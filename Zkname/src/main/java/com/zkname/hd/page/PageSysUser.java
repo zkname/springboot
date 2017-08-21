@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 //用户表
-public class PageadminSysUser extends BasePage<SysUser> {
+public class PageSysUser extends BasePage<SysUser> {
 
 	private static final long serialVersionUID = -798933923926140876L;
 	
