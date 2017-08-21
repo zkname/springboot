@@ -114,9 +114,9 @@ public class JsonUtil {
 		String jsonString = null;
 		try {
 			com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-			mapper.setFilters(filter("objectFilter", filter));
+			mapper.setFilterProvider(filter("objectFilter", filter));
 			for(Class<?> c:clazz){
-				mapper.addMixInAnnotations(c, ObjectFilterMixIn.class);
+				mapper.addMixIn(c, ObjectFilterMixIn.class);
 			}
 			jsonString = mapper.writeValueAsString(data);
 			return jsonString;

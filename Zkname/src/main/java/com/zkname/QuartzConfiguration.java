@@ -3,8 +3,6 @@ package com.zkname;
 import java.text.ParseException;
 import java.util.List;
 
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +10,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
-import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import com.google.common.collect.Lists;
 import com.zkname.frame.util.spring.SpringContextHolder;
-import com.zkname.hd.util.quartz.ClearQuartz;
 import com.zkname.hd.util.quartz.CreateTableQuartz;
 
 /**
@@ -41,7 +37,6 @@ public class QuartzConfiguration {
 		List<Trigger> list=Lists.newArrayList();
 		list.add(getCreateTableQuartzSimpleTrigger().getObject());
 		list.add(getCreateTableQuartzTrigger().getObject());
-		list.add(getClearQuartzTrigger().getObject());
 		schedulerFactoryBean.setTriggers(list.toArray(new Trigger[list.size()]));
 		return schedulerFactoryBean;
 	}
@@ -70,23 +65,6 @@ public class QuartzConfiguration {
 		CronTriggerFactoryBean schedulerFactoryBean = new CronTriggerFactoryBean();
 		schedulerFactoryBean.setJobDetail(getCreateTableQuartz().getObject());
 		schedulerFactoryBean.setCronExpression("0 0 0 * * ?");
-		return schedulerFactoryBean;
-	}
-	
-	//=============================清理缓存========================================
-	@Bean
-	public JobDetailFactoryBean getClearQuartz()  {
-		JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
-        factoryBean.setJobClass(ClearQuartz.class);
-        factoryBean.setDurability(true);
-        return factoryBean;
-	}
-	
-	@Bean("ClearQuartzTrigger")
-	public CronTriggerFactoryBean getClearQuartzTrigger() throws ClassNotFoundException, NoSuchMethodException, ParseException {
-		CronTriggerFactoryBean schedulerFactoryBean = new CronTriggerFactoryBean();
-		schedulerFactoryBean.setJobDetail(getClearQuartz().getObject());
-		schedulerFactoryBean.setCronExpression("0 0 12 * * ?");
 		return schedulerFactoryBean;
 	}
 }

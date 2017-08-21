@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zkname.frame.dao.IBaseDAO;
 import com.zkname.frame.util.DateUtil;
-import com.zkname.hd.service.HdUserWalletService;
 
 /**
  * 
