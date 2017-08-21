@@ -1,0 +1,29 @@
+select.validation-failed,input.validation-failed,textarea.validation-failed
+	{
+	border: 1px solid #FF3300;
+	color: #FF3300;
+}
+
+.validation-advice {
+	margin: 0px 0;
+	padding: 0px;
+	margin-left: 10px;
+	color: #FF3300;
+	font-weight: bold;
+}
+
+.custom-advice1 {
+	margin: 5px 0;
+	padding: 5px;
+	background-color: #DFF3FB;
+	color: #FF3300;
+	font-weight: bold;
+}
+
+.custom-advice2 {
+	margin: 5px 0;
+	padding: 5px;
+	background-color: #FF3300;
+	color: #FFF;
+	font-weight: bold;
+}
