@@ -5,9 +5,9 @@ import lombok.Setter;
 
 public class PayInfo {
 	
-	public static final String APPID="wx14b534f75ea4296e";
-	public static final String MCH_ID="1487189112";
-	public static final String KEY="cfb1e8537345b22bc974b723af694ccc";
+	public static final String APPID="";
+	public static final String MCH_ID="";
+	public static final String KEY="";
 	
 	@Getter
 	@Setter
