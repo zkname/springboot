@@ -27,7 +27,7 @@ import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.google.common.primitives.Bytes;
 import com.zkname.frame.util.conf.ConfigurationProperties;
-import com.zkname.frame.util.json.JsonUtil;
+import com.zkname.frame.util.jackson.JsonUtil;
 import com.zkname.frame.util.spring.DateConvertEditor;
 
 /**

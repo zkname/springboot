@@ -1,4 +1,4 @@
-package com.zkname.hd.util;
+package com.zkname.frame.util.jackson;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

@@ -5,7 +5,7 @@ import com.dangdang.ddframe.rdb.sharding.api.strategy.table.SingleKeyTableShardi
 import com.google.common.collect.Range;
 import com.zkname.frame.util.DateUtil;
 import com.zkname.frame.util.ParamType;
-import com.zkname.frame.util.json.JsonUtil;
+import com.zkname.frame.util.jackson.JsonUtil;
 
 import java.util.Collection;
 import java.util.Date;

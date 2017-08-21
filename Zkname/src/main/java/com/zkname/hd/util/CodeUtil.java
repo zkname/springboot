@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.common.collect.Maps;
 import com.zkname.frame.page.Page;
-import com.zkname.frame.util.json.JsonUtil;
+import com.zkname.frame.util.jackson.JsonUtil;
 
 /**
  * json 格式 {"code":"0（错误代码）","message":"错误信息（属性可能不存在）"}
