@@ -6,15 +6,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import com.google.common.collect.Lists;
 import com.zkname.frame.dao.row.AutoBoxingRowMapper;
 import com.zkname.frame.util.ParamType;
@@ -30,8 +25,6 @@ import com.zkname.frame.util.spring.SpringContextHolder;
  * @since Ver 1.1
  * @Date 2011-7-27
  */
-@JsonAutoDetect
-@JsonIgnoreProperties(value = { "sb", "list", "searchValue", "orderByValue", "entityClass", "slider" })
 public class BasePage<T> extends Page<T> {
 
     private static final long serialVersionUID = 8490499760803515703L;

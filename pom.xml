@@ -2,15 +2,87 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>SpringBoot</groupId>
-	<artifactId>zkname_parent</artifactId>
+	<artifactId>zkname</artifactId>
 	<version>0.0.1</version>
 	<packaging>pom</packaging>
-
-
+ 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<spring.boot.version>1.5.3.RELEASE</spring.boot.version>
+		<spring.security.version>5.0.0.M1</spring.security.version>
+		<sharding.version>1.5.1</sharding.version>
+		<spring.version>4.3.8.RELEASE</spring.version>
+	</properties>
+	
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring.boot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+<!--         <dependency> -->
+<!--             <groupId>org.springframework.boot</groupId> -->
+<!--             <artifactId>spring-boot-devtools</artifactId> -->
+<!--             <version>${spring.boot.version}</version> -->
+<!--             <scope>provided</scope> -->
+<!--         </dependency> -->
+		<dependency>
+		   <groupId>com.alibaba</groupId>
+		   <artifactId>druid-spring-boot-starter</artifactId>
+		   <version>1.1.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+			<version>${spring.boot.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>apache-jsp</artifactId>
+			<version>9.4.6.v20170531</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- servlet 依赖. -->
+		
+       <dependency>
+           <groupId>javax.servlet</groupId>
+           <artifactId>javax.servlet-api</artifactId>
+           <version>4.0.0-b05</version>
+           <scope>provided</scope>
+       </dependency>
+       
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.12.6</version>
+			<scope>provided</scope>
+		</dependency>
+		
+	</dependencies>
+	
 	
 	<modules>
 		<module>zkname</module>
-		<module>zkname_generator</module>
-    	<module>zkname_core</module>
+		<module>generator</module>
+    	<module>core</module>
   </modules>
 </project>
