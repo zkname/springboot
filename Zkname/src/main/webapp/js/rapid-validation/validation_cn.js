@@ -11,11 +11,17 @@
  * http://tetlaw.id.au/view/blog/really-easy-field-validation-with-prototype
  * Andrew Tetlaw
  * Version 1.5.3 (2006-07-15)
- * 
+ *
  * Copyright (c) 2006 Andrew Tetlaw
  * http://www.opensource.org/licenses/mit-license.php
  */
+/*备忘：
+ *1).支持自定义错误信息显示位置，可自定义一个div标签，class为'validation-advice',id为'advice-name-input元素id',name为校验class的名字
+ *2).如果input的值为空值也继续进行校验，可以通过设置validator的option选项为{ignoreEmptyValue:false}，默认input为空值则不校验
+ *3).如果校验绑定的是checkbox或者radio元素，会寻找其父节点，将错误信息标签放在父节点的后面
+ */
 
+//设置验证的默认选项
 var ValidationDefaultOptions = function(){};
 ValidationDefaultOptions.prototype = {
 	onSubmit : true, //是否监听form的submit事件
@@ -28,22 +34,27 @@ ValidationDefaultOptions.prototype = {
 	onElementValidate : function(result, elm) {} //某个input验证时的回调函数
 }
 
+//每个校验项的原型
 var ValidatorDefaultOptions = function(){}
 ValidatorDefaultOptions.prototype = {
 	ignoreEmptyValue : true, //是否忽略空值
 	depends : [] //相关依赖项
 }
 
-//compatible with prototype
-if(typeof Prototype != 'undefined' && (typeof $ != 'undefined')) {
-	$prototype = $;
-}
+Validator = function() {
+      this.initialize.apply(this, arguments);
+    };
 
-Validator = Class.create();
 
+/*
+ * 存放回调函数，存放的键为validate-ajax-responseJudge校验的input的id，值为对应的回调函数
+ */
+Validator.callBack = [];
+
+//存放校验对应的错误信息
 Validator.messageSource = {};
 Validator.messageSource['en-us'] = [
-	['validation-failed' , 'Validation failed.'],
+['validation-failed' , 'Validation failed.'],
 	['required' , 'This is a required field.'],
 	['validate-number' , 'Please enter a valid number in this field.'],
 	['validate-digits' , 'Please use numbers only in this field. please avoid spaces or other characters such as dots or commas.'],
@@ -80,11 +91,12 @@ Validator.messageSource['en-us'] = [
 	['validate-mobile-phone','Please enter a valid mobile phone,For example 13910001000.current length is %s.'],
 	['validate-zip','Please enter a valid zip code.'],
 	['validate-qq','Please enter a valid qq number']
-]
+	]
 
-Validator.messageSource['en'] = Validator.messageSource['en-us']
+	Validator.messageSource['en'] = Validator.messageSource['en-us']
 
-Validator.messageSource['zh-cn'] = [
+	//校验类型及其对应的错误信息，messageSource['zh-cn']是二维数组
+	Validator.messageSource['zh-cn'] = [
 	['validation-failed' , '验证失败.'],
 	['required' , '请输入值.'],
 	['validate-number' , '请输入有效的数字.'],
@@ -102,13 +114,10 @@ Validator.messageSource['zh-cn'] = [
 	['max-value' , '最大值为%s'],
 	['min-length' , '最小长度为%s,当前长度为%s.'],
 	['max-length', '最大长度为%s,当前长度为%s.'],
-	['min-length-byte' , '最小长度为%s字节,当前长度为%s字节.'],
-	['max-length-byte', '最大长度为%s字节,当前长度为%s字节.'],
 	['int-range' , '输入值应该为 %s 至 %s 的整数'],
 	['float-range' , '输入值应该为 %s 至 %s 的数字'],
 	['length-range' , '输入值的长度应该在 %s 至 %s 之间,当前长度为%s'],
 	['equals','两次输入不一致,请重新输入'],
-	['no-equals','两次输入不能一致,请重新输入'],
 	['less-than','请输入小于前面的值'],
 	['less-than-equal','请输入小于或等于前面的值'],
 	['great-than','请输入大于前面的值'],
@@ -124,695 +133,847 @@ Validator.messageSource['zh-cn'] = [
 	['validate-phone','请输入正确的电话号码,如:010-29392929,当前长度为%s.'],
 	['validate-mobile-phone','请输入正确的手机号码,当前长度为%s.'],
 	['validate-zip','请输入有效的邮政编码'],
-	['validate-qq','请输入有效的QQ号码.'],
-	['loopTimes','请输入正整数(包括0)或者n'],
-	['programeProducer','系统中不存在该制作商！'],
-	['programeName','系统中不存在该节目名！'],
-	['audioName','系统中不存在该碎片名！'],
-	['duration','请输入正整数'],
-	['timelinessDateTimeFillInOne', '时效性日期和时效性小时四项中至少填写一项'],
-	['greaterThanTimelinessBeginTime', '结束时间必须大于开始时间'],
-	['requestTypeName', '当前渠道或上级分类下，此点播分类名称重复']
-];
+	['validate-qq','请输入有效的QQ号码.']
+	]
 
-ValidationUtils = {
-	isVisible : function(elm) {
-		while(elm && elm.tagName != 'BODY') {
-			if(!$prototype(elm).visible()) return false;
-			elm = elm.parentNode;
-		}
-		return true;
-	},
-	getReferenceForm : function(elm) {
-		while(elm && elm.tagName != 'BODY') {
-			if(elm.tagName == 'FORM') return elm;
-			elm = elm.parentNode;
-		}
-		return null;
-	},
-	getInputValue : function(elm) {
-		var elm = $prototype(elm);
-		if(elm.type.toLowerCase() == 'file') {
-			return elm.value;
-		}else {
-			return $F(elm);
-		}
-	},
-	getElmID : function(elm) {
-		return elm.id ? elm.id : elm.name;
-	},
-	format : function(str,args) {
-		args = args || [];
-		ValidationUtils.assert(args.constructor == Array,"ValidationUtils.format() arguement 'args' must is Array");
-		var result = str
-		for (var i = 0; i < args.length; i++){
-			result = result.replace(/%s/, args[i]);	
-		}
-		return result;
-	},
-	// 通过classname传递的参数必须通过'-'分隔各个参数
-	// 返回值包含一个参数singleArgument,例:validate-pattern-/[a-c]/gi,singleArgument值为/[a-c]/gi
-	getArgumentsByClassName : function(prefix,className) {
-		if(!className || !prefix)
-			return [];
-		var pattern = new RegExp(prefix+'-(\\S+)');
-		var matchs = className.match(pattern);
-		if(!matchs)
-			return [];
-		var results = [];
-		results.singleArgument = matchs[1];
-		var args =  matchs[1].split('-');
-		for(var i = 0; i < args.length; i++) {
-			if(args[i] == '') {
-				if(i+1 < args.length) args[i+1] = '-'+args[i+1];
-			}else{
-				results.push(args[i]);
+	/*
+	 * param elm 表单元素对象
+	 * param v validator对象
+	 * 该类中为一些工具方法
+	 */
+	ValidationUtils = {
+		//判断元素是否隐藏，一直上溯到非body的祖先节点
+		isVisible : function(elm) {
+						while(elm && !elm.is('body')) {
+							if(elm.is(":visible") == false){
+								return false;
+							}
+							elm = elm.parent();
+						}
+						return true;
+					},
+		//返回到表单元素所在的Form
+		getReferenceForm : function(elm) {
+							   while(elm && !elm.is('body')) {
+								   if(elm.is('form')) return elm;
+								   elm = elm.parent();
+							   }
+							   return null;
+						   },
+		//获取表单的值
+		getInputValue : function(elm) {
+							return elm.val();
+						},
+		//获取表单元素的ID，如果无ID，则返回name
+		getElmID : function(elm) {
+					   var id = elm.attr('id') ? elm.attr('id') : elm.attr('name');
+					   if(id != undefined){
+					   		id = id.replace('\.','\-');
+					   }
+					   return id;
+				   },
+		//用args数组中的值顺序替换%s,比如传入的str是%s-%s-%s,传入的args是[1,2,3],则处理后的结果是1-2-3
+		format : function(str,args) {
+					 args = args || [];
+					 ValidationUtils.assert(args.constructor == Array,"ValidationUtils.format() arguement 'args' must is Array");
+					 var result = str
+						 for (var i = 0; i < args.length; i++){
+							 result = result.replace(/%s/, args[i]);
+						 }
+					 return result;
+				 },
+		// 通过classname传递的参数必须通过'-'分隔各个参数，可以正确处理参数为负数的情况，返回参数数组results
+		// 返回值results还有一个属性singleArgument,例:validate-pattern-/[a-c]/gi,singleArgument值为/[a-c]/gi
+		// prefix为校验名，例如int-range-1-5，传入的prefix为int-range，返回[1,5],singleArgument的值为1-5
+		getArgumentsByClassName : function(prefix,className) {
+									  if(!className || !prefix)
+										  return [];
+									  var pattern = new RegExp(prefix+'-(\\S+)');
+									  var matchs = className.match(pattern);
+									  if(!matchs)
+										  return [];
+									  var results = [];
+									  results.singleArgument = matchs[1];
+									  var args =  matchs[1].split('-');
+									  for(var i = 0; i < args.length; i++) {
+										  if(args[i] == '') {
+											  //处理形如int-range--10--5的情况
+											  if(i+1 < args.length) args[i+1] = '-'+args[i+1];
+										  }else{
+											  results.push(args[i]);
+										  }
+									  }
+									  return results;
+								  },
+		assert : function(condition,message) {
+					 var errorMessage = message || ("assert failed error,condition="+condition);
+					 if (!condition) {
+						 alert(errorMessage);
+						 throw new Error(errorMessage);
+					 }else {
+						 return condition;
+					 }
+				 },
+		/*
+		 * 判断是否是日期，如果不是日期，返回false
+		 */
+		isDate : function(v,dateFormat) {
+					 var MONTH = "MM";
+					 var DAY = "dd";
+					 var YEAR = "yyyy";
+					 var regex = '^'+dateFormat.replace(YEAR,'\\d{4}').replace(MONTH,'\\d{2}').replace(DAY,'\\d{2}')+'$';
+					 if(!new RegExp(regex).test(v)) return false;
+
+					 var year = v.substr(dateFormat.indexOf(YEAR),4);
+					 var month = v.substr(dateFormat.indexOf(MONTH),2);
+					 var day = v.substr(dateFormat.indexOf(DAY),2);
+
+					 var d = new Date(ValidationUtils.format('%s/%s/%s',[year,month,day]));
+					 return ( parseInt(month, 10) == (1+d.getMonth()) ) &&
+						 (parseInt(day, 10) == d.getDate()) &&
+						 (parseInt(year, 10) == d.getFullYear() );
+				 },
+		// prototype.js
+		//document: http://ajaxcn.org/space/start/2006-05-15/2
+		//没有找到调用
+		//fireSubmit: function(form) {
+		//				var form = $prototype(form);
+		//				if (form.fireEvent) { //for ie
+		//					if(form.fireEvent('onsubmit'))
+		//						form.submit();
+		//				} else if (document.createEvent) { // for dom level 2
+		//					var evt = document.createEvent("HTMLEvents");
+		//					//true for can bubble, true for cancelable
+		//					evt.initEvent('submit', false, true);
+		//					form.dispatchEvent(evt);
+		//				}
+		//			},
+		//获取语言，从浏览器navigator对象中获取
+		getLanguage : function() {
+						  var lang = null;
+						  if (typeof navigator.userLanguage == 'undefined')
+							  lang = navigator.language.toLowerCase();
+						  else
+							  lang = navigator.userLanguage.toLowerCase();
+						  return lang;
+					  },
+		//根据用户语言获取相应的错误提示信息
+		getMessageSource : function() {
+							   var lang = ValidationUtils.getLanguage();
+							   var messageSource = Validator.messageSource['zh-cn'];
+							   if(Validator.messageSource[lang]) {
+								   messageSource = Validator.messageSource[lang];
+							   }
+
+							   var results = {};
+							   for(var i = 0; i < messageSource.length; i++) {
+								   results[messageSource[i][0]] = messageSource[i][1];
+							   }
+							   return results;
+						   },
+		//根据校验名获取相应的错误提示信息
+		getI18nMsg : function(key) {
+						 return ValidationUtils.getMessageSource()[key];
+					 },
+		//模拟prototype.js中的all方法
+		all: function(collection,iterator) {
+				 var result = true;
+				 $.each(collection,function(value, index) {
+					 result = result && !!(iterator || function(x){return x;})(value, index);
+					 return result;
+				 });
+				 return result;
+			 },
+		//模拟prototype.js中的any方法
+		any: function(collection,iterator) {
+				 var result = true;
+				 $.each(collection,function(value, index) {
+					 result = result && !(iterator || function(x){return x;})(value, index);
+					 return result;
+				 });
+				 return !result;
+			 },
+		getFormElements: function(form){
+					rinput = /^(?:color|date|datetime|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|radio|checkbox|week)$/i;
+					rselectTextarea = /^(?:select|textarea)/i;
+					return form.map(function(){
+									return this.elements ? jQuery.makeArray( this.elements ) : this;
+								})
+								.filter(function(){
+									return this.name && !this.disabled &&
+										( this.checked || rselectTextarea.test( this.nodeName ) ||
+											rinput.test( this.type ) );
+								});
 			}
-		}
-		return results;
-	},
-	assert : function(condition,message) {
-		var errorMessage = message || ("assert failed error,condition="+condition);
-		if (!condition) {
-			alert(errorMessage);
-			throw new Error(errorMessage);
-		}else {
-			return condition;
-		}
-	},
-	isDate : function(v,dateFormat) {
-		var MONTH = "MM";
-	   	var DAY = "dd";
-	   	var YEAR = "yyyy";
-		var regex = '^'+dateFormat.replace(YEAR,'\\d{4}').replace(MONTH,'\\d{2}').replace(DAY,'\\d{2}')+'$';
-		if(!new RegExp(regex).test(v)) return false;
-		
-		var year = v.substr(dateFormat.indexOf(YEAR),4);
-		var month = v.substr(dateFormat.indexOf(MONTH),2);
-		var day = v.substr(dateFormat.indexOf(DAY),2);
-		
-		var d = new Date(ValidationUtils.format('%s/%s/%s',[year,month,day]));
-		return ( parseInt(month, 10) == (1+d.getMonth()) ) && 
-					(parseInt(day, 10) == d.getDate()) && 
-					(parseInt(year, 10) == d.getFullYear() );		
-	},
-	//document: http://ajaxcn.org/space/start/2006-05-15/2
-	fireSubmit: function(form) {
-	    var form = $prototype(form);
-	    if (form.fireEvent) { //for ie
-	    	if(form.fireEvent('onsubmit'))
-	    		form.submit();
-	    } else if (document.createEvent) { // for dom level 2
-			var evt = document.createEvent("HTMLEvents");
-	      	//true for can bubble, true for cancelable
-	      	evt.initEvent('submit', false, true); 
-	      	form.dispatchEvent(evt);
-	    }
- 	},
- 	getLanguage : function() {
- 		var lang = null;
-		if (typeof navigator.userLanguage == 'undefined')
-			lang = navigator.language.toLowerCase();
-		else
-			lang = navigator.userLanguage.toLowerCase();
- 		return lang;
- 	},
- 	getMessageSource : function() {
- 		var lang = ValidationUtils.getLanguage();
- 		var messageSource = Validator.messageSource['zh-cn'];
-		if(Validator.messageSource[lang]) {
-			messageSource = Validator.messageSource[lang];
-		}
-		
-		var results = {};
-		for(var i = 0; i < messageSource.length; i++) {
-			results[messageSource[i][0]] = messageSource[i][1];
-		}
-		return results;
- 	},
- 	getI18nMsg : function(key) {
- 		return ValidationUtils.getMessageSource()[key];
- 	}
-}
 
+	}
+/*
+ * 设置Validator的原型，Validator对象有三个成员变量，className, testFun, options，分别为类名，校验函数，自定义选项
+ */
 Validator.prototype = {
+	/*
+	 * 初始化validator，初始化的时候将ValidatorDefaultOptions中的属性复制到options中
+	 */
 	initialize : function(className, test, options) {
-		this.options = Object.extend(new ValidatorDefaultOptions(), options || {});
-		this._test = test ? test : function(v,elm){ return true };
-		this._error = ValidationUtils.getI18nMsg(className) ? ValidationUtils.getI18nMsg(className) : ValidationUtils.getI18nMsg('validation-failed');
-		this.className = className;
-		this._dependsTest = this._dependsTest.bind(this);
-		this.testAndGetError = this.testAndGetError.bind(this);
-		this.testAndGetDependsError = this.testAndGetDependsError.bind(this);
-	},
+					 this.options =$.extend(new ValidatorDefaultOptions(), options || {});
+					 this._test = test ? test : function(v,elm){ return true };
+					 this._error = ValidationUtils.getI18nMsg(className) ? ValidationUtils.getI18nMsg(className) : ValidationUtils.getI18nMsg('validation-failed');
+					 this.className = className;
+					 this._dependsTest = $.proxy(this._dependsTest,this);
+					 this.testAndGetError = $.proxy(this.testAndGetError,this);
+					 this.testAndGetDependsError = $.proxy(this.testAndGetDependsError,this);
+				 },
+	//对设置的校验依赖进行测试，返回测试结果
 	_dependsTest : function(v,elm) {
-		if(this.options.depends && this.options.depends.length > 0) {
-			var dependsResult = $A(this.options.depends).all(function(depend){
-				return Validation.get(depend).test(v,elm);
-			});
-			return dependsResult;
-		}
-		return true;
-	},
+					   if(this.options.depends && this.options.depends.length > 0) {
+						   var dependsResult = ValidationUtils.all(
+								   $.makeArray(this.options.depends)
+								   ,function(depend){
+									   return Validation.get(depend).test(v,elm);
+								   }
+							);
+						   return dependsResult;
+					   }
+					   return true;
+				   },
+	//进行校验，校验前先检查是否能通过依赖校验
 	test : function(v, elm) {
-		if(!this._dependsTest(v,elm))
-			return false;
-		if(!elm) elm = {}
-		var isEmpty = (this.options.ignoreEmptyValue && ((v == null) || (v.length == 0)));
-		return  isEmpty || this._test(v,elm,ValidationUtils.getArgumentsByClassName(this.className,elm.className),this);
-	},
+			   if(!this._dependsTest(v,elm))
+				   return false;
+			   if(!elm) elm = {}
+			   //是否忽略空值
+			   var isEmpty = (this.options.ignoreEmptyValue && ((v == null) || (v.length == 0)));
+			   var elmClass = "";
+			   if(elm && elm[0]){
+					elmClass = elm.attr('class');
+			   }
+			   return  isEmpty || this._test(v,elm,ValidationUtils.getArgumentsByClassName(this.className,elmClass),this);
+		   },
+	//进行依赖项的校验，获取错误提示信息
 	testAndGetDependsError : function(v,elm) {
-		var depends = this.options.depends;
-		if(depends && depends.length > 0) {
-			var dependsError = null;
-			for(var i = 0; i < depends.length; i++) {
-				var dependsError = Validation.get(depends[i]).testAndGetError(v,elm);
-				if(dependsError) return dependsError;
-			}
-		}
-		return null;
-	},	
+								 var depends = this.options.depends;
+								 if(depends && depends.length > 0) {
+									 var dependsError = null;
+									 for(var i = 0; i < depends.length; i++) {
+										 var dependsError = Validation.get(depends[i]).testAndGetError(v,elm);
+										 if(dependsError) return dependsError;
+									 }
+								 }
+								 return null;
+							 },
+	//进行校验，并获取错误提示信息
 	testAndGetError : function(v, elm,useTitle) {
-		var dependsError = this.testAndGetDependsError(v,elm);
-		if(dependsError) return dependsError;
-		if(!elm) elm = {};
-		var isEmpty = (this.options.ignoreEmptyValue && ((v == null) || (v.length == 0)));
-		var result = isEmpty || this._test(v,elm,ValidationUtils.getArgumentsByClassName(this.className,elm.className),this);
-		if(!result) return this.error(v,elm,useTitle);
-		return null;
-	},
+						  var dependsError = this.testAndGetDependsError(v,elm);
+						  if(dependsError) return dependsError;
+
+						  if(!elm) elm = {}
+						  var isEmpty = (this.options.ignoreEmptyValue && ((v == null) || (v.length == 0)));
+						  var result = isEmpty || this._test(v,elm,ValidationUtils.getArgumentsByClassName(this.className,elm.attr('class')),this);
+						  if(!result) return this.error(v,elm,useTitle);
+						  return null;
+					  },
+	//返回错误信息，如果错误信息为string，则替换其中的变量后返回，如果错误信息为函数，则调用函数，返回调用结果
 	error : function(v,elm,useTitle) {
-		var args  = ValidationUtils.getArgumentsByClassName(this.className,elm.className);
-		var error = this._error;
-		if(this.className=="validate-ajax"){
-			return error;
-		}
-		if(typeof error == 'string') {
-			if(v) {
-				if(this.className=="min-length-byte" || this.className=="max-length-byte"){
-					args.push(v.replace(/[^\x00-\xff]/g,"**").length);
-				}else{
-					args.push(v.length);
+				var args  = ValidationUtils.getArgumentsByClassName(this.className,elm.attr('class'));
+				var error = this._error;
+				if(typeof error == 'string') {
+					if(v) args.push(v.length);
+					error = ValidationUtils.format(this._error,args);
+				}else if(typeof error == 'function') {
+					error = error(v,elm,args,this);
+				}else {
+					alert('property "_error" must type of string or function,current type:'+typeof error+" current className:"+this.className);
 				}
-			}
-			error = ValidationUtils.format(this._error,args);
-		}else if(typeof error == 'function') {
-			error = error(v,elm,args,this);
-		}else {
-			alert('property "_error" must type of string or function,current type:'+typeof error+" current className:"+this.className);
-		}
-		if(!useTitle) useTitle = elm.className.indexOf('useTitle') >= 0;
-		if(this.className=="required"){
-			return useTitle ? ((elm && elm.title) ? elm.title : error) : error;
-		}else{
-			return error;
-		}
-		
-	}
-};
-
-var Validation = Class.create();
-
-Validation.prototype = {
-	initialize : function(form, options){
-		this.options = Object.extend(new ValidationDefaultOptions(), options || {});
-		this.form = $prototype(form);
-		var formId =  ValidationUtils.getElmID($prototype(form));
-		Validation.validations[formId] = this;
-		if(this.options.onSubmit) Event.observe(this.form,'submit',this.onSubmit.bind(this),false);
-		if(this.options.onReset) Event.observe(this.form,'reset',this.reset.bind(this),false);
-		if(this.options.immediate) {
-			var useTitles = this.options.useTitles;
-			var callback = this.options.onElementValidate;
-			var elements = $A(Form.getElements(this.form));
-			for(var i = 0; i < elements.length; i++) {
-				var input = elements[i];
-				Event.observe(input, 'blur', function(ev) { Validation.validateElement(Event.element(ev),{useTitle : useTitles, onElementValidate : callback}); });
-			}
-		}
-	},
-	onSubmit :  function(ev){
-		if(!this.validate()) Event.stop(ev);
-	},
-	validate : function() {
-		var result = true;
-		var useTitles = this.options.useTitles;
-		var callback = this.options.onElementValidate;
-		if(this.options.stopOnFirst) {
-			var elements = $A(Form.getElements(this.form));
-			for(var i = 0; i < elements.length; i++) {
-				var elm = elements[i];
-				result = Validation.validateElement(elm,{useTitle : useTitles, onElementValidate : callback});
-				if(!result) break;
-			}
-		} else {
-			var elements = $A(Form.getElements(this.form));
-			for(var i = 0; i < elements.length; i++) {
-				var elm = elements[i];
-				if(!Validation.validateElement(elm,{useTitle : useTitles, onElementValidate : callback})) {
-					result = false;
+				if(!useTitle){
+					var classes = elm.attr('class') || "";
+					useTitle = classes.indexOf('useTitle') >= 0;
 				}
+				return useTitle ? ((elm && elm.attr('title')) ? elm.attr('title') : error) : error;
 			}
-		}
-		if(!result && this.options.focusOnError) {
-			var first = Form.getElements(this.form).findAll(function(elm){return $prototype(elm).hasClassName('validation-failed')})[0];
-			if(first.select) first.select(); 
-			first.focus();
-		}
-		return this.options.onFormValidate(result, this.form);
-	},
-	reset : function() {
-		var elements = $A(Form.getElements(this.form))
-		for(var i = 0; i < elements.length; i++)
-			Validation.reset(elements[i]);
-	}
 }
 
-Object.extend(Validation, {
+
+var Validation = function() {
+      this.initialize.apply(this, arguments);
+    };
+
+//设置Validation的原型,Validation的所有校验方法存在Validation.methods中
+//需要校验的form的信息存放在validations中
+Validation.prototype = {
+	/*
+	 * Validation的初始化方法，初始化的时候将ValidationDefaultOptions中的属性复制到options中
+	 */
+	initialize : function(form, options){
+					 this.options = $.extend(new ValidationDefaultOptions(), options || {});
+					 if(form instanceof jQuery){
+					 	this.form = form;
+					 }else if(form.nodeType && form.tagName == 'FORM'){
+					 	this.form = $(form);
+					 }else if(typeof form === 'string'){ 
+					 	this.form = $('#' + form);
+					 }else{
+					 	return;
+					 }
+					 var formId =  ValidationUtils.getElmID($(this.form));
+					 Validation.validations[formId] = this;
+					 if(this.options.onSubmit) this.form.bind('submit',$.proxy(this.onSubmit,this));
+					 if(this.options.onReset) this.form.bind('reset',$.proxy(this.reset,this));
+					 //对form表单中的元素绑定校验事件
+					 if(this.options.immediate) {
+						 var useTitles = this.options.useTitles;
+						 var callback = this.options.onElementValidate;
+						 var elements = ValidationUtils.getFormElements(this.form);
+						 //没必要调用makeArray
+						 for(var i = 0; i < elements.length; i++) {
+							 var input = $(elements[i]);
+							 input.bind('blur', function(ev) {
+									 Validation.validateElement($(ev.target || ev.srcElement),{useTitle : useTitles, onElementValidate : callback});
+								 });
+						 }
+					 }
+				 },
+	//提交校验，如果通不过校验，阻止提交事件
+	onSubmit :  function(ev){
+					if(!this.validate()) ev.stopPropagation();
+				},
+	//校验整个表单
+	validate : function() {
+				 var result = true;
+				 var useTitles = this.options.useTitles;
+				 var callback = this.options.onElementValidate;
+				 var elements = ValidationUtils.getFormElements(this.form);
+				 if(this.options.stopOnFirst) {
+					for(var i = 0; i < elements.length; i++) {
+						   var elm = $(elements[i]);
+						   result = Validation.validateElement(elm,{useTitle : useTitles, onElementValidate : callback});
+						   if(!result) break;
+					   }
+				   } else {
+					   for(var i = 0; i < elements.length; i++) {
+						   var elm = $(elements[i]);
+						   if(!Validation.validateElement(elm,{useTitle : useTitles, onElementValidate : callback})) {
+							   result = false;
+						   }
+					   }
+				   }
+				   //将焦点移动到校验失败的地方
+				   if(!result && this.options.focusOnError) {
+					   var first = $.grep(ValidationUtils.getFormElements(this.form),function(elm){return $(elm).hasClass('validation-failed')})[0];
+					   if(first.select) first.select();
+					   first.focus();
+				   }
+				   return this.options.onFormValidate(result, this.form);
+			   },
+	//重置form
+	reset : function() {
+				 var elements = ValidationUtils.getFormElements(this.form);
+					for(var i = 0; i < elements.length; i++)
+						Validation.reset($(elements[i]));
+			}
+}
+
+//Object.extent是prototype.js中的函数，传入两个参数destination和source
+//该函数会把source中的属性复制到destination中，模拟继承的效果
+//如果destination中已存在同名属性，会被覆盖
+$.extend(Validation, {
+	//调用test函数校验表单元素
 	validateElement : function(elm, options){
-		options = Object.extend({
-			useTitle : false,
-			onElementValidate : function(result, elm) {}
-		}, options || {});
-		elm = $prototype(elm);
-		var cn = $A(elm.classNames());
-		for(var i = 0; i < cn.length; i++) {
-			var value = cn[i];
-			var test = Validation.test(value,elm,options.useTitle);
-			options.onElementValidate(test, elm);
-			if(!test) return false;
-		}
-		return true;
-	},
+						  options = $.extend({
+							  useTitle : false,
+								  onElementValidate : function(result, elm) {}
+						  }, options || {});
+						  var classes = elm.attr('class') || '';
+						  var cn = classes.split(/\s+/);
+						  for(var i = 0; i < cn.length; i++) {
+							  var className = cn[i];
+							  var test = Validation.test(className,elm,options.useTitle);
+							  options.onElementValidate(test, elm);
+							  if(!test) return false;
+						  }
+						  return true;
+					  },
+	//创建显示错误信息的标签，使用span标签，class为'validation-advice',id为'advice-name-元素id'，通过display属性设置隐藏,name属性为传入参数，为校验class的名称
+	//如果是checkbox或者radio元素，会寻找其父节点，将span标签放在父节点的后面
+	//创建错误信息
 	newErrorMsgAdvice : function(name,elm,errorMsg) {
-		var advice = '<div class="validation-advice" id="advice-' + name + '-' + ValidationUtils.getElmID(elm) +'" style="display:none">' + errorMsg + '</div>'
-		switch (elm.type.toLowerCase()) {
-			case 'checkbox':
-			case 'radio':
-				var p = elm.parentNode;
-				if(p) {
-					new Insertion.Bottom(p, advice);
-				} else {
-					new Insertion.After(elm, advice);
-				}
-				break;
-			default:
-				new Insertion.After(elm, advice);
-	    }
-		advice = $prototype('advice-' + name + '-' + ValidationUtils.getElmID(elm));
-		return advice;
-	},
+							var advice = '<span class="validation-advice" id="advice-' + name + '-' + ValidationUtils.getElmID(elm) +'" style="display:none">&nbsp;&nbsp;' + errorMsg + '</span>';
+							var tagName = '';
+							if(elm.prop && elm.prop('tagName') != undefined){
+							   tagName = elm.prop('tagName');
+							}else{
+							   tagName = elm.attr('tagName');
+							}
+						switch (tagName) {
+							case 'checkbox':
+							case 'radio':
+								var p = elm.parent();
+								if(p) {
+									p.children(':last').after(advice);
+								} else {
+									elm.after(advice);
+								}
+								break;
+							default:
+									elm.after(advice);
+						}
+						advice = $('#advice-' + name + '-' + ValidationUtils.getElmID(elm));
+						return advice;
+					},
+	//显示错误信息
 	showErrorMsg : function(name,elm,errorMsg) {
-		var elm = $prototype(elm);
-		if(typeof Tooltip != 'undefined') {
-			if (!elm.tooltip) {
-				elm.tooltip = new Tooltip(elm, {backgroundColor:"#FC9", borderColor:"#C96", textColor:"#000", textShadowColor:"#FFF"});
-			}
-			elm.tooltip.content = errorMsg;
-		}else {
-			var prop = Validation._getAdviceProp(name);
-			var advice = Validation.getAdvice(name, elm);
-			if(!elm[prop]) {
-				if(!advice) {
-					advice = Validation.newErrorMsgAdvice(name,elm,errorMsg);
-				}
-			}
-			if(advice && !advice.visible()) {
-				if(typeof Effect == 'undefined') {
-					advice.style.display = '';
-				} else {
-					new Effect.Appear(advice, {duration : 1 });
-				}			
-			}
-			advice.innerHTML = errorMsg;
-			elm[prop] = true;
-		}
-		
-		elm.removeClassName('validation-passed');
-		elm.addClassName('validation-failed');
-	},
+					   var advice = Validation.getAdvice(name, elm);
+					   if(!advice || !advice[0]) {
+						   advice = Validation.newErrorMsgAdvice(name,elm,errorMsg);
+					   }
+					   if(advice && !advice.is(':visible')) {
+							   advice.css('display','');
+					   }
+					   advice.text("  "+errorMsg);
+					   //样式切换
+					   elm.removeClass('validation-passed');
+					   elm.addClass('validation-failed');
+				   },
+	//隐藏错误信息
 	hideErrorMsg : function(name,elm) {
-		var elm = $prototype(elm);
-		if(typeof Tooltip != 'undefined') {
-			if (elm.tooltip) {
-				elm.tooltip.stop();
-				elm.tooltip = false;
-			}
-		}else {
-			var prop = Validation._getAdviceProp(name);
-			var advice = Validation.getAdvice(name, elm);
-			if(advice && elm[prop]) {
-				if(typeof Effect == 'undefined')
-					advice.hide()
-				else 
-					new Effect.Fade(advice, {duration : 1 });
-			}
-			elm[prop] = false;
-		}
-		
-		elm.removeClassName('validation-failed');
-		elm.addClassName('validation-passed');
-	},
+					   var advice = Validation.getAdvice(name, elm);
+					   if(advice && advice.is(':visible')) {
+						   advice.hide()
+					   }
+					   elm.removeClass('validation-failed');
+					   elm.addClass('validation-passed');
+				   },
 	_getAdviceProp : function(validatorName) {
-		return '__advice'+validatorName;
-	},
+						 return '__advice'+validatorName;
+					 },
+	//校验表单元素，调用validator中的testAndGetError方法进行校验
 	test : function(name, elm, useTitle) {
-		var v = Validation.get(name);
-		var errorMsg = null;
-		
-		if(ValidationUtils.isVisible(elm)) 
-			errorMsg = v.testAndGetError(ValidationUtils.getInputValue(elm),elm,useTitle);
-		
-		if(errorMsg) {
-			//elm.sbTitle=elm.title;
-			Validation.showErrorMsg(name,elm,errorMsg);
-			return false;
-		} else {
-			Validation.hideErrorMsg(name,elm);
-			//if(elm.sbTitle)
-			//	elm.title=elm.sbTitle;
-			return true;
-		}
-	},
+			   var v = Validation.get(name);
+			   var errorMsg = null;
+			   if(ValidationUtils.isVisible(elm))
+				   //调用validator中的testAndGetError方法进行校验
+				   errorMsg = v.testAndGetError(ValidationUtils.getInputValue(elm),elm,useTitle);
+			   if(errorMsg) {
+				   Validation.showErrorMsg(v.className,elm,errorMsg);
+				   return false;
+			   } else {
+				   Validation.hideErrorMsg(v.className,elm);
+				   return true;
+			   }
+		   },
+	//获取信息提示div
 	getAdvice : function(name, elm) {
-		return $prototype('advice-' + name + '-' + ValidationUtils.getElmID(elm)) || $prototype('advice-' + ValidationUtils.getElmID(elm));
-	},
+					var advice = $('#advice-' + name + '-' + ValidationUtils.getElmID(elm));
+					if(advice && advice[0]){
+						return advice;
+					}
+					advice = $('#advice-' + ValidationUtils.getElmID(elm));
+					if(advice && advice[0]){
+						return advice;
+					}
+					return undefined;
+				},
+	//重置所有form表单，清楚框架附加的各种显示效果class，隐藏错误提示消息
 	reset : function(elm) {
-		elm = $prototype(elm);
-		var cn = $A(elm.classNames());
-		for(var i = 0; i < cn.length; i++) {
-			var value = cn[i];
-			var prop = Validation._getAdviceProp(value);
-			if(elm[prop]) {
-				var advice = Validation.getAdvice(value, elm);
-				advice.hide();
-				elm[prop] = '';
-			}
-			elm.removeClassName('validation-failed');
-			elm.removeClassName('validation-passed');			
-		}
-	},
+				var classes = elm.attr('class') || '';
+				var cn = classes.split(/\s+/);
+				for(var i = 0; i < cn.length; i++) {
+					var value = cn[i];
+					var className = Validation.get(value).className;
+					if(className){
+						var advice = Validation.getAdvice(className, elm);
+						if(advice != undefined){
+							advice.hide();
+							elm.removeClass('validation-failed');
+							elm.removeClass('validation-passed');
+						}
+					}
+				}
+			},
+	//添加单个校验规则，function参数可以直接传入正则表达式对象，该函数会使用正则对象生成校验方法，进行校验。
+	//options默认自动包括ValidatorDefaultOptions，同时支持通过传入options进行扩展，例如{depends : ['validate-integer']}
 	add : function(className, test, options) {
-		var nv = {};
-		var testFun = test;
-		if(test instanceof RegExp)
-			testFun = function(v,elm,args,metadata){ return test.test(v); }
-		nv[className] = new Validator(className, testFun, options);
-		Object.extend(Validation.methods, nv);
-	},
+			  var nv = {};
+			  var testFun = test;
+			  //处理校验规则是正则表达式对象的情况
+			  if(test instanceof RegExp)
+				  testFun = function(v,elm,args,metadata){ return test.test(v); }
+			  //生成validator对象
+			  nv[className] = new Validator(className, testFun, options);
+			  $.extend(Validation.methods, nv);
+		  },
+	//添加多个校验规则，校验方法以二维数组的形式传入，第一维的每一个元素存放的是一个数组
+	//第一个元素是校验函数的class名字，第二个是校验函数，第三个是自定义的option
+	//调用Validation的add（class的名字，校验函数，自定义选项），将校验规则加入Validation
 	addAllThese : function(validators) {
-		var validators = $A(validators);
-		for(var i = 0; i < validators.length; i++) {
-			var value = validators[i];
-			Validation.add(value[0], value[1], (value.length > 2 ? value[2] : {}));
-		}
-	},
+					  var validators = $.makeArray(validators);
+					  for(var i = 0; i < validators.length; i++) {
+						  var value = validators[i];
+						  Validation.add(value[0], value[1], (value.length > 2 ? value[2] : {}));
+					  }
+				  },
+	/*
+	 * 根据class的名字获得对应的校验函数，支持模糊查询
+	 * 如果存在，返回该class对应的校验函数
+	 * 如果不存在，new一个Validator对象返回。
+	 * 返回以methodName开头的最长匹配
+     * 比如获取validate-ajax-responseJudge-multiParams-http://localhost:8080/test.do-id-id-id的校验方法
+     * validate-ajax、validate-ajax-responseJudege、validate-ajax-responseJudge-multiParams都可以匹配
+     * 框架会选择最长的并且最早出现的作为校验函数
+	 */
 	get : function(name) {
-		var resultMethodName;
-		for(var methodName in Validation.methods) {
-			if(name == methodName) {
-				resultMethodName = methodName;
-				break;
-			}
-			if(name.indexOf(methodName) >= 0) {
-				resultMethodName = methodName;
-			}
-		}
-		return Validation.methods[resultMethodName] ? Validation.methods[resultMethodName] : new Validator();
-	},
-	$ : function(formId) {
-		return Validation.validations[formId];
-	},
+			  var resultMethodName;
+			  var maxMatchLength = 0;
+			  for(var methodName in Validation.methods) {
+			  	if(name == methodName) {
+			  		resultMethodName = methodName;
+			  		break;
+			  	}
+			  	if(name.indexOf(methodName) == 0) {
+			  		if(methodName.length > maxMatchLength){
+			  			maxMatchLength = methodName.length;
+			  			resultMethodName = methodName;
+			  		}
+			  	}
+			  }
+			  return Validation.methods[resultMethodName] ? Validation.methods[resultMethodName] : new Validator();
+		  },
+	//存放校验的validator，属性名是校验名，值是validator对象
 	methods : {},
+	//存放校验的Validation对象，属性名是form的id，值是Validation对象
 	validations : {}
-});
+	});
 
 Validation.addAllThese([
-	['required', function(v) {
-				return !((v == null) || (v.length == 0) || /^[\s|\u3000]+$/.test(v));
-			},{ignoreEmptyValue:false}],
-	['validate-number', function(v) {
-				return (!isNaN(v) && !/^\s+$/.test(v));
-			}],
-	['validate-digits', function(v) {
-				return !/[^\d]/.test(v);
-			}],
-	['validate-alphanum', function(v) {
-				return !/\W/.test(v)
-			}],
-	['validate-one-required', function (v,elm) {
-				//var p = elm.parentNode;
-				//var p = ValidationUtils.getReferenceForm(elm);
-				var options = document.getElementsByName(elm.name);
-				return $A(options).any(function(elm) {
-					return $F(elm);
-				});
-			},{ignoreEmptyValue : false}],
-			
-	['validate-digits',/^[\d]+$/],		
-	['validate-alphanum',/^[a-zA-Z0-9]+$/],		
-	['validate-alpha',/^[a-zA-Z]+$/],
-	['validate-email',/\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/],
-	['validate-url',/^(http|https|ftp|mms|rtsp):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i],
-	// [$]1[##][,###]+[.##]
-	// [$]1###+[.##]
-	// [$]0.##
-	// [$].##
-	['validate-currency-dollar',/^\$?\-?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/]
-]);
-
-//custom validate start
-
-Validation.addAllThese([
-	/**
-	 * Usage : equals-$otherInputId
-	 * Example : equals-username or equals-email etc..
-	 */
-	['equals', function(v,elm,args,metadata) {
-				return $F(args[0]) == v;
-			},{ignoreEmptyValue:false}],
-	/**
-	 * Usage : no-equals-$otherInputId
-	 * Example : no-equals-username or no-equals-email etc..
-	 */
-	['no-equals', function(v,elm,args,metadata) {
-		return $F(args[0]) != v;
-	},{ignoreEmptyValue:false}],	
-			
-	/**
-	 * Usage : less-than-$otherInputId
-	 */
-	['less-than', function(v,elm,args,metadata) {
-				if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test($F(args[0])))
-					return parseFloat(v) < parseFloat($F(args[0]));
-				return v < $F(args[0]);
-			}],
-	/**
-	 * Usage : less-than-equal-$otherInputId
-	 */
-	['less-than-equal', function(v,elm,args,metadata) {
-				if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test($F(args[0])))
-					return parseFloat(v) <= parseFloat($F(args[0]));
-				return v < $F(args[0]) || v == $F(args[0]);
-			}],			
-	/**
-	 * Usage : great-than-$otherInputId
-	 */
-	['great-than', function(v,elm,args,metadata) {
-				if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test($F(args[0])))
-					return parseFloat(v) > parseFloat($F(args[0]));
-				return v > $F(args[0]);
-			}],
-	/**
-	 * Usage : great-than-equal-$otherInputId
-	 */
-	['great-than-equal', function(v,elm,args,metadata) {
-				if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test($F(args[0])))
-					return parseFloat(v) >= parseFloat($F(args[0]));
-				return v > $F(args[0]) || v == $F(args[0]);
-			}],			
-	/*
-	 * Usage: min-length-$number
-	 * Example: min-length-10
-	 */
-	['min-length',function(v,elm,args,metadata) {
-		return v.length >= parseInt(args[0]);
-	}],
-	/*
-	 * Usage: max-length-$number
-	 * Example: max-length-10
-	 */
-	['max-length',function(v,elm,args,metadata) {
-		return v.length <= parseInt(args[0]);
-	}],
-	/*
-	 * Usage: min-length-byte-$number
-	 * Example: min-length-byte-10
-	 */
-	['min-length-byte',function(v,elm,args,metadata) {
-		return v.replace(/[^\x00-\xff]/g,"**").length >= parseInt(args[0]);
-	}],
-	/*
-	 * Usage: max-length-byte-$number
-	 * Example: max-length-byte-10
-	 */
-	['max-length-byte',function(v,elm,args,metadata) {
-		return v.replace(/[^\x00-\xff]/g,"**").length <= parseInt(args[0]);
-	}],
-	/*
-	 * Usage: validate-file-$type1-$type2-$typeX
-	 * Example: validate-file-png-jpg-jpeg
-	 */
-	['validate-file',function(v,elm,args,metadata) {
-		return $A(args).any(function(extentionName) {
-			return new RegExp('\\.'+extentionName+'$','i').test(v);
-		});
-	}],
-	/*
-	 * Usage: float-range-$minValue-$maxValue
-	 * Example: -2.1 to 3 = float-range--2.1-3
-	 */
-	['float-range',function(v,elm,args,metadata) {
-		return (parseFloat(v) >= parseFloat(args[0]) && parseFloat(v) <= parseFloat(args[1]))
-	},{depends : ['validate-number']}],
-	/*
-	 * Usage: int-range-$minValue-$maxValue
-	 * Example: -10 to 20 = int-range--10-20
-	 */
-	['int-range',function(v,elm,args,metadata) {
-		return (parseInt(v) >= parseInt(args[0]) && parseInt(v) <= parseInt(args[1]))
-	},{depends : ['validate-integer']}],
-	/*
-	 * Usage: length-range-$minLength-$maxLength
-	 * Example: 10 to 20 = length-range-10-20
-	 */
-	['length-range',function(v,elm,args,metadata) {
-		return (v.length >= parseInt(args[0]) && v.length <= parseInt(args[1]))
-	}],
-	/*
-	 * Usage: max-value-$number
-	 * Example: max-value-10
-	 */
-	['max-value',function(v,elm,args,metadata) {
-		return parseFloat(v) <= parseFloat(args[0]);
-	},{depends : ['validate-number']}],
-	/*
-	 * Usage: min-value-$number
-	 * Example: min-value-10
-	 */
-	['min-value',function(v,elm,args,metadata) {
-		return parseFloat(v) >= parseFloat(args[0]);
-	},{depends : ['validate-number']}],
-	/*
-	 * Usage: validate-pattern-$RegExp
-	 * Example: <input id='sex' class='validate-pattern-/^[fm]$/i'>
-	 */
-	['validate-pattern',function(v,elm,args,metadata) {
-		return eval('('+args.singleArgument+'.test(v))');
-	}],
-	/*
-	 * Usage: validate-ajax-$url
-	 * Example: <input id='email' class='validate-ajax-http://localhost:8080/validate-email.jsp'>
-	 */
-	['validate-ajax',function(v,elm,args,metadata) {
-		var form = ValidationUtils.getReferenceForm(elm);
-		//var params = (form ? Form.serialize(form) : Form.Element.serialize(elm));
-		var params = ValidationUtils.format("&%s=%s",[elm.name,encodeURIComponent(v)]);
-		//中文乱码处理
-		var url=encodeURI(args.singleArgument);
-		var request = new Ajax.Request(url,{
-			parameters : params,
-			asynchronous : false,
-			method : "get"
-		});
-		
-		var responseText = request.transport.responseText;
-		if("" == responseText.strip()) return true;
-		metadata._error = responseText;
-		return false;
-	}],
-	/*
-	 * Usage: validate-dwr-${service}.${method}
-	 * Example: <input id='email' class='validate-dwr-service.method'>
-	 */
-	['validate-dwr',function(v,elm,args,metadata) {
-		var result = false;
-		var callback = function(methodResult) {
-			if(methodResult) 
-				metadata._error = methodResult;
-			else 
-				result = true;
-		}
-		var call = args.singleArgument+"('"+v+"',callback)";
-		DWREngine.setAsync(false);
-		eval(call);
-		DWREngine.setAsync(true);
-		return result;
-	}],
-	/*
-	 * Usage: validate-buffalo-${service}.${method}
-	 * Example: <input id='email' class='validate-buffalo-service.method'>
-	 */
-	['validate-buffalo',function(v,elm,args,metadata) {
-		var result = false;
-		var callback = function(reply) {
-			if(replay.getResult()) 
-				metadata._error = replay.getResult();
-			else 
-				result = true;
-		}
-		if(!BUFFALO_END_POINT) alert('not found "BUFFALO_END_POINT" variable');
-		var buffalo = new Buffalo(BUFFALO_END_POINT,false);
-		buffalo.remoteCall(args.singleArgument,v,callback);
-		return result;
-	}],
-	/*
-	 * Usage: validate-date-$dateFormat or validate-date($dateFormat default is yyyy-MM-dd)
-	 * Example: validate-date-yyyy/MM/dd
-	 */
-	['validate-date', function(v,elm,args,metadata) {
-			var dateFormat = args.singleArgument || 'yyyy-MM-dd';
-			metadata._error = ValidationUtils.format(ValidationUtils.getI18nMsg(metadata.className),[dateFormat,dateFormat.replace('yyyy','2006').replace('MM','03').replace('dd','12')]);
-			return ValidationUtils.isDate(v,dateFormat);
+		['required', function(v) {
+			return !((v == null) || (v.length == 0) || /^[\s|\u3000]+$/.test(v));
+		},{ignoreEmptyValue:false}],
+		['validate-number', function(v) {
+			return (!isNaN(v) && !/^\s+$/.test(v));
 		}],
-	['validate-selection', function(v,elm,args,metadata) {
-			return elm.options ? elm.selectedIndex > 0 : !((v == null) || (v.length == 0));
-		}],	
-	['validate-integer',/^[-+]?[1-9]\d*$|^0$/],
-	['validate-ip',/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/],
-	
-	//中国相关验证开始
-	['validate-id-number',function(v,elm,args,metadata) {
-		if(!(/^\d{17}(\d|x)$/i.test(v) || /^\d{15}$/i.test(v))) return false;
-		var provinceCode = parseInt(v.substr(0,2));
-		if((provinceCode < 11) || (provinceCode > 91)) return false;
-		var forTestDate = v.length == 18 ? v : v.substr(0,6)+"19"+v.substr(6,15);
-		var birthday = forTestDate.substr(6,8);
-		if(!ValidationUtils.isDate(birthday,'yyyyMMdd')) return false;
-		if(v.length == 18) {
-			v = v.replace(/x$/i,"a");
-			var verifyCode = 0;
-			for(var i = 17;i >= 0;i--)   
-            	verifyCode += (Math.pow(2,i) % 11) * parseInt(v.charAt(17 - i),11);
-            if(verifyCode % 11 != 1) return false;
-		}
-		return true;
-	}],
-	['validate-chinese',/^[\u4e00-\u9fa5]+$/],
-	['validate-phone',/^((0[1-9]{3})?(0[12][0-9])?[-])?\d{6,8}$/],
-	['validate-mobile-phone',/(^0?[1][358][0-9]{9}$)/],
-	['validate-zip',/^[1-9]\d{5}$/],
-	['validate-qq',/^[1-9]\d{4,8}$/]
-]);
+		['validate-digits', function(v) {
+			return !/[^\d]/.test(v);
+		}],
+		['validate-alphanum', function(v) {
+			return !/\W/.test(v)
+		}],
+		['validate-one-required', function (v,elm) {
+			var p = elm.parent();
+			var options = $(p).find("input:checked");
+			return options.length>0?true:false;
+		},{ignoreEmptyValue : false}],
 
+		['validate-digits',/^[\d]+$/],
+		['validate-alphanum',/^[a-zA-Z0-9]+$/],
+		['validate-alpha',/^[a-zA-Z]+$/],
+		['validate-email',/\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/],
+		['validate-url',/^(http|https|ftp):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i],
+		// [$]1[##][,###]+[.##]
+		// [$]1###+[.##]
+		// [$]0.##
+		// [$].##
+		['validate-currency-dollar',/^\$?\-?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/]
+		]);
 
-Validation.autoBind = function() {
-	 var forms = $A(document.getElementsByClassName('required-validate'));
-	 for(var i = 0; i < forms.length; i++) {
-	 	var form = forms[i];
-	 	var validation = new Validation(form,{immediate:true,useTitles:true,stopOnFirst:true});
-		Event.observe(form,'reset',function() {validation.reset();},false);
-	 }
-};
+		//custom validate start
 
-Event.observe(window,'load',Validation.autoBind,false);
+		Validation.addAllThese([
+				/**
+				 * Usage : equals-$otherInputId
+				 * Example : equals-username or equals-email etc..
+				 */
+				['equals', function(v,elm,args,metadata) {
+					var compareValue = $('#' + args[0]).val();
+					return compareValue == v;
+				},{ignoreEmptyValue:false}],
+				/**
+				 * Usage : less-than-$otherInputId
+				 */
+				['less-than', function(v,elm,args,metadata) {
+					var compareValue = $('#' + args[0]).val();
+					if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test(compareValue))
+						return parseFloat(v) < parseFloat(compareValue);
+					return v < compareValue;
+				}],
+				/**
+				 * Usage : less-than-equal-$otherInputId
+				 */
+				['less-than-equal', function(v,elm,args,metadata) {
+					var compareValue = $('#' + args[0]).val();
+					if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test(compareValue))
+						return parseFloat(v) <= parseFloat(compareValue);
+					return v < compareValue || v == compareValue;
+				}],
+				/**
+				 * Usage : great-than-$otherInputId
+				 */
+				['great-than', function(v,elm,args,metadata) {
+					var compareValue = $('#' + args[0]).val();
+					if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test(compareValue))
+						return parseFloat(v) > parseFloat(compareValue);
+					return v > compareValue;
+				}],
+				/**
+				 * Usage : great-than-equal-$otherInputId
+				 */
+				['great-than-equal', function(v,elm,args,metadata) {
+					var compareValue = $('#' + args[0]).val();
+					if(Validation.get('validate-number').test(v) && Validation.get('validate-number').test(compareValue))
+						return parseFloat(v) >= parseFloat(compareValue);
+					return v > compareValue || v == compareValue;
+				}],
+				/*
+				 * Usage: min-length-$number
+				 * Example: min-length-10
+				 */
+				['min-length',function(v,elm,args,metadata) {
+					return v.length >= parseInt(args[0]);
+				}],
+				/*
+				 * Usage: max-length-$number
+				 * Example: max-length-10
+				 */
+				['max-length',function(v,elm,args,metadata) {
+					return v.length <= parseInt(args[0]);
+				}],
+				/*
+				 * Usage: validate-file-$type1-$type2-$typeX
+				 * Example: validate-file-png-jpg-jpeg
+				 */
+				['validate-file',function(v,elm,args,metadata) {
+					return ValidationUtils.any($.makeArray(args),function(extentionName) {
+						return new RegExp('\\.'+extentionName+'$','i').test(v);
+					});
+				}],
+				/*
+				 * Usage: float-range-$minValue-$maxValue
+				 * Example: -2.1 to 3 = float-range--2.1-3
+				 */
+				['float-range',function(v,elm,args,metadata) {
+					return (parseFloat(v) >= parseFloat(args[0]) && parseFloat(v) <= parseFloat(args[1]))
+				},{depends : ['validate-number']}],
+				/*
+				 * Usage: int-range-$minValue-$maxValue
+				 * Example: -10 to 20 = int-range--10-20
+				 */
+				['int-range',function(v,elm,args,metadata) {
+					return (parseInt(v) >= parseInt(args[0]) && parseInt(v) <= parseInt(args[1]))
+				},{depends : ['validate-integer']}],
+				/*
+				 * Usage: length-range-$minLength-$maxLength
+				 * Example: 10 to 20 = length-range-10-20
+				 */
+				['length-range',function(v,elm,args,metadata) {
+					return (v.length >= parseInt(args[0]) && v.length <= parseInt(args[1]))
+				}],
+				/*
+				 * Usage: max-value-$number
+				 * Example: max-value-10
+				 */
+				['max-value',function(v,elm,args,metadata) {
+					return parseFloat(v) <= parseFloat(args[0]);
+				},{depends : ['validate-number']}],
+				/*
+				 * Usage: min-value-$number
+				 * Example: min-value-10
+				 */
+				['min-value',function(v,elm,args,metadata) {
+					return parseFloat(v) >= parseFloat(args[0]);
+				},{depends : ['validate-number','required']}],
+				/*
+				 * Usage: validate-pattern-$RegExp
+				 * Example: <input id='sex' class='validate-pattern-/^[fm]$/i'>
+				 */
+				['validate-pattern',function(v,elm,args,metadata) {
+					return eval('('+args.singleArgument+'.test(v))');
+				}],
+				/*
+				 * Usage: validate-ajax-$url
+				 * Example: <input id='email' class='validate-ajax-http://localhost:8080/validate-email.jsp'>
+				 */
+				['validate-ajax',function(v,elm,args,metadata) {
+					var params = elm.serialize();
+					params += ValidationUtils.format("&what=%s&value=%s",[elm.name,encodeURIComponent(v)]);
+					var request = $.ajax(
+								{
+									url:args.singleArgument,
+									data:params,
+									async:false,
+									type:'get'
+								}
+							);
+					var responseText = $.trim(request.responseText);
+					if("" == responseText) return true;
+					metadata._error = responseText;
+					return false;
+				}],
+				/*
+				 * Usage: validate-ajax-responseJudge-$url
+				 * 建议使用validate-ajax-responseJudge-multiParams
+				 * 支持回调函数
+				 * 1).如果返回值不为空且以'error:'开头，则返回的为错误信息，截取错误信息的正文，由框架进行错误信息的显示流程
+				 * 2).如果返回值不为空且不以'error:'开头，则返回的是数据，根据elm的id值，在Validator.callBack中寻找绑定的回调函数，将返回值作为参数传入
+				 *    对应的回调函数需事先绑定在Validator.callBack中，绑定形式为Validator.callBack[标签id] = 回调函数的引用
+				 *	  例如：Validator.callBack['example'] = callbackFunc;
+				 * 3).如果返回值为空，则说明校验通过且没有返回数据
+				 * Example: <input id='email' class='validate-ajax-responseJudge-multiParams-http://localhost:8080/validate-email.jsp'>
+				 */
+				['validate-ajax-responseJudge',function(v,elm,args,metadata) {
+					var flag = true;    //该校验通过或不通过的标志位
+					var params = elm.serialize();
+					params += ValidationUtils.format("&what=%s&value=%s",[elm.name,encodeURIComponent(v)]);
+					var request = $.ajax(
+								{
+									url:args[0],
+									data:params,
+									async:false,
+									type:'get',
+									success:function (msg){
+										var responseText = $.trim(msg);
+										if(responseText != '' && responseText.indexOf('error:') == 0){
+											metadata._error = responseText.substring(6);
+											flag = false;
+										}else if(responseText != ''){
+											var callbackFunc = Validator.callBack[elm.attr("id")]; //根绝elm的id获取绑定的回调函数
+											if(callbackFunc != null && typeof(callbackFunc) == 'function'){
+												flag = callbackFunc.call(this,responseText);
+											}
+										}else{
+											flag = true;
+										}
+									}
+								}
+							);
+					return flag;
+				}],
+				/*
+				 * Usage: validate-ajax-responseJudge-multiParams-$url-id-id-id....
+				 * 支持回调函数,不再序列化整个form,需要传多个值需要把对应的输入框的id拼在url后面
+				 * 对应的回调函数需事先绑定在Validator.callBack中，绑定形式为Validator.callBack[标签id] = 回调函数的引用
+				 * 例如：Validator.callBack['example'] = callbackFunction;
+				 * 1).如果返回值不为空且以'error:'开头，则返回的为错误信息，截取错误信息的正文，在Validator.callBack中寻找绑定的回调函数
+				 将返回值作为参数传入，然后由框架进行错误信息的显示流程
+				 * 2).如果返回值不为空且不以'error:'开头，则返回的是需要获取的数据，根据elm的id值，在Validator.callBack中寻找绑定的回调函数，将返回值作为参数传入
+				 * 3).如果返回值为空，则说明校验通过且没有返回数据
+				 * Example: <input id='email' class='validate-ajax-responseJudge-multiParams-http://localhost:8080/validate-email.jsp-id-id-id'>
+				 */
+				['validate-ajax-responseJudge-multiParams',function(v,elm,args,metadata) {
+					var flag = true;	//该校验通过或不通过的标志位
+					var params = elm.serialize();
+					for(var i = 1;i < args.length;i=i+1){
+						var element = $('#' + args[i]);
+							if(element && element[0]){
+								params = params + '&' + element.serialize();
+							}
+					}
+					var currentDate = new Date();
+					params = params + '&_datetime=' + currentDate;
+					var request = $.ajax(
+								{
+									url:args[0],
+									data:params,
+									async:false,
+									type:'get',
+									success:function(msg){
+										var responseText = $.trim(msg);
+										if(responseText != '' && responseText.indexOf('error:') == 0){
+											metadata._error = responseText.substring(6);
+											flag = false;
+										}else if(responseText != ''){
+											var callbackFunc = Validator.callBack[elm.attr("id")]; //根绝elm的id获取绑定的回调函数
+											if(callbackFunc != null && typeof(callbackFunc) == 'function'){
+												flag = callbackFunc.call(this,responseText);
+											}
+										}else{
+											flag = true;
+										}
+									}
+								}
+							);
+					return flag;
+				}],
+				/*
+				 * Usage: validate-dwr-${service}.${method}
+				 * Example: <input id='email' class='validate-dwr-service.method'>
+				['validate-dwr',function(v,elm,args,metadata) {
+					var result = false;
+					var callback = function(methodResult) {
+						if(methodResult)
+							metadata._error = methodResult;
+						else
+							result = true;
+					}
+					var call = args.singleArgument+"('"+v+"',callback)";
+					DWREngine.setAsync(false);
+					eval(call);
+					DWREngine.setAsync(true);
+					return result;
+				}],
+				 */
+				/*
+				 * Usage: validate-buffalo-${service}.${method}
+				 * Example: <input id='email' class='validate-buffalo-service.method'>
+				['validate-buffalo',function(v,elm,args,metadata) {
+					var result = false;
+					var callback = function(reply) {
+						if(replay.getResult())
+							metadata._error = replay.getResult();
+						else
+							result = true;
+					}
+					if(!BUFFALO_END_POINT) alert('not found "BUFFALO_END_POINT" variable');
+					var buffalo = new Buffalo(BUFFALO_END_POINT,false);
+					buffalo.remoteCall(args.singleArgument,v,callback);
+					return result;
+				}],
+				 */
+				/*
+				 * Usage: validate-date-$dateFormat or validate-date($dateFormat default is yyyy-MM-dd)
+				 * Example: validate-date-yyyy/MM/dd
+				 */
+				['validate-date', function(v,elm,args,metadata) {
+					var dateFormat = args.singleArgument || 'yyyy-MM-dd';
+					metadata._error = ValidationUtils.format(ValidationUtils.getI18nMsg(metadata.className),[dateFormat,dateFormat.replace('yyyy','2006').replace('MM','03').replace('dd','12')]);
+					return ValidationUtils.isDate(v,dateFormat);
+				}],
+				['validate-selection', function(v,elm,args,metadata) {
+					return elm[0].options ? elm[0].selectedIndex > 0 : !((v == null) || (v.length == 0));
+				}],
+				['validate-integer',/^[-+]?[1-9]\d*$|^0$/],
+				['validate-ip',/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/],
+
+				//中国相关验证开始
+				['validate-id-number',function(v,elm,args,metadata) {
+					if(!(/^\d{17}(\d|x)$/i.test(v) || /^\d{15}$/i.test(v))) return false;
+					var provinceCode = parseInt(v.substr(0,2));
+					if((provinceCode < 11) || (provinceCode > 91)) return false;
+					var forTestDate = v.length == 18 ? v : v.substr(0,6)+"19"+v.substr(6,15);
+					var birthday = forTestDate.substr(6,8);
+					if(!ValidationUtils.isDate(birthday,'yyyyMMdd')) return false;
+					if(v.length == 18) {
+						v = v.replace(/x$/i,"a");
+						var verifyCode = 0;
+						for(var i = 17;i >= 0;i--)
+							verifyCode += (Math.pow(2,i) % 11) * parseInt(v.charAt(17 - i),11);
+						if(verifyCode % 11 != 1) return false;
+					}
+					return true;
+				}],
+				['validate-chinese',/^[\u4e00-\u9fa5]+$/],
+				['validate-phone',/^((0[1-9]{3})?(0[12][0-9])?[-])?\d{6,8}$/],
+				['validate-mobile-phone',/(^0?[1][3458][0-9]{9}$)/],
+				['validate-zip',/^[1-9]\d{5}$/],
+				['validate-qq',/^[1-9]\d{4,9}$/]
+				]);
+
+				//初始化，绑定所有需要校验的form，同时绑定reset事件
+				//根据class为require-validate来确定form需要被校验
+				Validation.autoBind = function() {
+					var forms = $('.required-validate');
+					for(var i = 0; i < forms.length; i++) {
+						var form = $(forms[i]);
+						var validation = new Validation(form,{immediate:true,useTitles:true,stopOnFirst:true});
+						form.bind('reset',function() {validation.reset();});
+					}
+				};
+//初始化
+$(Validation.autoBind);
