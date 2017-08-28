@@ -2,11 +2,10 @@ package com.zkname.frame.util;
 
 import java.io.PrintWriter;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
-import com.alibaba.fastjson.JSON;
+import com.alibaba.druid.support.json.JSONUtils;
 import com.google.common.collect.Maps;
+import com.zkname.frame.util.jackson.JsonUtil;
 
 /**
  * json 格式  {"code":"0（错误代码）","message":"错误信息（属性可能不存在）"}
@@ -34,7 +33,7 @@ public class CodeHttpUtil {
             if(message!=null){
             	map.put("message", message);
             }
-            String jsonObject = JSON.toJSONString(map);
+            String jsonObject = JsonUtil.toJSONString(map);
             response.setContentType(contentType);
             out.print(jsonObject);
         } catch (Exception e) {
@@ -50,6 +49,6 @@ public class CodeHttpUtil {
         Map<String,Object> map=Maps.newHashMap();
         map.put("code", code);
         map.put("result", result);
-        return JSON.toJSONString(map);
+        return JsonUtil.toJSONString(map);
      }
 }

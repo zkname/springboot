@@ -1,14 +1,11 @@
 package com.zkname.hd.service;
 
-import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zkname.frame.dao.IBaseDAO;
 import com.zkname.frame.service.BaseService;
-import com.zkname.frame.util.memcache.XMemcachedClientImp;
 import com.zkname.hd.dao.SysUserDAO;
 import com.zkname.hd.entity.SysUser;
 
@@ -18,9 +15,6 @@ public class SysUserService extends BaseService<SysUser> {
 	
 	@Autowired
 	private SysUserDAO dao;
-	
-	@Resource(name = "baseXMemcachedClient")
-	private XMemcachedClientImp baseXMemcachedClient;
 
 	@Transactional(readOnly=true)//非事务处理
 	public IBaseDAO<SysUser> getDAO() {

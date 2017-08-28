@@ -3,11 +3,7 @@ package com.zkname;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.sql.DataSource;
-
-import org.jdbcdslog.ConnectionPoolDataSourceProxy;
-import org.jdbcdslog.JDBCDSLogException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -46,15 +42,6 @@ public class DatabaseConfiguration {
 		return dataSource;
 	}
 	
-	
-	@Bean("jdbcdslogDataSource")
-	public DataSource jdbcdslogDataSource() throws JDBCDSLogException {
-		log.info("init Jdbcdslog DataSource Configuration");
-		ConnectionPoolDataSourceProxy connectionPoolDataSourceProxy = new ConnectionPoolDataSourceProxy();
-		connectionPoolDataSourceProxy.setTargetDSDirect(dataSource());
-		return connectionPoolDataSourceProxy;
-	}
-	
 	@Bean
 	public SqlFactory getSqlFactory(){
 		return new SqlFactory();
@@ -62,43 +49,40 @@ public class DatabaseConfiguration {
 
 	@Primary
 	@Bean("jdbcTemplate")
-	public JdbcTemplate getJdbcTemplate() throws JDBCDSLogException  {
-		return new JdbcTemplate(jdbcdslogDataSource());
+	public JdbcTemplate getJdbcTemplate()   {
+		return new JdbcTemplate(dataSource());
 	}
 	
 	@Bean("jdbcTemplateSharding")
-	public JdbcTemplate getJdbcTemplateSharding() throws JDBCDSLogException  {
-		return new JdbcTemplate(getDataSource());
+	public JdbcTemplate getJdbcTemplateSharding()   {
+		return new JdbcTemplate(dataSource());
 	}
 	
 	@Primary
 	@Bean("transactionManager")
-	public DataSourceTransactionManager getDataSourceTransactionManager() throws JDBCDSLogException  {
-		return new DataSourceTransactionManager(jdbcdslogDataSource());
+	public DataSourceTransactionManager getDataSourceTransactionManager()   {
+		return new DataSourceTransactionManager(dataSource());
 	}
 	
 	@Bean("transactionManager1")
-	public DataSourceTransactionManager getDataSourceTransactionManager1() throws JDBCDSLogException  {
-		return new DataSourceTransactionManager(getDataSource());
+	public DataSourceTransactionManager getDataSourceTransactionManager1()   {
+		return new DataSourceTransactionManager(dataSource());
 	}
 	
 	@Bean("chainedTransactionManager")
-	public ChainedTransactionManager getChainedTransactionManager() throws JDBCDSLogException  {
+	public ChainedTransactionManager getChainedTransactionManager()   {
 		return new ChainedTransactionManager(getDataSourceTransactionManager(),getDataSourceTransactionManager1());
 	}
 	
 	@Bean(name="shardingDataSource")
-	public DataSource getDataSource() throws JDBCDSLogException {
+	public DataSource getDataSource()  {
 		log.info("init Sharding DataSource Configuration");
         //设置分库映射
         Map<String, DataSource> dataSourceMap = new HashMap<>(1);
-        dataSourceMap.put("dataSource", jdbcdslogDataSource());
+        dataSourceMap.put("dataSource", dataSource());
         DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap, "dataSource");
         List<TableRule> List= Lists.newArrayList();
         List.add(TableRule.builder("hd_user_pay_log").dynamic(true).dataSourceRule(dataSourceRule).build());
-        List.add(TableRule.builder("hd_user_recharge_log").dynamic(true).dataSourceRule(dataSourceRule).build());
-        List.add(TableRule.builder("hd_shop_wallet_log").dynamic(true).dataSourceRule(dataSourceRule).build());
-        List.add(TableRule.builder("hd_user_wallet_log").dynamic(true).dataSourceRule(dataSourceRule).build());
 
         //具体分库分表策略，按什么规则来分
         ShardingRule shardingRule = ShardingRule.builder().dataSourceRule(dataSourceRule).tableRules(List).tableShardingStrategy(new TableShardingStrategy("createTime", new CommentKeyModuloTableShardingAlgorithm())).build();

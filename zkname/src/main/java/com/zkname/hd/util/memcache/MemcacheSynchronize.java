@@ -3,7 +3,7 @@ package com.zkname.hd.util.memcache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zkname.frame.util.memcache.XMemcachedClientImp;
+import com.zkname.frame.util.memcache.XMemcacheClient;
 import com.zkname.frame.util.spring.SpringContextHolder;
 
 /**
@@ -24,7 +24,7 @@ public class MemcacheSynchronize {
 	 * @param iMemSyn
 	 * @return
 	 */
-	public static boolean memcacheSyn(XMemcachedClientImp baseXMemcachedClient,String key,int exp,IMemSyn iMemSyn){
+	public static boolean memcacheSyn(XMemcacheClient baseXMemcachedClient,String key,int exp,IMemSyn iMemSyn){
 		try {
 			key = "SYN_" + key;
 			Long v = null;
@@ -53,7 +53,7 @@ public class MemcacheSynchronize {
 	}
 	
 	public static void test() {
-		XMemcachedClientImp xMemcachedClientImp=SpringContextHolder.getBean("baseXMemcachedClient");
+		XMemcacheClient xMemcachedClientImp=SpringContextHolder.getBean("baseXMemcachedClient");
 		
 		String key="test_aaaaaaaaaaaaaaa";
 		IMemSyn iMemSyn = ()->{

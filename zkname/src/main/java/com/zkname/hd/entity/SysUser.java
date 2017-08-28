@@ -1,15 +1,10 @@
 package com.zkname.hd.entity;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import com.zkname.hd.entity.base.BaseSysUser;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@JsonAutoDetect
-@JsonIgnoreProperties(value = { "sysUserUserRoleRs", "sysUser", "password" })
 public class SysUser extends BaseSysUser {
 
 	private static final long serialVersionUID = -3451888062016242057L;

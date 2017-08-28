@@ -9,13 +9,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import com.google.common.collect.Maps;
 import com.zkname.frame.util.conf.ConfigurationProperties;
+import com.zkname.frame.util.jackson.XmlUtil;
 import com.zkname.hd.util.EncodeUtils;
 import com.zkname.hd.util.http.ClientConnectionManager;
-import com.zkname.hd.util.xml.XmlUtil;
 
 public class PlayUnifiedorder {
 
@@ -24,7 +23,7 @@ public class PlayUnifiedorder {
 		String url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 		String entity = genProductArgs(payinfo, orderId, ip ,openid);
 		String json = ClientConnectionManager.getInstance().postEntityJson(url, entity);
-		Map map = XmlUtil.xmlToObject(json, HashMap.class);
+		Map map = XmlUtil.xmlToObject(json,HashMap.class);
 //		Map<String,String> returnMap=Maps.newHashMap();
 		if (map != null && map.get("result_code") != null && map.get("result_code").toString().equals("SUCCESS") && map.get("return_code") != null && map.get("return_code").toString().equals("SUCCESS")) {
 //			returnMap.put("paySign", map.get("sign").toString());
@@ -120,15 +119,4 @@ public class PlayUnifiedorder {
 		return str;
 	}
 	
-	public static void main(String[] args) throws Exception {
-		String[] springConfigArray = { "applicationContext.xml", "applicationContext-import.xml" };
-
-		ApplicationContext ctx = new ClassPathXmlApplicationContext(springConfigArray);
-//		HbSoftInfoService hbSoftInfoService = ctx.getBean(HbSoftInfoService.class);
-//		HbSoftInfo hs = hbSoftInfoService.findById(1);
-//		String a = EncodeUtils.getUUID();
-//		String a1 = PlayUnifiedorder.unifiedorder(hs, a, "oXX5ts4OYbQpYmTZ4Po2HsUWxhkE", 6);
-//		System.out.println(a1);
-	}
-
 }
