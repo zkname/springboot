@@ -37,7 +37,7 @@ public class BasePage<T> extends Page<T> {
     // 起始
     private static final String searchValue = " from ";
     // 结束
-    private static final String orderByValue = "ORDER BY";
+    private static final String orderByValue = "order by";
 
     private Class<T> entityClass;
 
@@ -166,10 +166,10 @@ public class BasePage<T> extends Page<T> {
      * @since 1.0.0
      */
     protected String getSQLCount(String sql) {
-        String sqlCount = "select count(*) from " + sql.substring(sql.indexOf(searchValue) + searchValue.length(), sql.length());
+        String sqlCount = "select count(*) from " + sql.substring(sql.toLowerCase().lastIndexOf(searchValue) + searchValue.length(), sql.length());
         // 先判断是否存在
-        if (sqlCount.lastIndexOf(orderByValue) != -1) {
-            sqlCount = sqlCount.substring(0, sqlCount.lastIndexOf(orderByValue));
+        if (sqlCount.toLowerCase().lastIndexOf(orderByValue) != -1) {
+            sqlCount = sqlCount.substring(0, sqlCount.toLowerCase().lastIndexOf(orderByValue));
         }
         return sqlCount;
     }
