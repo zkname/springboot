@@ -28,7 +28,7 @@ $(function() {
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="${ctx}/index"><b>demo</b>管理平台</a>
+    <a href="${ctx}/index"><b>DEMO</b>管理平台</a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
