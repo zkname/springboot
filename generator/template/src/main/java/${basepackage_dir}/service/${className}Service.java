@@ -6,7 +6,7 @@ package ${basepackage}.service;
 
 import ${basepackage}.dao.*;
 import ${basepackage}.entity.*;
-import com.yuewuxian.frame.service.BaseService;
+import com.zkname.frame.service.BaseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -27,7 +27,7 @@ $(function() {
 			  return null;
 		  }else if(window.confirm("确认是否删除？")){
 			  //多选就发布
-			  $("#form").attr("action","<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/delete.do");
+			  $("#form").attr("action","<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/delete");
 			  $("#form").submit();
 		  }
 	});
@@ -39,7 +39,7 @@ $(function() {
 <div class="wrapper">
 	<jsp:include page="/WEB-INF/jsp/admin/body_top.jsp" />
 	  <!-- =============================================== -->
-	<c:import url="/admin/bodyMenu.do" ></c:import>
+	<c:import url="/admin/bodyMenu" ></c:import>
 	  <!-- =============================================== -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -51,11 +51,11 @@ $(function() {
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/list.do">后台管理</a></li>
+        <li><a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/list">后台管理</a></li>
         <li class="active">${table.tableAlias}</li>
       </ol>
     </section>
-	<form id="form" action="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/list.do" method="get">
+	<form id="form" action="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/list" method="get">
 		<input type="hidden" name="pageNo" id="pageNo" value="<@jspEl 'page.pageNo'/>"/>
 		<input name="token" type="hidden" id="token" value="<@jspEl 'token'/>" />
 	    <!-- Main content -->
@@ -93,7 +93,7 @@ $(function() {
 	         </div>
 	            <hr style="border:none;border-top:1px dotted #185598;" />
 	            <div style="margin-left:10px">
-					 <a href="javascript:void(0);" id="deleteId">删除</a> | <a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/add.do" > 添加</a>
+					 <a href="javascript:void(0);" id="deleteId">删除</a> | <a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/add" > 添加</a>
 	            </div>
 	            <!-- /.box-header -->
 	          <div class="box-body table-responsive no-padding">
@@ -123,7 +123,7 @@ $(function() {
 				        <#lt></td>
 				      </#if>
 				      </#list>
-				      <td><a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/update/<@generateId/>.do">修改</a> </td>
+				      <td><a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/update/<@generateId/>">修改</a> </td>
 				    </tr>
 					</c:forEach>
 			        </table>

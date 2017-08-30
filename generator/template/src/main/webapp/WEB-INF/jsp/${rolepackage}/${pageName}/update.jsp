@@ -12,7 +12,7 @@
 <div class="wrapper">
 	<jsp:include page="/WEB-INF/jsp/admin/body_top.jsp" />
 	  <!-- =============================================== -->
-	<c:import url="/admin/bodyMenu.do" ></c:import>
+	<c:import url="/admin/bodyMenu" ></c:import>
 	  <!-- =============================================== -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -23,12 +23,12 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/list.do">后台管理</a></li>
+        <li><a href="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/list">后台管理</a></li>
         <li class="active">${table.tableAlias}</li>
       </ol>
     </section>
     
-<form action="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/updateInput.do" method="POST" id="inputForm">
+<form action="<@jspEl 'ctx'/>/${rolepackage}/${toclassName}/updateInput" method="POST" id="inputForm">
 <input name="ctx" type="hidden" id="ctx" value="<@jspEl 'ctx'/>">
 <input name="token" type="hidden" id="token" value="<@jspEl 'token'/>">
 <#list table.columns as column><#if column.pk><input name="${column.columnNameLower}" type="hidden" id="${column.columnNameLower}" value="<@jspEl 'entity.${column.columnNameLower}'/>"></#if></#list>

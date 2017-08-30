@@ -22,6 +22,9 @@ public class ControllerInterceptor  implements HandlerInterceptor  {
 	public void afterCompletion(HttpServletRequest arg0,HttpServletResponse arg1, Object arg2, Exception arg3)throws Exception {
 		if(logger.isDebugEnabled()){
 			StopWatch stopWatch = StopWatchLocal.get();   
+			if(stopWatch==null){
+				return;
+			}
 	        stopWatch.stop();   
 	        String currentPath = arg0.getRequestURI();   
 	        String queryString  = arg0.getQueryString();

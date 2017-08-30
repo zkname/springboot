@@ -7,8 +7,8 @@ package ${basepackage}.page;
 import java.util.*;
 
 import ${basepackage}.entity.*;
-import com.yuewuxian.frame.page.BasePage;
-import com.yuewuxian.frame.util.DateUtil;
+import com.zkname.frame.page.BasePage;
+import com.zkname.frame.util.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 

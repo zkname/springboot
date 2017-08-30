@@ -6,7 +6,7 @@ package ${basepackage}.dao;
 
 import java.util.*;
 import ${basepackage}.entity.*;
-import com.yuewuxian.frame.dao.BaseDAO;
+import com.zkname.frame.dao.BaseDAO;
 import org.springframework.stereotype.Repository;
 
 @Repository

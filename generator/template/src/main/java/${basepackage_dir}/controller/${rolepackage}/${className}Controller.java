@@ -22,7 +22,7 @@ import ${basepackage}.page.*;
 import ${basepackage}.entity.*;
 import ${basepackage}.service.*;
 import ${basepackage}.util.exception.ActionException;
-import com.yuewuxian.frame.controller.BaseController;
+import com.zkname.frame.controller.BaseController;
 
 @Controller
 @RequestMapping(value = "/${rolepackage}/${toclassName}")
