@@ -6,7 +6,7 @@ import com.zkname.hd.entity.SysRegion;
 import lombok.Getter;
 import lombok.Setter;
 
-//SysRegion
+//省市
 public class PageSysRegion extends BasePage<SysRegion> {
 
 	private static final long serialVersionUID = -4033946585064541028L;
