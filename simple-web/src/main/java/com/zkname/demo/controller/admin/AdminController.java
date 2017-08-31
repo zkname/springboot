@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.zkname.demo.session.LoginUser;
-import com.zkname.frame.controller.BaseController;
+import com.zkname.core.controller.BaseController;
 
 
 /**

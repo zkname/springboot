@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import com.zkname.frame.util.WebPathUtil;
+import com.zkname.core.util.WebPathUtil;
 
 /**
  * 图片加水印，设置透明度 http://blog.csdn.net/hfmbook

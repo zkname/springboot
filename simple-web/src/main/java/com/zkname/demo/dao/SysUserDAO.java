@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.zkname.frame.dao.BaseDAO;
+import com.zkname.core.dao.BaseDAO;
 import com.zkname.demo.entity.SysUser;
 
 @Repository

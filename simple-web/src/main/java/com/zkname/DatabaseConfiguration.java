@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.google.common.collect.Lists;
-import com.zkname.frame.dao.sql.SqlFactory;
+import com.zkname.core.dao.sql.SqlFactory;
 
 @Configuration
 @EnableTransactionManagement(proxyTargetClass=true)

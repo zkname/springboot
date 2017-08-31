@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.zkname.demo.dao.SysUserDAO;
 import com.zkname.demo.entity.SysUser;
 import com.zkname.demo.session.LoginUser;
-import com.zkname.frame.dao.IBaseDAO;
-import com.zkname.frame.service.BaseService;
+import com.zkname.core.dao.IBaseDAO;
+import com.zkname.core.service.BaseService;
 
 @Service
 @Transactional(rollbackFor=Exception.class)//注解实现事务，所有异常都回滚；

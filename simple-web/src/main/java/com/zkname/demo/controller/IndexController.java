@@ -17,8 +17,8 @@ import com.zkname.demo.entity.SysUser;
 import com.zkname.demo.service.SysUserService;
 import com.zkname.demo.session.LoginUser;
 import com.zkname.demo.util.EncodeUtils;
-import com.zkname.frame.controller.BaseController;
-import com.zkname.frame.util.spring.SpringHttpServletRequest;
+import com.zkname.core.controller.BaseController;
+import com.zkname.core.util.spring.SpringHttpServletRequest;
 import com.zkname.patchca.PatchcaFilter;
 
 

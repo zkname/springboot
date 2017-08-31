@@ -15,8 +15,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.zkname.frame.util.spring.AvoidDuplicateSubmissionInterceptor;
-import com.zkname.frame.util.spring.ControllerInterceptor;
+import com.zkname.core.util.spring.AvoidDuplicateSubmissionInterceptor;
+import com.zkname.core.util.spring.ControllerInterceptor;
 
 @Configuration
 public class SpringMvcConfigurer extends WebMvcConfigurerAdapter {

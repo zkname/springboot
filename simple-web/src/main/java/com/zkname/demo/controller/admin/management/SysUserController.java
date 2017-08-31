@@ -19,8 +19,8 @@ import com.zkname.demo.page.PageSysUser;
 import com.zkname.demo.service.SysUserService;
 import com.zkname.demo.session.LoginUser;
 import com.zkname.demo.util.EncodeUtils;
-import com.zkname.frame.controller.BaseController;
-import com.zkname.frame.util.exception.ActionException;
+import com.zkname.core.controller.BaseController;
+import com.zkname.core.util.exception.ActionException;
 
 @Controller
 @RequestMapping(value = "/admin/management/sysuser")

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import com.google.common.collect.Lists;
-import com.zkname.frame.util.spring.CustomerApplicationContextInitializer;
+import com.zkname.core.util.spring.CustomerApplicationContextInitializer;
 
 @SpringBootApplication
 @Configuration

@@ -7,8 +7,8 @@ package ${basepackage}.page;
 import java.util.*;
 
 import ${basepackage}.entity.*;
-import com.zkname.frame.page.BasePage;
-import com.zkname.frame.util.DateUtil;
+import com.zkname.core.page.BasePage;
+import com.zkname.core.util.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 

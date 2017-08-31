@@ -16,5 +16,7 @@
 		<module>core</module>
 		<module>patchca</module>
 		<module>simple-web</module>
+		<module>spring-security</module>
+		
   </modules>
 </project>

@@ -1,7 +1,7 @@
 package com.zkname.demo.session;
 
-import com.zkname.frame.util.exception.LoginTimeoutException;
-import com.zkname.frame.util.spring.SpringHttpServletRequest;
+import com.zkname.core.util.exception.LoginTimeoutException;
+import com.zkname.core.util.spring.SpringHttpServletRequest;
 
 import lombok.Getter;
 import lombok.Setter;

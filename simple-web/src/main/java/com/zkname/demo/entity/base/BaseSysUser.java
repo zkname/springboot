@@ -12,8 +12,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.zkname.frame.entity.IdEntity;
-import com.zkname.frame.util.DateUtil;
+import com.zkname.core.entity.IdEntity;
+import com.zkname.core.util.DateUtil;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.zkname.frame.util.CodeHttpUtil;
-import com.zkname.frame.util.exception.ActionException;
-import com.zkname.frame.util.exception.LoginTimeoutException;
+import com.zkname.core.util.CodeHttpUtil;
+import com.zkname.core.util.exception.ActionException;
+import com.zkname.core.util.exception.LoginTimeoutException;
 
 /**
  * 默认抛出异常输出

@@ -6,8 +6,8 @@ package ${basepackage}.entity.base;
 
 import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
-import com.zkname.frame.entity.IdEntity;
-import com.zkname.frame.util.DateUtil;
+import com.zkname.core.entity.IdEntity;
+import com.zkname.core.util.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.*;
