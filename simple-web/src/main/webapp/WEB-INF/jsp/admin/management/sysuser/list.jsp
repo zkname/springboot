@@ -5,6 +5,12 @@
 <head>
 <%@ include file="/WEB-INF/jsp/include/head.jsp" %>
 <script type="text/javascript">
+$(function() {
+	//全选不选结合
+	$("#checkbox").click(function(){
+		 $(":input[id=ids]").attr("checked",this.checked);
+	});
+});
 //废止操作
 function jsDeleStatus(type){
 	  if ($("input[name='ids']:checked").length < 1) {
