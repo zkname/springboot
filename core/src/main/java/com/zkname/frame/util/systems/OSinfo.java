@@ -5,14 +5,6 @@ package com.zkname.frame.util.systems;
  * 操作系统类： 获取System.getProperty("os.name")对应的操作系统
  */
 public class OSinfo {
-
-//    static {
-//        if(OSinfo.isWindows()){
-//            System.load(WebPathUtil.getWebModulPath()+File.separatorChar+"WEB-INF"+File.separatorChar+"classes"+File.separatorChar+"library"+File.separatorChar+"libpsdk-x"+System.getProperty("sun.arch.data.model")+".dll");
-//        }else{
-//            System.load(WebPathUtil.getWebModulPath()+File.separatorChar+"WEB-INF"+File.separatorChar+"classes"+File.separatorChar+"library"+File.separatorChar+"libpsdk.so");
-//        }
-//    }
     
 	private static String OS = System.getProperty("os.name").toLowerCase();
 

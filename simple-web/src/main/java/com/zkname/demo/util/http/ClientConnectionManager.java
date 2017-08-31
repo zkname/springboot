@@ -22,7 +22,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.zkname.frame.util.ExceptionUtils;
+import com.zkname.frame.util.exception.ExceptionUtils;
 
 import lombok.Getter;
 

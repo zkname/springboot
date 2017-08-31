@@ -1,4 +1,4 @@
-package com.zkname.frame.util.spring;
+package com.zkname.frame.util.exception;
 
 import com.zkname.frame.util.exception.ActionException;
 
