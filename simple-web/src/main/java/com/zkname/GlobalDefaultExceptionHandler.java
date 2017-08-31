@@ -5,10 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.zkname.frame.util.CodeHttpUtil;
 import com.zkname.frame.util.exception.ActionException;
@@ -25,7 +23,7 @@ public class GlobalDefaultExceptionHandler {
 	public String defaultErrorHandler(HttpServletRequest req, HttpServletResponse rep,Exception arg) {
 	    // 根据不同错误转向不同页面  
 		if(arg instanceof ActionException){
-		    if(!req.getParameterMap().containsKey("isAjax")){
+		    if(!req.getParameterMap().containsKey("ajax")){
 		    	req.setAttribute("error", arg.getMessage());
 		        return "include/error";
 		    }
@@ -34,7 +32,7 @@ public class GlobalDefaultExceptionHandler {
 			return "redirect:/index";
 		}else{
 			logger.error("错误",arg);
-			if(!req.getParameterMap().containsKey("isAjax")){
+			if(!req.getParameterMap().containsKey("ajax")){
 				return "include/error";
           }
 			CodeHttpUtil.writer(rep, CodeHttpUtil.错误);
