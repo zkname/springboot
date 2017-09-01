@@ -44,12 +44,6 @@ public class SysUserController extends BaseController{
 	@Autowired
 	private SysUserUserRoleRService  isysSysUserUserRoleRService;
 	
-	@Autowired
-	private SysPlatformService iadminSysPlatformService;
-	
-    //模块id
-    public static final Integer MODLE_ID = 2;
-	
 	/**
 	 * list(列表)
 	 */
