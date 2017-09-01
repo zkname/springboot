@@ -18,6 +18,10 @@ public class CodeHttpUtil {
     public static final int 成功=200;
     public static final int 无权限=403;
     public static final int 错误=500;
+    
+    
+    public static final int 登陆超时=1001;
+    
 	
 	public final static String contentType = "application/json";
 	

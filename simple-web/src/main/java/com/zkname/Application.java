@@ -9,9 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import com.google.common.collect.Lists;
-import com.zkname.core.util.spring.CustomerApplicationContextInitializer;
-
 @SpringBootApplication
 @Configuration
 @ComponentScan("com.zkname")
@@ -22,7 +19,7 @@ public class Application  {
 	   
 	public static void main(String[] args) throws Exception {
 		SpringApplication ctx = new SpringApplication(Application.class);
-		ctx.setInitializers(Lists.newArrayList(new CustomerApplicationContextInitializer()));
+//		ctx.setInitializers(Lists.newArrayList(new CustomerApplicationContextInitializer()));
 		ApplicationContext applicationContext = ctx.run(args);
 		String[] activeProfiles = applicationContext.getEnvironment().getActiveProfiles();
 		for (String profile : activeProfiles) {

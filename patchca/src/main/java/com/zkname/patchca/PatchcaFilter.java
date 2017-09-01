@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.patchca.color.SingleColorFactory;
 import org.patchca.filter.predefined.CurvesRippleFilterFactory;
 import org.patchca.filter.predefined.DiffuseRippleFilterFactory;
@@ -24,10 +25,25 @@ import org.patchca.filter.predefined.MarbleRippleFilterFactory;
 import org.patchca.filter.predefined.WobbleRippleFilterFactory;
 import org.patchca.service.Captcha;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class PatchcaFilter implements Filter {
 
 	public final static CaptchaService cs = new CaptchaService();
 
+	@Getter
+	@Setter
+	private String loginUrl="/images/codeVerification.png";
+	
+	@Getter
+	@Setter
+	private String errorUrl="/index";
+	
+	@Getter
+	@Setter
+	private boolean debug;
+	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		String filterFactory = filterConfig.getInitParameter("filterFactory");
@@ -46,20 +62,26 @@ public class PatchcaFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest obj1, ServletResponse obj2, FilterChain chain) {
-
+	public void doFilter(ServletRequest obj1, ServletResponse obj2, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) obj1;
 		HttpServletResponse response = (HttpServletResponse) obj2;
 		response.setHeader("Cache-Control", "no-cache");
-		if (request.getRequestURI().indexOf("/images/codeVerification.png") != -1) {
+		if (request.getRequestURI().indexOf(this.getLoginUrl()) != -1) {
+			if(!this.isDebug() && !isValidationCode(request, request.getParameter("code"))){
+				response.sendRedirect(errorUrl);
+				return;
+			}
+			chain.doFilter(obj1, obj2);    
+			return;
+		} else if (StringUtils.isNoneBlank(request.getParameter("ajax"))) {
 			try {
 				response.getWriter().write(Boolean.toString(isValidationCode(request, request.getParameter("code"))));
 				response.getWriter().flush();
 			} catch (IOException e) {
 			}
-		} else {
-			createImg(request, response);
+			return;
 		}
+		createImg(request, response);
 	}
 
 	public void createImg(HttpServletRequest request, HttpServletResponse response) {
