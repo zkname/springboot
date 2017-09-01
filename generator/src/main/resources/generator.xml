@@ -8,7 +8,7 @@
 	</comment>
 	
 	<!-- 系统路径 -->
-	<entry key="basepackage">com.zkname</entry>
+	<entry key="basepackage">com.zkname.demo</entry>
 	
 	<!-- 子包 -->
 	<entry key="rolepackage">base</entry>
@@ -38,7 +38,7 @@
 	<entry key="java_typemapping.java.sql.Clob">String</entry>
 	
 	<!-- Mysql -->
-	<entry key="jdbc.url">jdbc:mysql://192.168.1.101:3306/zk_test?useUnicode=true&amp;characterEncoding=utf-8</entry>
+	<entry key="jdbc.url">jdbc:mysql://192.168.1.101:3306/demo?useUnicode=true&amp;characterEncoding=utf-8</entry>
 	<entry key="jdbc.driver">com.mysql.jdbc.Driver</entry>
 
 	<!--  Oracle		jdbc:oracle:oci:@tnsname_devdb
