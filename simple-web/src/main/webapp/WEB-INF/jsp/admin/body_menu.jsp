@@ -34,6 +34,7 @@
 		    if(window.location.href.indexOf(href)!=-1){
 		    	$(this).closest("ul").show();
 		    	$(this).closest("ul").parent().addClass("menu-open");
+		    	$(this).closest("li").addClass("active");
 		    	return;
 		    }
 	    }
