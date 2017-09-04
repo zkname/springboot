@@ -21,7 +21,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import ${basepackage}.page.*;
 import ${basepackage}.entity.*;
 import ${basepackage}.service.*;
-import ${basepackage}.util.exception.ActionException;
 import com.zkname.core.controller.BaseController;
 
 @Controller
