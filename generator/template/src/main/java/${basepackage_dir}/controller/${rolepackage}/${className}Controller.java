@@ -22,6 +22,7 @@ import ${basepackage}.page.*;
 import ${basepackage}.entity.*;
 import ${basepackage}.service.*;
 import com.zkname.core.controller.BaseController;
+import com.zkname.core.util.spring.annotation.AvoidDuplicateSubmission;
 
 @Controller
 @RequestMapping(value = "/${rolepackage}/${toclassName}")
@@ -34,6 +35,7 @@ public class ${className}Controller extends BaseController{
 	/**
 	 * list(列表)
 	 */
+	@AvoidDuplicateSubmission(needSaveToken=true)
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(Page${className} page,HttpServletRequest request,HttpServletResponse response) {
 		page.setHttpServletRequestValue(request);
@@ -46,6 +48,7 @@ public class ${className}Controller extends BaseController{
 	/**
 	 * add(添加页面)
 	 */
+	@AvoidDuplicateSubmission(needSaveToken=true)
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request,HttpServletResponse response) {
 		
@@ -56,6 +59,7 @@ public class ${className}Controller extends BaseController{
 	/**
 	 * addInput(添加提交功能)
 	 */
+	@AvoidDuplicateSubmission(needRemoveToken=true)
 	@RequestMapping(value = "/addInput", method = RequestMethod.POST)
 	public RedirectView add(${className} entity,HttpServletRequest request,HttpServletResponse response) {
 		service.save(entity);
@@ -67,6 +71,7 @@ public class ${className}Controller extends BaseController{
 	/**
 	 * update(修改页面)
 	 */
+	@AvoidDuplicateSubmission(needSaveToken=true)
 	@RequestMapping(value = "/update/{<@byId/>}", method = RequestMethod.GET)
 	public ModelAndView update(@PathVariable <@newIdkey/>,HttpServletRequest request,HttpServletResponse response) {
 		${className} entity = service.findById(<@newIdkey1/>);
@@ -78,6 +83,7 @@ public class ${className}Controller extends BaseController{
 	/**
 	 * updateInput(修改提交功能)
 	 */
+	@AvoidDuplicateSubmission(needRemoveToken=true)
 	@RequestMapping(value = "/updateInput", method = RequestMethod.POST)
 	public RedirectView updateInput(${className} entity,<@newIdkey/>,HttpServletRequest request,HttpServletResponse response) {
 		${className} entityUpdate = service.findById(<@newIdkey1/>);
@@ -91,6 +97,7 @@ public class ${className}Controller extends BaseController{
 	/**
 	 * delete(删除功能)
 	 */
+	@AvoidDuplicateSubmission(needRemoveToken=true)
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public RedirectView delete(Object [] ids,HttpServletRequest request,HttpServletResponse response) {
 		RedirectView mv = new RedirectView("list.do");
