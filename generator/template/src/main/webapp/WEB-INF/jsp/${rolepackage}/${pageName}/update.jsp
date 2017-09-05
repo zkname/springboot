@@ -7,6 +7,24 @@
 <%@page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"%>
 <%@ page import="${basepackage}.entity.*"%>
 <%@ include file="/WEB-INF/jsp/include/taglibs.jsp" %>
+<!DOCTYPE html>
+<html>
+<head>
+<%@ include file="/WEB-INF/jsp/include/head.jsp" %>
+<!-- 添加表单验证,参数为表单ID -->
+<script type="text/javascript">
+$(function() {
+	var valid = new Validation('inputForm',{immediate:true,useTitles:true});
+	$(".btn-info").click(function(){
+	   if(valid.validate()){
+			$("#inputForm").submit();
+	   }else{
+		    return false;
+	   }
+   });
+});
+</script>
+</head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
