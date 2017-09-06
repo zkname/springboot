@@ -8,7 +8,7 @@
 	</comment>
 	
 	<!-- 系统路径 -->
-	<entry key="basepackage">com.zkname.demo</entry>
+	<entry key="basepackage">com.zkname.credit.card</entry>
 	
 	<!-- 子包 -->
 	<entry key="rolepackage">base</entry>
@@ -21,8 +21,8 @@
 	<!-- 需要移除的表名前缀,使用逗号进行分隔多个前缀,示例值: t_,v_ -->
 	<entry key="tableRemovePrefixes"></entry>
 	
-	<entry key="jdbc.username">systest</entry>
-	<entry key="jdbc.password">systest</entry>
+	<entry key="jdbc.username">root</entry>
+	<entry key="jdbc.password">root</entry>
 		
 	<!-- oracle需要指定jdbc.schema,并且可能要大写，其它数据库忽略此项配置  -->
 	<entry key="jdbc.schema"></entry>
@@ -38,7 +38,7 @@
 	<entry key="java_typemapping.java.sql.Clob">String</entry>
 	
 	<!-- Mysql -->
-	<entry key="jdbc.url">jdbc:mysql://192.168.1.101:3306/demo?useUnicode=true&amp;characterEncoding=utf-8</entry>
+	<entry key="jdbc.url">jdbc:mysql://192.168.1.116:3306/credit_card?useUnicode=true&amp;characterEncoding=utf-8</entry>
 	<entry key="jdbc.driver">com.mysql.jdbc.Driver</entry>
 
 	<!--  Oracle		jdbc:oracle:oci:@tnsname_devdb

@@ -63,7 +63,7 @@ public class ${className}Controller extends BaseController{
 	@RequestMapping(value = "/addInput", method = RequestMethod.POST)
 	public RedirectView add(${className} entity,HttpServletRequest request,HttpServletResponse response) {
 		service.save(entity);
-		RedirectView mv = new RedirectView("list.do");
+		RedirectView mv = new RedirectView("list");
 		return mv;
 	}
 	
@@ -90,7 +90,7 @@ public class ${className}Controller extends BaseController{
 		//获取参数实体，操作更新实体，不拷贝字段
 		BeanUtils.copyProperties(entity,entityUpdate,new String[]{<@newIdkey2/>});
 		service.update(entityUpdate);
-		RedirectView mv = new RedirectView("list.do");
+		RedirectView mv = new RedirectView("list");
 		return mv;
 	}
 	
@@ -100,7 +100,7 @@ public class ${className}Controller extends BaseController{
 	@AvoidDuplicateSubmission(needRemoveToken=true)
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public RedirectView delete(Object [] ids,HttpServletRequest request,HttpServletResponse response) {
-		RedirectView mv = new RedirectView("list.do");
+		RedirectView mv = new RedirectView("list");
 		service.delete(ids);
 		return mv;
 	}
