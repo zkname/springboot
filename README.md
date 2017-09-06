@@ -5,4 +5,4 @@
 ## 3、patchca 验证码
 ## 4、simple-web 简单web例子
 ## 5、spring-security-web 简单spring-security例子
-## 6、credit-card-web 信用卡提额程序
+## 6、credit-card-web 信用卡提额刷卡程序（信用卡提额必备）
