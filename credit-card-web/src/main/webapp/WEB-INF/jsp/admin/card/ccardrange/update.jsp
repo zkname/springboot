@@ -67,14 +67,20 @@ $(function() {
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><font color="red">*</font><%=CcardRange.ALIAS_MONEY_PROP_START_VALUE%></label>
                   <div class="col-sm-10">
+                  	<div class="input-group">
       				<input value="${entity.moneyPropStartValue}" id="moneyPropStartValue" name="moneyPropStartValue" class="required validate-integer min-value-35 max-value-80 form-control"  />
+      				<span class="input-group-addon">%</span>
+      				</div>
       				<br>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><font color="red">*</font><%=CcardRange.ALIAS_MONEY_PROP_END_VALUE%></label>
                   <div class="col-sm-10">
+                  	<div class="input-group">
       				<input value="${entity.moneyPropEndValue}" id="moneyPropEndValue" name="moneyPropEndValue" class="required validate-integer min-value-35 max-value-80 form-control"  />
+      				<span class="input-group-addon">%</span>
+      				</div>
       				<br>
                   </div>
                 </div>
