@@ -36,8 +36,11 @@ $(function () {
         today: '今天',
         month: '月',
         week : '周',
-        day  : '日',
+        day  : '日'
       },
+	  editable: true,
+	  eventLimit: true, // allow "more" link when too many events
+	  navLinks: true,
       events: function(start,end,timezone,callback){
     	  $.getJSON("${ctx}/admin/card/ccardcalendar/data",{'start': start.format("YYYY-MM-DD"),'end': end.format("YYYY-MM-DD")}, function(json){
     		  var events = [];
