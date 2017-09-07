@@ -55,7 +55,7 @@ CREATE TABLE `c_card_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `bankId` bigint(20) NOT NULL COMMENT '银行id',
   `cardRangeId` bigint(20) DEFAULT NULL COMMENT '信用规则id',
-  `jobDate` datetime DEFAULT NULL COMMENT '生成任务日期',
+  `jobDate` date DEFAULT NULL COMMENT '生成任务日期',
   `name` varchar(50) NOT NULL COMMENT '卡名',
   `money` int(11) DEFAULT NULL COMMENT '额度',
   `annualFeeType` int(11) DEFAULT '0' COMMENT '年费类型：1、强制收费，2、刷卡次数，3、免年费',
