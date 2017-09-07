@@ -1,16 +1,24 @@
 package com.zkname.credit.card.entity.base;
 
-import javax.persistence.*;
-import org.apache.commons.lang3.builder.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
-import lombok.Getter;
-import lombok.Setter;
-import java.util.*;
 
-import java.util.*;
+import lombok.Data;
+import lombok.ToString;
 
-
+@Data
+@ToString
 @Entity
 @Table(name = "c_bank")
 public class BaseCbank extends IdEntity<java.lang.Long>
@@ -32,32 +40,32 @@ public class BaseCbank extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 名称
 	 */
 	@Column(name = "name")
-	@Getter @Setter private java.lang.String name;
+	private java.lang.String name;
 	/**
 	 * 创建时间
 	 */
 	@Column(name = "createTime")
-	@Getter @Setter private java.util.Date createTime;
+	private java.util.Date createTime;
 	/**
 	 * 修改时间
 	 */
 	@Column(name = "updateTime")
-	@Getter @Setter private java.util.Date updateTime;
+	private java.util.Date updateTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
 	@Column(name = "deleStatus")
-	@Getter @Setter private java.lang.String deleStatus;
+	private java.lang.String deleStatus;
 	/**
 	 * 创建者id
 	 */
 	@Column(name = "creatorId")
-	@Getter @Setter private java.lang.Long creatorId;
+	private java.lang.Long creatorId;
 	//columns END
 
 	public BaseCbank(){
@@ -81,10 +89,6 @@ public class BaseCbank extends IdEntity<java.lang.Long>
 	}
 	public void setUpdateTimeString(String value) {
 		setUpdateTime(DateUtil.Str2Date(value));
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {

@@ -4,13 +4,18 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.*;
+import lombok.ToString;
 
 import java.util.*;
 
+import java.util.*;
 
+@Data
+@ToString
 @Entity
 @Table(name = "sys_param")
 public class BaseSysParam extends IdEntity<java.lang.Long>
@@ -35,47 +40,47 @@ public class BaseSysParam extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 参数名称
 	 */
 	@Column(name = "name")
-	@Getter @Setter private java.lang.String name;
+	private java.lang.String name;
 	/**
 	 * 参数类型
 	 */
 	@Column(name = "type")
-	@Getter @Setter private java.lang.Integer type;
+	private java.lang.Integer type;
 	/**
 	 * 参数key
 	 */
 	@Column(name = "k")
-	@Getter @Setter private java.lang.String k;
+	private java.lang.String k;
 	/**
 	 * 参数value
 	 */
 	@Column(name = "v")
-	@Getter @Setter private java.lang.String v;
+	private java.lang.String v;
 	/**
 	 * 创建时间
 	 */
 	@Column(name = "createTime")
-	@Getter @Setter private java.util.Date createTime;
+	private java.util.Date createTime;
 	/**
 	 * 修改时间
 	 */
 	@Column(name = "updateTime")
-	@Getter @Setter private java.util.Date updateTime;
+	private java.util.Date updateTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
 	@Column(name = "deleStatus")
-	@Getter @Setter private java.lang.String deleStatus;
+	private java.lang.String deleStatus;
 	/**
 	 * 创建者id
 	 */
 	@Column(name = "creatorId")
-	@Getter @Setter private java.lang.Long creatorId;
+	private java.lang.Long creatorId;
 	//columns END
 
 	public BaseSysParam(){
@@ -99,10 +104,6 @@ public class BaseSysParam extends IdEntity<java.lang.Long>
 	}
 	public void setUpdateTimeString(String value) {
 		setUpdateTime(DateUtil.Str2Date(value));
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {

@@ -4,13 +4,18 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.*;
+import lombok.ToString;
 
 import java.util.*;
 
+import java.util.*;
 
+@Data
+@ToString
 @Entity
 @Table(name = "c_card_job")
 public class BaseCcardJob extends IdEntity<java.lang.Long>
@@ -39,67 +44,67 @@ public class BaseCcardJob extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 银行id
 	 */
 	@Column(name = "bankId")
-	@Getter @Setter private java.lang.Long bankId;
+	private java.lang.Long bankId;
 	/**
 	 * 信用卡id
 	 */
 	@Column(name = "cardInfoId")
-	@Getter @Setter private java.lang.Long cardInfoId;
+	private java.lang.Long cardInfoId;
 	/**
 	 * 信用卡限制id
 	 */
 	@Column(name = "cardRangeId")
-	@Getter @Setter private java.lang.Long cardRangeId;
+	private java.lang.Long cardRangeId;
 	/**
 	 * 执行日期
 	 */
 	@Column(name = "jobDate")
-	@Getter @Setter private java.util.Date jobDate;
+	private java.util.Date jobDate;
 	/**
 	 * 金额
 	 */
 	@Column(name = "money")
-	@Getter @Setter private java.lang.Double money;
+	private java.lang.Double money;
 	/**
 	 * 手续费率
 	 */
 	@Column(name = "fee")
-	@Getter @Setter private java.lang.Double fee;
+	private java.lang.Double fee;
 	/**
 	 * 手续费
 	 */
 	@Column(name = "feeValue")
-	@Getter @Setter private java.lang.Double feeValue;
+	private java.lang.Double feeValue;
 	/**
 	 * 刷卡状态：1、已刷卡
 	 */
 	@Column(name = "status")
-	@Getter @Setter private java.lang.Integer status;
+	private java.lang.Integer status;
 	/**
 	 * 创建时间
 	 */
 	@Column(name = "createTime")
-	@Getter @Setter private java.util.Date createTime;
+	private java.util.Date createTime;
 	/**
 	 * 修改时间
 	 */
 	@Column(name = "updateTime")
-	@Getter @Setter private java.util.Date updateTime;
+	private java.util.Date updateTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
 	@Column(name = "deleStatus")
-	@Getter @Setter private java.lang.String deleStatus;
+	private java.lang.String deleStatus;
 	/**
 	 * 创建者id
 	 */
 	@Column(name = "creatorId")
-	@Getter @Setter private java.lang.Long creatorId;
+	private java.lang.Long creatorId;
 	//columns END
 
 	public BaseCcardJob(){
@@ -130,10 +135,6 @@ public class BaseCcardJob extends IdEntity<java.lang.Long>
 	}
 	public void setUpdateTimeString(String value) {
 		setUpdateTime(DateUtil.Str2Date(value));
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {

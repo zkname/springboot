@@ -4,13 +4,18 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.*;
+import lombok.ToString;
 
 import java.util.*;
 
+import java.util.*;
 
+@Data
+@ToString
 @Entity
 @Table(name = "c_card_range")
 public class BaseCcardRange extends IdEntity<java.lang.Long>
@@ -38,62 +43,62 @@ public class BaseCcardRange extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 名称
 	 */
 	@Column(name = "name")
-	@Getter @Setter private java.lang.String name;
+	private java.lang.String name;
 	/**
 	 * 刷卡比例开始
 	 */
 	@Column(name = "moneyPropStartValue")
-	@Getter @Setter private java.lang.Integer moneyPropStartValue;
+	private java.lang.Integer moneyPropStartValue;
 	/**
 	 * 刷卡比例结束
 	 */
 	@Column(name = "moneyPropEndValue")
-	@Getter @Setter private java.lang.Integer moneyPropEndValue;
+	private java.lang.Integer moneyPropEndValue;
 	/**
 	 * 刷卡次数开始
 	 */
 	@Column(name = "frequencyPropStartValue")
-	@Getter @Setter private java.lang.Integer frequencyPropStartValue;
+	private java.lang.Integer frequencyPropStartValue;
 	/**
 	 * 刷卡次数结束
 	 */
 	@Column(name = "frequencyPropEndtValue")
-	@Getter @Setter private java.lang.Integer frequencyPropEndtValue;
+	private java.lang.Integer frequencyPropEndtValue;
 	/**
 	 * 刷卡天数
 	 */
 	@Column(name = "day")
-	@Getter @Setter private java.lang.Integer day;
+	private java.lang.Integer day;
 	/**
 	 * 备注
 	 */
 	@Column(name = "remarks")
-	@Getter @Setter private java.lang.String remarks;
+	private java.lang.String remarks;
 	/**
 	 * 创建时间
 	 */
 	@Column(name = "createTime")
-	@Getter @Setter private java.util.Date createTime;
+	private java.util.Date createTime;
 	/**
 	 * 修改时间
 	 */
 	@Column(name = "updateTime")
-	@Getter @Setter private java.util.Date updateTime;
+	private java.util.Date updateTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
 	@Column(name = "deleStatus")
-	@Getter @Setter private java.lang.String deleStatus;
+	private java.lang.String deleStatus;
 	/**
 	 * 创建者id
 	 */
 	@Column(name = "creatorId")
-	@Getter @Setter private java.lang.Long creatorId;
+	private java.lang.Long creatorId;
 	//columns END
 
 	public BaseCcardRange(){
@@ -117,10 +122,6 @@ public class BaseCcardRange extends IdEntity<java.lang.Long>
 	}
 	public void setUpdateTimeString(String value) {
 		setUpdateTime(DateUtil.Str2Date(value));
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {

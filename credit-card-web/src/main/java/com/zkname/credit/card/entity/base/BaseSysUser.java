@@ -15,10 +15,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-
+@Data
+@ToString
 @Entity
 @Table(name = "sys_user")
 public class BaseSysUser extends IdEntity<java.lang.Long>
@@ -44,52 +47,52 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 真实姓名
 	 */
 	@Column(name = "realName")
-	@Getter @Setter private java.lang.String realName;
+	private java.lang.String realName;
 	/**
 	 * 用户名
 	 */
 	@Column(name = "username")
-	@Getter @Setter private java.lang.String username;
+	private java.lang.String username;
 	/**
 	 * 密码
 	 */
 	@Column(name = "password")
-	@Getter @Setter private java.lang.String password;
+	private java.lang.String password;
 	/**
 	 * 邮箱
 	 */
 	@Column(name = "email")
-	@Getter @Setter private java.lang.String email;
+	private java.lang.String email;
 	/**
 	 * 创建时间
 	 */
 	@Column(name = "createTime")
-	@Getter @Setter private java.util.Date createTime;
+	private java.util.Date createTime;
 	/**
 	 * 修改时间
 	 */
 	@Column(name = "updateTime")
-	@Getter @Setter private java.util.Date updateTime;
+	private java.util.Date updateTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
 	@Column(name = "deleStatus")
-	@Getter @Setter private java.lang.String deleStatus;
+	private java.lang.String deleStatus;
 	/**
 	 * 创建者id
 	 */
 	@Column(name = "creatorId")
-	@Getter @Setter private java.lang.Long creatorId;
+	private java.lang.Long creatorId;
 	/**
 	 * 登陆时间
 	 */
 	@Column(name = "loginTime")
-	@Getter @Setter private java.util.Date loginTime;
+	private java.util.Date loginTime;
 	//columns END
 
 	public BaseSysUser(){
@@ -120,10 +123,6 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	}
 	public void setLoginTimeString(String value) {
 		setLoginTime(DateUtil.Str2Date(value));
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {

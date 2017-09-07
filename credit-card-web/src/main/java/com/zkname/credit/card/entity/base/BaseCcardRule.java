@@ -4,13 +4,18 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.*;
+import lombok.ToString;
 
 import java.util.*;
 
+import java.util.*;
 
+@Data
+@ToString
 @Entity
 @Table(name = "c_card_rule")
 public class BaseCcardRule extends IdEntity<java.lang.Long>
@@ -29,17 +34,17 @@ public class BaseCcardRule extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 信用卡id
 	 */
 	@Column(name = "cardInfoId")
-	@Getter @Setter private java.lang.Long cardInfoId;
+	private java.lang.Long cardInfoId;
 	/**
 	 * 信用规则id
 	 */
 	@Column(name = "cardRangeId")
-	@Getter @Setter private java.lang.Long cardRangeId;
+	private java.lang.Long cardRangeId;
 	//columns END
 
 	public BaseCcardRule(){
@@ -49,10 +54,6 @@ public class BaseCcardRule extends IdEntity<java.lang.Long>
 		java.lang.Long id
 	){
 		this.id = id;
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {

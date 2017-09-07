@@ -4,13 +4,18 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.*;
+import lombok.ToString;
 
 import java.util.*;
 
+import java.util.*;
 
+@Data
+@ToString
 @Entity
 @Table(name = "c_card_info")
 public class BaseCcardInfo extends IdEntity<java.lang.Long>
@@ -42,82 +47,82 @@ public class BaseCcardInfo extends IdEntity<java.lang.Long>
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Getter @Setter private java.lang.Long id;
+	private java.lang.Long id;
 	/**
 	 * 银行id
 	 */
 	@Column(name = "bankId")
-	@Getter @Setter private java.lang.Long bankId;
+	private java.lang.Long bankId;
 	/**
 	 * 信用规则id
 	 */
 	@Column(name = "cardRangeId")
-	@Getter @Setter private java.lang.Long cardRangeId;
+	private java.lang.Long cardRangeId;
 	/**
 	 * 生成任务日期
 	 */
 	@Column(name = "jobDate")
-	@Getter @Setter private java.util.Date jobDate;
+	private java.util.Date jobDate;
 	/**
 	 * 卡名
 	 */
 	@Column(name = "name")
-	@Getter @Setter private java.lang.String name;
+	private java.lang.String name;
 	/**
 	 * 额度
 	 */
 	@Column(name = "money")
-	@Getter @Setter private java.lang.Integer money;
+	private java.lang.Integer money;
 	/**
 	 * 年费类型：1、强制收费，2、刷卡次数，3、免年费
 	 */
 	@Column(name = "annualFeeType")
-	@Getter @Setter private java.lang.Integer annualFeeType;
+	private java.lang.Integer annualFeeType;
 	/**
 	 * 年费
 	 */
 	@Column(name = "annualFee")
-	@Getter @Setter private java.lang.Integer annualFee;
+	private java.lang.Integer annualFee;
 	/**
 	 * 刷卡次数
 	 */
 	@Column(name = "cardNum")
-	@Getter @Setter private java.lang.Integer cardNum;
+	private java.lang.Integer cardNum;
 	/**
 	 * 账单日
 	 */
 	@Column(name = "billDate")
-	@Getter @Setter private java.lang.Integer billDate;
+	private java.lang.Integer billDate;
 	/**
 	 * 下次提额时间
 	 */
 	@Column(name = "nextUp")
-	@Getter @Setter private java.util.Date nextUp;
+	private java.util.Date nextUp;
 	/**
 	 * 备注
 	 */
 	@Column(name = "remarks")
-	@Getter @Setter private java.lang.String remarks;
+	private java.lang.String remarks;
 	/**
 	 * 创建时间
 	 */
 	@Column(name = "createTime")
-	@Getter @Setter private java.util.Date createTime;
+	private java.util.Date createTime;
 	/**
 	 * 修改时间
 	 */
 	@Column(name = "updateTime")
-	@Getter @Setter private java.util.Date updateTime;
+	private java.util.Date updateTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
 	@Column(name = "deleStatus")
-	@Getter @Setter private java.lang.String deleStatus;
+	private java.lang.String deleStatus;
 	/**
 	 * 创建者id
 	 */
 	@Column(name = "creatorId")
-	@Getter @Setter private java.lang.Long creatorId;
+	private java.lang.Long creatorId;
 	//columns END
 
 	public BaseCcardInfo(){
@@ -155,10 +160,6 @@ public class BaseCcardInfo extends IdEntity<java.lang.Long>
 	}
 	public void setUpdateTimeString(String value) {
 		setUpdateTime(DateUtil.Str2Date(value));
-	}
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 	
 	public int hashCode() {
