@@ -133,8 +133,8 @@ $(function() {
 				      <td><c:out value='${item.bankName}'/></td>
 				      <td><c:out value='${item.cardRangeName}'/></td>
 				      <td><c:out value='${item.name}'/></td>
-				      <td><c:out value='${item.money}'/></td>
-				      <td><c:out value='${item.totalAmount}'/></td>
+				      <td><c:out value='${item.money}'/>元</td>
+				      <td><c:out value='${item.totalAmount}'/>元</td>
 				      
 				      
 				      <td>

@@ -24,11 +24,25 @@ public class CcardInfo extends BaseCcardInfo {
 	private String cardRangeName;
 	
 	/**
-	 * 总金额
+	 * 未刷总金额
 	 */
 	@Getter
 	@Setter
 	private double totalAmount;
+	
+	/**
+	 * 已刷金额
+	 */
+	@Getter
+	@Setter
+	private double amount;
+	
+	/**
+	 * 手续费
+	 */
+	@Getter
+	@Setter
+	private double fee;
 	
 	public CcardInfo() {
 	}

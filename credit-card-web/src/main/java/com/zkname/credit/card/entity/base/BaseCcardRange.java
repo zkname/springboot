@@ -20,10 +20,11 @@ public class BaseCcardRange extends IdEntity<java.lang.Long>
 	public static final String TABLE_ALIAS = "信用卡刷卡区间";
 	public static final String ALIAS_ID = "主键";
 	public static final String ALIAS_NAME = "名称";
-	public static final String ALIAS_MONEY_PROP_START_VALUE = "刷卡比例[BEGIN]";
-	public static final String ALIAS_MONEY_PROP_END_VALUE = "刷卡比例[END]";
-	public static final String ALIAS_FREQUENCY_PROP_START_VALUE = "刷卡次数[BEGIN]";
-	public static final String ALIAS_FREQUENCY_PROP_ENDT_VALUE = "刷卡次数[END]";
+	public static final String ALIAS_MONEY_PROP_START_VALUE = "刷卡比例开始";
+	public static final String ALIAS_MONEY_PROP_END_VALUE = "刷卡比例结束";
+	public static final String ALIAS_FREQUENCY_PROP_START_VALUE = "刷卡次数开始";
+	public static final String ALIAS_FREQUENCY_PROP_ENDT_VALUE = "刷卡次数结束";
+	public static final String ALIAS_DAY = "刷卡天数";
 	public static final String ALIAS_REMARKS = "备注";
 	public static final String ALIAS_CREATE_TIME = "创建时间";
 	public static final String ALIAS_UPDATE_TIME = "修改时间";
@@ -63,6 +64,11 @@ public class BaseCcardRange extends IdEntity<java.lang.Long>
 	 */
 	@Column(name = "frequencyPropEndtValue")
 	@Getter @Setter private java.lang.Integer frequencyPropEndtValue;
+	/**
+	 * 刷卡天数
+	 */
+	@Column(name = "day")
+	@Getter @Setter private java.lang.Integer day;
 	/**
 	 * 备注
 	 */

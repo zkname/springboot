@@ -46,7 +46,17 @@
 					<li><a href="${ctx}/admin/card/ccardjob/list"><i class="fa fa-circle-o"></i>刷卡明细</a></li>
 				</ul>
 			</li>
-			
+			<li class="treeview">
+	          <a href='#'>
+	            <i class="fa fa-dashboard"></i> <span>统计管理</span>
+	            <span class="pull-right-container">
+	              <i class="fa fa-angle-left pull-right"></i>
+	            </span>
+	          </a>
+	    		<ul class="treeview-menu">
+					<li><a href="${ctx}/admin/card/ccardstatistics/list"><i class="fa fa-circle-o"></i>统计信息</a></li>
+				</ul>
+			</li>
 			<c:if test="${user.id==1}">
 		    	<li class="treeview">
 		          <a href='#'>

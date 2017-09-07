@@ -60,6 +60,10 @@ public class CcardJobService extends BaseService<CcardJob> {
     	cinfo.setJobDate(DateUtil.Str2Date(d));
     	Date e=DateUtil.addMonth(DateUtil.Str2Date(d), 1);
     	int v=DateUtil.daysBetween(cinfo.getJobDate(), e)-1;
+    	//设置最小天数
+    	if(ccardRange.getDay()<v){
+    		v=ccardRange.getDay();
+    	}
     	List<List<Double>> list=Lists.newArrayList();
     	for(int i=0;i<v;i++){
     		if(moneyList.size()>0){
