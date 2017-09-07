@@ -8,23 +8,6 @@
 <script type="text/javascript">
 $(function() {
 	
-	//全选不选结合
-	$("#checkbox").click(function(){
-		 $(":input[id=ids]").attr("checked",this.checked);
-	});
-	
-	
-	//删除
-	$("#deleteId").click(function(){
-		  if($(":input:checkbox:checked[id=ids]").length<1){
-			  alert("请选择最少一条记录！");
-			  return null;
-		  }else if(window.confirm("确认是否删除？")){
-			  //多选就发布
-			  $("#form").attr("action","${ctx}/admin/card/ccardstatistics/delete");
-			  $("#form").submit();
-		  }
-	});
  });
 </script>
 </head>
@@ -76,7 +59,6 @@ $(function() {
 	          <div class="box-body table-responsive no-padding"> 
 	              <table class="table table-hover">
 				    <tr>
-				      <th><input type="checkbox" id="checkbox" value="checkbox"></th>
 				      <th>ID</th>
 				      <th>银行名称</th>
 				      <th>规则名称</th>
@@ -86,11 +68,11 @@ $(function() {
 				      <th>已刷金额</th>
 				      <th>已刷手续费</th>
 				    </tr>
+				   <c:set value="0" var="n"></c:set>
 				   <c:set value="0" var="m"></c:set>
 				   <c:set value="0" var="f"></c:set>
 					<c:forEach var="item" items="${page.result}">
 				    <tr>
-				      <td><input type="checkbox" name="ids" id="ids" value="${item.id}"></td>
 				      <td>${item.id}</td>
 				      <td><c:out value='${item.bankName}'/></td>
 				      <td><c:out value='${item.cardRangeName}'/></td>
@@ -102,13 +84,14 @@ $(function() {
 				    </tr>
 				    <c:set value="${f+item.fee}" var="f"></c:set>
 				    <c:set value="${m+item.amount}" var="m"></c:set>
+				    <c:set value="${n+item.totalAmount}" var="n"></c:set>
 					</c:forEach>
 			        </table>
 	            </div>
 	            
 	            
 	            <div style="margin-left:10px">
-					 总刷卡金额：${m}元，总手续费：${f}元
+					 未刷金额：${n}元，总刷卡金额：${m}元，总手续费：${f}元
 	            </div>
 	            
 	            
