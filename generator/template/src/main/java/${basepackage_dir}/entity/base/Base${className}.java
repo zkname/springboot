@@ -8,12 +8,11 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
-import lombok.*;
+import lombok.Data;
 import java.util.*;
 
 <#include "/java_imports.include">
 
-@Builder
 @Data
 @Entity
 @Table(name = "${table.sqlName}")
