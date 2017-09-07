@@ -9,11 +9,15 @@ import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
 import lombok.Data;
+import lombok.ToString;
 import java.util.*;
 
 <#include "/java_imports.include">
 
+
+
 @Data
+@ToString
 @Entity
 @Table(name = "${table.sqlName}")
 public class Base${className} extends IdEntity<@idkey/>{
@@ -28,10 +32,6 @@ public class Base${className} extends IdEntity<@idkey/>{
 	<@generateCompositeIdConstructorIfis/>
 	<@generateNotPkProperties/>
 	<@newIdkey/>
-	
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
 	
 	public int hashCode() {
 		return new HashCodeBuilder().append(getId()).toHashCode();
