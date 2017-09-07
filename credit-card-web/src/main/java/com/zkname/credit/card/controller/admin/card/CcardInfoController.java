@@ -109,7 +109,7 @@ public class CcardInfoController extends BaseController{
 			throw new ActionException("参数错误！");
 		}
 		//获取参数实体，操作更新实体，不拷贝字段
-		BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","createTime","updateTime","deleStatus","creatorId"});
+		BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","createTime","updateTime","deleStatus","creatorId","jobDate"});
 		entityUpdate.setNextUp(entity.getNextUp());
 		service.update(entityUpdate);
 		RedirectView mv = new RedirectView("list");
