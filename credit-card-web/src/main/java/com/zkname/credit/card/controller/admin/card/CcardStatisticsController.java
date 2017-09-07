@@ -47,8 +47,8 @@ public class CcardStatisticsController extends BaseController{
 		if(StringUtils.isBlank(page.getDate()) || page.getDate().length()!=7){
 			page.setDate(DateUtil.Date2Str(new Date(),"yyyy-MM"));
 		}
-		page.setPageNo(-1);
-		page.setPageSize(-1);
+		page.setPageNo(1);
+		page.setPageSize(100000);
 		page.query();
         ModelAndView mv = new ModelAndView("admin/card/ccardstatistics/list");
         mv.addObject("page", page);
