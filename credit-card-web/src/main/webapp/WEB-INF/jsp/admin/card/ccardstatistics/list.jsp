@@ -72,9 +72,6 @@ $(function() {
             </div>
 	         </div>
 	            <hr style="border:none;border-top:1px dotted #185598;" />
-	            <div style="margin-left:10px">
-					 <a href="javascript:void(0);" id="deleteId">删除</a> | <a href="${ctx}/admin/card/ccardstatistics/add" > 添加</a>
-	            </div>
 	            <!-- /.box-header -->
 	          <div class="box-body table-responsive no-padding"> 
 	              <table class="table table-hover">
@@ -89,6 +86,8 @@ $(function() {
 				      <th>已刷金额</th>
 				      <th>已刷手续费</th>
 				    </tr>
+				   <c:set value="0" var="m"></c:set>
+				   <c:set value="0" var="f"></c:set>
 					<c:forEach var="item" items="${page.result}">
 				    <tr>
 				      <td><input type="checkbox" name="ids" id="ids" value="${item.id}"></td>
@@ -101,10 +100,18 @@ $(function() {
 				      <td><c:out value='${item.amount}'/>元</td>
 				      <td><c:out value='${item.fee}'/>元</td>
 				    </tr>
+				    <c:set value="${f+item.fee}" var="f"></c:set>
+				    <c:set value="${m+item.amount}" var="m"></c:set>
 					</c:forEach>
 			        </table>
-			        <%@ include file="/WEB-INF/jsp/include/page.jsp" %>
 	            </div>
+	            
+	            
+	            <div style="margin-left:10px">
+					 总刷卡金额：${m}元，总手续费：${f}元
+	            </div>
+	            
+	            
 	            <!-- /.box-body -->
 	          </div>
 	        </div>
