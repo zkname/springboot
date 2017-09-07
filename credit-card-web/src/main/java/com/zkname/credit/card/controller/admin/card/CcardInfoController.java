@@ -108,6 +108,7 @@ public class CcardInfoController extends BaseController{
 		if(LoginUser.getUser().getId().longValue()!=entityUpdate.getCreatorId().longValue()){
 			throw new ActionException("参数错误！");
 		}
+		entity.setJobDate(entityUpdate.getJobDate());
 		//获取参数实体，操作更新实体，不拷贝字段
 		BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","createTime","updateTime","deleStatus","creatorId","jobDate"});
 		entityUpdate.setNextUp(entity.getNextUp());
