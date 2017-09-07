@@ -20,7 +20,8 @@ public class AdminController extends BaseController {
 	
 	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
 	public String index(HttpServletRequest request,HttpServletResponse response){
-		return "admin/index";
+		return "redirect:/admin/card/ccardcalendar/list";
+//		return "admin/index";
 	}
 	
 	@RequestMapping(value = "/bodyMenu")

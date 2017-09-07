@@ -10,7 +10,7 @@
         	<c:if test="${user.id==1}">
 		    	<li class="treeview">
 		          <a href='#'>
-		            <i class="fa fa-dashboard"></i> <span>用户管理</span>
+		            <i class="fa fa-gears"></i> <span>用户管理</span>
 		            <span class="pull-right-container">
 		              <i class="fa fa-angle-left pull-right"></i>
 		            </span>
@@ -23,7 +23,7 @@
 			
 	    	<li class="treeview">
 	          <a href='#'>
-	            <i class="fa fa-dashboard"></i> <span>信息管理</span>
+	            <i class="fa fa-edit"></i> <span>信息管理</span>
 	            <span class="pull-right-container">
 	              <i class="fa fa-angle-left pull-right"></i>
 	            </span>
@@ -36,7 +36,7 @@
 			</li>
 	    	<li class="treeview">
 	          <a href='#'>
-	            <i class="fa fa-dashboard"></i> <span>刷卡管理</span>
+	            <i class="fa fa-ticket"></i> <span>刷卡管理</span>
 	            <span class="pull-right-container">
 	              <i class="fa fa-angle-left pull-right"></i>
 	            </span>
@@ -48,7 +48,7 @@
 			</li>
 			<li class="treeview">
 	          <a href='#'>
-	            <i class="fa fa-dashboard"></i> <span>统计管理</span>
+	            <i class="fa fa-bar-chart-o"></i> <span>统计管理</span>
 	            <span class="pull-right-container">
 	              <i class="fa fa-angle-left pull-right"></i>
 	            </span>
@@ -60,7 +60,7 @@
 			<c:if test="${user.id==1}">
 		    	<li class="treeview">
 		          <a href='#'>
-		            <i class="fa fa-dashboard"></i> <span>系统管理</span>
+		            <i class="fa fa-gear"></i> <span>系统管理</span>
 		            <span class="pull-right-container">
 		              <i class="fa fa-angle-left pull-right"></i>
 		            </span>
