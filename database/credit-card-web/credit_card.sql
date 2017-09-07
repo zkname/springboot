@@ -1,17 +1,21 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 192.168.1.116
-Source Server Version : 50711
-Source Host           : 192.168.1.116:3306
+Source Server         : localhost_3306
+Source Server Version : 50717
+Source Host           : localhost:3306
 Source Database       : credit_card
 
 Target Server Type    : MYSQL
-Target Server Version : 50711
+Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2017-09-06 14:34:25
+Date: 2017-09-07 10:27:29
 */
+
+CREATE DATABASE credit_card DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+use credit_card;
 
 SET FOREIGN_KEY_CHECKS=0;
 
@@ -136,6 +140,7 @@ CREATE TABLE `c_card_range` (
   `moneyPropEndValue` int(11) DEFAULT '60' COMMENT '刷卡比例结束',
   `frequencyPropStartValue` int(11) DEFAULT '22' COMMENT '刷卡次数开始',
   `frequencyPropEndtValue` int(11) DEFAULT '35' COMMENT '刷卡次数结束',
+  `day` int(11) DEFAULT '30' COMMENT '刷卡天数',
   `remarks` longtext COMMENT '备注',
   `createTime` datetime NOT NULL COMMENT '创建时间',
   `updateTime` datetime NOT NULL COMMENT '修改时间',
@@ -144,12 +149,13 @@ CREATE TABLE `c_card_range` (
   PRIMARY KEY (`id`),
   KEY `creatorId` (`creatorId`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='信用卡刷卡区间';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='信用卡刷卡区间';
 
 -- ----------------------------
 -- Records of c_card_range
 -- ----------------------------
-INSERT INTO `c_card_range` VALUES ('1', '养卡', '38', '45', '20', '30', '养卡规则', '2017-09-06 14:31:05', '2017-09-06 14:31:05', '1', '1');
+INSERT INTO `c_card_range` VALUES ('1', '养卡', '20', '35', '20', '25', '30', '养卡规则', '2017-09-07 10:24:32', '2017-09-07 10:24:33', '1', '1');
+INSERT INTO `c_card_range` VALUES ('2', '手头紧', '70', '80', '5', '8', '10', '手头紧', '2017-09-07 10:25:43', '2017-09-07 10:25:43', '1', '1');
 
 -- ----------------------------
 -- Table structure for sys_param
