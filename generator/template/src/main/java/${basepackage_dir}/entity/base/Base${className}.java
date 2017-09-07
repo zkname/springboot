@@ -8,12 +8,13 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import java.util.*;
 
 <#include "/java_imports.include">
 
+@Builder
+@Data
 @Entity
 @Table(name = "${table.sqlName}")
 public class Base${className} extends IdEntity<@idkey/>{
@@ -55,13 +56,13 @@ public class Base${className} extends IdEntity<@idkey/>{
 	@Id
 	@Column(name = "${column.sqlName}")
 	<#if column.auto>@GeneratedValue(strategy=GenerationType.AUTO)</#if>
-	@Getter @Setter private ${column.javaType} ${column.columnNameLower};
+	private ${column.javaType} ${column.columnNameLower};
 	<#else>
 	/**
 	 * ${column.columnAlias}
 	 */
 	@Column(name = "${column.sqlName}")
-	@Getter @Setter private ${column.javaType} ${column.columnNameLower};
+	private ${column.javaType} ${column.columnNameLower};
 	</#if>
 	</#list>
 	//columns END
