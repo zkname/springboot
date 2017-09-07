@@ -173,7 +173,7 @@ public class PageCcardStatistics extends BasePage<CcardInfo> {
 		sb.append("select o.*,a.name as bankName,b.name as cardRangeName,");
 		sb.append(" (SELECT sum(k.money) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='0' and ").append(v).append(") as totalAmount  ,");
 		sb.append(" (SELECT sum(k.money) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='1' and ").append(v).append(") as amount  ,");
-		sb.append(" (SELECT sum(k.fee) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='1' and ").append(v).append(") as fee  ");
+		sb.append(" (SELECT sum(k.feeValue) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='1' and ").append(v).append(") as fee  ");
 		sb.append(" from c_card_info as o,c_bank as a,c_card_range as b where o.bankId=a.id and b.id=o.cardRangeId").append(this.getSql());
 		return super.query();
 	}
