@@ -26,8 +26,8 @@ public class CaptchaService extends AbstractCaptchaService {
 		super.setFilterFactory(new CurvesRippleFilterFactory(super.getColorFactory()));
 		super.getTextRenderer().setLeftMargin(0);
 		super.getTextRenderer().setRightMargin(0);
-		super.setWidth(80);
-		super.setHeight(20);
+		super.setWidth(100);
+		super.setHeight(35);
 	}
 
 }
