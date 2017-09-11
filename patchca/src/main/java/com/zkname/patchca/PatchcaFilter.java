@@ -42,7 +42,7 @@ public class PatchcaFilter implements Filter {
 	
 	@Getter
 	@Setter
-	private boolean debug;
+	private static boolean debug;
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -116,6 +116,9 @@ public class PatchcaFilter implements Filter {
 		HttpSession session = request.getSession(false);
 		if (session == null)
 			return false;
+		if(debug){
+			return true;
+		}
 		String validationCode = (String) session.getAttribute("validationCode");
 		if (validationCode == null || !validationCode.equals(code)) {
 			return false;
