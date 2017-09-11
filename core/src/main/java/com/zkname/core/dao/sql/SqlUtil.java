@@ -172,14 +172,17 @@ public class SqlUtil {
 		StringBuffer sb=new StringBuffer();
 		sb.append("update ").append(sqlBean.getTableName()).append(" set ");
 		Set<String> s=Sets.newHashSet(fields);
-		Iterables.forEach(sqlBean.getOther(), (i,v)->{
+		int a=0;
+		for(int i=0;i<sqlBean.getOther().size();i++){
+			String v=sqlBean.getOther().get(i);
 			if(s.contains(v)){
-				if(i>0){
+				if(a>0){
 					sb.append(",");
 				}
 				sb.append(v).append("=?");
+				a++;
 			};
-		});
+		}
 		sb.append(" where 1=1 ");
 		sqlBean.getIds().forEach((id)->{
 			sb.append(" and ").append(id).append("=?");
