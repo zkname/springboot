@@ -3,7 +3,9 @@ package com.zkname.credit.card.session;
 import javax.servlet.http.HttpSession;
 
 import com.zkname.core.util.exception.LoginTimeoutException;
+import com.zkname.core.util.spring.SpringContextHolder;
 import com.zkname.core.util.spring.SpringHttpServletRequest;
+import com.zkname.credit.card.service.SysUserService;
 
 import lombok.Getter;
 import lombok.Setter;

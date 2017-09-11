@@ -16,57 +16,44 @@ import java.util.*;
 @Data
 @ToString
 @Entity
-@Table(name = "sys_user")
-public class BaseSysUser extends IdEntity<java.lang.Long>
+@Table(name = "c_invitation_code")
+public class BaseCinvitationCode extends IdEntity<java.lang.Long>
 {
 	
 	//alias
-	public static final String TABLE_ALIAS = "用户表";
-	public static final String ALIAS_ID = "主键";
-	public static final String ALIAS_USERNAME = "用户名";
-	public static final String ALIAS_PASSWORD = "密码";
-	public static final String ALIAS_REAL_NAME = "真实姓名";
-	public static final String ALIAS_EMAIL = "邮箱";
-	public static final String ALIAS_VALID_PERIOD_TIME = "有效期";
+	public static final String TABLE_ALIAS = "邀请码";
+	public static final String ALIAS_ID = "id";
+	public static final String ALIAS_INVITATION_CODE_BATCH = "批次ID";
+	public static final String ALIAS_INVITATION_CODE = "邀请码";
+	public static final String ALIAS_USER_ID = "用户id";
 	public static final String ALIAS_CREATE_TIME = "创建时间";
 	public static final String ALIAS_UPDATE_TIME = "修改时间";
-	public static final String ALIAS_LOGIN_TIME = "登陆时间";
 	public static final String ALIAS_DELE_STATUS = "可见状态(0:不可见;1:可见)";
 	public static final String ALIAS_CREATOR_ID = "创建者id";
 	
 	//columns START
 	/**
-	 * 主键
+	 * id
 	 */
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private java.lang.Long id;
 	/**
-	 * 用户名
+	 * 批次id
 	 */
-	@Column(name = "username")
-	private java.lang.String username;
+	@Column(name = "invitationCodeBatch")
+	private java.lang.Long invitationCodeBatch;
 	/**
-	 * 密码
+	 * 邀请码InvitationCode
 	 */
-	@Column(name = "password")
-	private java.lang.String password;
+	@Column(name = "invitationCode")
+	private java.lang.String invitationCode;
 	/**
-	 * 真实姓名
+	 * 用户id
 	 */
-	@Column(name = "realName")
-	private java.lang.String realName;
-	/**
-	 * 邮箱
-	 */
-	@Column(name = "email")
-	private java.lang.String email;
-	/**
-	 * 有效期
-	 */
-	@Column(name = "validPeriodTime")
-	private java.util.Date validPeriodTime;
+	@Column(name = "userId")
+	private java.lang.Long userId;
 	/**
 	 * 创建时间
 	 */
@@ -77,11 +64,6 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	 */
 	@Column(name = "updateTime")
 	private java.util.Date updateTime;
-	/**
-	 * 登陆时间
-	 */
-	@Column(name = "loginTime")
-	private java.util.Date loginTime;
 	/**
 	 * 可见状态(0:不可见;1:可见)
 	 */
@@ -94,20 +76,13 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	private java.lang.Long creatorId;
 	//columns END
 
-	public BaseSysUser(){
+	public BaseCinvitationCode(){
 	}
 	
-	public BaseSysUser(
+	public BaseCinvitationCode(
 		java.lang.Long id
 	){
 		this.id = id;
-	}
-	@Transient
-	public String getValidPeriodTimeString() {
-		return DateUtil.Date2Str(getValidPeriodTime());
-	}
-	public void setValidPeriodTimeString(String value) {
-		setValidPeriodTime(DateUtil.Str2Date(value));
 	}
 	@Transient
 	public String getCreateTimeString() {
@@ -123,22 +98,15 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	public void setUpdateTimeString(String value) {
 		setUpdateTime(DateUtil.Str2Date(value));
 	}
-	@Transient
-	public String getLoginTimeString() {
-		return DateUtil.Date2Str(getLoginTime());
-	}
-	public void setLoginTimeString(String value) {
-		setLoginTime(DateUtil.Str2Date(value));
-	}
 	
 	public int hashCode() {
 		return new HashCodeBuilder().append(getId()).toHashCode();
 	}
 	
 	public boolean equals(Object obj) {
-		if(obj instanceof BaseSysUser == false) return false;
+		if(obj instanceof BaseCinvitationCode == false) return false;
 		if(this == obj) return true;
-		BaseSysUser other = (BaseSysUser)obj;
+		BaseCinvitationCode other = (BaseCinvitationCode)obj;
 		return new EqualsBuilder().append(getId(),other.getId()).isEquals();
 	}
 }

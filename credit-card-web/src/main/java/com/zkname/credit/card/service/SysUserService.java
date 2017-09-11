@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zkname.credit.card.dao.SysUserDAO;
+import com.zkname.credit.card.entity.CinvitationCode;
 import com.zkname.credit.card.entity.SysUser;
 import com.zkname.credit.card.session.LoginUser;
 import com.zkname.core.dao.IBaseDAO;
 import com.zkname.core.service.BaseService;
+import com.zkname.core.util.exception.ActionException;
+import com.zkname.core.util.exception.DaoException;
 
 @Service
 @Transactional(rollbackFor=Exception.class)//注解实现事务，所有异常都回滚；
@@ -19,6 +22,9 @@ public class SysUserService extends BaseService<SysUser> {
 	@Autowired
 	private SysUserDAO dao;
 
+	@Autowired
+	private CinvitationCodeService cinvitationCodeService;
+	
 	@Transactional(readOnly=true)//非事务处理
 	public IBaseDAO<SysUser> getDAO() {
 		return dao;
@@ -35,19 +41,18 @@ public class SysUserService extends BaseService<SysUser> {
 	 * @since  1.0.0
 	 */
 	@Transactional(readOnly=true)//非事务处理
-	public LoginUser login(String userName) {
-		SysUser sysUserDto=dao.login(userName);
-		if(sysUserDto!=null){
-			LoginUser suv=new LoginUser();
-			suv.setId(sysUserDto.getId());
-			suv.setPassword(sysUserDto.getPassword());
-			suv.setUsername(sysUserDto.getUsername());
-			suv.setEmail(sysUserDto.getEmail());
-			return suv;
-		}
-		return null;
+	public SysUser login(String userName) {
+		return dao.login(userName);
 	}
 	
+	/**
+	 * 更新登陆时间
+	 * @param id
+	 * @return
+	 */
+	public void updateLoginTime(SysUser user) {
+		dao.update(user, "loginTime");
+	}
 	
 	/**
 	 * 
@@ -62,6 +67,21 @@ public class SysUserService extends BaseService<SysUser> {
 	@Transactional(readOnly=true)//非事务处理
 	public SysUser findUserByUserName(String userName) {
 		return dao.findUserByUserName(userName);
+	}
+	
+	/**
+	 * 
+	 * findUserByUserName(查询用户是否已存在)
+	 * (这里描述这个方法适用条件 – 可选)
+	 * @param userName
+	 * @return 
+	 * SysUser
+	 * @exception 
+	 * @since  1.0.0
+	 */
+	@Transactional(readOnly=true)//非事务处理
+	public SysUser findUserByEmail(String email) {
+		return dao.findUserByEmail(email);
 	}
 	
 	
@@ -128,5 +148,22 @@ public class SysUserService extends BaseService<SysUser> {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * 注册
+	 * @param sysUser
+	 * @param cinvitationCode
+	 */
+	public void register(SysUser sysUser,CinvitationCode cinvitationCode){
+		this.save(sysUser);
+		
+		cinvitationCode.setUserId(sysUser.getId());
+		cinvitationCode.setUpdateTime(new Date());
+		
+		if(cinvitationCodeService.register(cinvitationCode)<1){
+			throw new ActionException("请勿重复注册！");
+		};
+		
 	}
 }

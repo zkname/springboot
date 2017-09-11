@@ -1,17 +1,32 @@
 package com.zkname.credit.card.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.zkname.core.controller.BaseController;
+import com.zkname.core.util.DateUtil;
+import com.zkname.core.util.exception.ActionException;
+import com.zkname.core.util.exception.DaoException;
+import com.zkname.core.util.spring.SpringHttpServletRequest;
+import com.zkname.credit.card.entity.CinvitationCode;
+import com.zkname.credit.card.entity.SysUser;
+import com.zkname.credit.card.service.CinvitationCodeService;
 import com.zkname.credit.card.service.SysUserService;
-import com.zkname.credit.card.session.LoginUser;
 import com.zkname.credit.card.util.EncodeUtils;
+import com.zkname.patchca.PatchcaFilter;
 
 
 /**
@@ -23,6 +38,9 @@ public class IndexController extends BaseController {
 	
 	@Autowired
 	private SysUserService sysUserService;
+	
+	@Autowired
+	private CinvitationCodeService cinvitationCodeService;
 	
 	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
 	public String index(HttpServletRequest request,HttpServletResponse response){
@@ -38,12 +56,16 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
-	public String login(String username,String password,ModelMap model)  {
-		if(StringUtils.isAnyBlank(username,password)){
+	public String login(String username,String password,String code,ModelMap model)  {
+		if(StringUtils.isAnyBlank(username,password,code)){
         	model.put("login_error", "参数错误！");
         	return "index";
         }
-		LoginUser loginUser=sysUserService.login(username);
+		if(!PatchcaFilter.isValidationCode(SpringHttpServletRequest.getRequest(), code)){
+			model.put("login_error", "验证码错误！");
+        	return "index";
+		}
+		SysUser loginUser=sysUserService.login(username);
 		if(loginUser==null){
         	model.put("login_error", "用户不存在！");
         	return "index";
@@ -52,8 +74,125 @@ public class IndexController extends BaseController {
         	model.put("login_error", "用户密码错误！");
         	return "index";
 		}
+		loginUser.setLoginTime(new Date());
+		sysUserService.updateLoginTime(loginUser);
 		//登录
-		loginUser.login();
+		loginUser.getLoginUser().login();
         return "redirect:/admin/index"; 
+	}
+	
+	
+	
+	/**
+	 * 注册登录
+	 * @param username
+	 * @param password
+	 * @param code
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String registerGet()  {
+        return "register";
+	}
+	
+	
+	/**
+	 * 注册登录
+	 * @param username
+	 * @param password
+	 * @param code
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public String registerPost(String username,String password,String email,String invitationCode,String code,ModelMap model)  {
+		if(StringUtils.isAnyBlank(username,password,email,invitationCode,code)){
+        	model.put("login_error", "参数错误！");
+        	return "register";
+        }
+		if(!PatchcaFilter.isValidationCode(SpringHttpServletRequest.getRequest(), code)){
+			model.put("login_error", "验证码错误！");
+        	return "register";
+		}
+		CinvitationCode cinvitationCode=cinvitationCodeService.getDAO().findByInvitationCode(invitationCode);
+		if(cinvitationCode==null){
+			model.put("login_error", "邀请码错误！");
+        	return "register";
+		}
+		if(sysUserService.findUserByUserName(username)!=null){
+			model.put("login_error", "用户名已存在！");
+        	return "register";
+		}
+		try {
+			SysUser sysUser=new SysUser();
+			sysUser.setCreateTime(new Date());
+			sysUser.setCreatorId(1L);
+			sysUser.setDeleStatus("1");
+			sysUser.setEmail(email);
+			sysUser.setLoginTime(new Date());
+			sysUser.setPassword(DigestUtils.md5Hex(password));
+			sysUser.setUsername(username);
+			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), 365));
+			sysUser.setRealName(username);
+			sysUserService.register(sysUser,cinvitationCode);
+		} catch (ActionException e) {
+			model.put("login_error", e.getMessage());
+        	return "register";
+		}
+		return "redirect:/index"; 
+	}
+	
+	
+	/**
+	 * checkLoginName(查询用户是否已经存在)
+	 * (这里描述这个方法适用条件 – 可选)
+	 * @param oldLoginName
+	 * @param username
+	 * @param request
+	 * @param response
+	 * @return 
+	 * String
+	 * @throws UnsupportedEncodingException 
+	 * @exception 
+	 * @since  1.0.0
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/checkLoginName", produces = "application/text; charset=utf-8")
+	public String checkLoginName(@RequestParam("oldLoginName") String oldLoginName,@RequestParam("username") String username,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException{
+		
+		if (username.equals(oldLoginName)) {
+			return null;
+		} else if (sysUserService.findUserByUserName(username) != null) {
+			return "用户名已存在";
+		}
+		return null;
+	}
+	
+	
+	
+	/**
+	 * checkLoginName(查询用户是否已经存在)
+	 * (这里描述这个方法适用条件 – 可选)
+	 * @param oldLoginName
+	 * @param username
+	 * @param request
+	 * @param response
+	 * @return 
+	 * String
+	 * @throws UnsupportedEncodingException 
+	 * @exception 
+	 * @since  1.0.0
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/checkEmail", produces = "application/text; charset=utf-8")
+	public String checkEmail(@RequestParam("oldEmail") String oldLoginName,@RequestParam("email") String email,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException{
+		
+		if (email.equals(oldLoginName)) {
+			return null;
+		} else if (sysUserService.findUserByEmail(email) != null) {
+			return "Email已存在";
+		}
+		return null;
 	}
 }	
