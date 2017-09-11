@@ -178,7 +178,9 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>{
 			AssertUtils.notNull(t);
 			//是否为超类判断
 			AssertUtils.isAssignable(IdEntity.class, t.getClass());
-			getJdbcTemplate().update(sqlFactory.getUpdateSql(entityClass),sqlFactory.getUpdateParam(t,entityClass));
+			if(getJdbcTemplate().update(sqlFactory.getUpdateSql(entityClass),sqlFactory.getUpdateParam(t,entityClass))<1){
+				throw new DaoException("saveOrUpdate错误！");
+			}
 		}catch (IllegalArgumentException e) {
 			throw e;
 		} catch (DaoException e) {
@@ -202,7 +204,9 @@ public abstract class BaseDAO<T> implements IBaseDAO<T>{
 			AssertUtils.notNull(t);
 			//是否为超类判断
 			AssertUtils.isAssignable(IdEntity.class, t.getClass());
-			getJdbcTemplate().update(sqlFactory.getUpdateSql(entityClass,fields),sqlFactory.getUpdateParam(t,entityClass,fields));
+			if(getJdbcTemplate().update(sqlFactory.getUpdateSql(entityClass,fields),sqlFactory.getUpdateParam(t,entityClass,fields))<1){
+				throw new DaoException("saveOrUpdate错误！");
+			}
 		}catch (IllegalArgumentException e) {
 			throw e;
 		} catch (DaoException e) {
