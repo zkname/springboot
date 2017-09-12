@@ -4,9 +4,9 @@
     <!-- Logo -->
     <a href="${ctx}/admin/index" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>CARD</b></span>
+      <span class="logo-mini"><b>养卡</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>C_</b>CARD</span>
+      <span class="logo-lg"><b>养卡</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
