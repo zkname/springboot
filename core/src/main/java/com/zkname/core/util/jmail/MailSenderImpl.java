@@ -17,6 +17,8 @@ import org.springframework.util.Assert;
 import com.zkname.core.util.ParamType;
 import com.zkname.core.util.conf.MailProperties;
 
+import lombok.Getter;
+
 
 public class MailSenderImpl implements MailSender {
 	
@@ -27,7 +29,7 @@ public class MailSenderImpl implements MailSender {
 	private String username;
 	
 	private String password;
-	
+
 	private Properties props;
 	
 	private boolean debug;
@@ -167,5 +169,10 @@ public class MailSenderImpl implements MailSender {
 		}
 		return this;
 	}
+
+	public Properties getProps() {
+		return props;
+	}
+	
 	
 }

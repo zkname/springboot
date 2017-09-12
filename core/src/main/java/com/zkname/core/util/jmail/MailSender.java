@@ -1,5 +1,7 @@
 package com.zkname.core.util.jmail;
 
+import java.util.Properties;
+
 import javax.mail.MessagingException;
 
 public interface MailSender {
@@ -26,4 +28,5 @@ public interface MailSender {
 	
 	MailSender load();
 	
+	Properties getProps();
 }
