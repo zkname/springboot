@@ -15,7 +15,7 @@ public class CcardRangeDAO extends BaseDAO<CcardRange> {
 	 * @return
 	 */
 	public List<CcardRange> findAll(long userId){
-		String sql="SELECT a.* FROM c_card_range as a where (a.creatorId=? or a.creatorId=0) and a.deleStatus='1' order by a.name";
+		String sql="SELECT a.* FROM c_card_range as a where (a.creatorId=? or a.creatorId=0) and a.deleStatus='1' order by a.id";
 		return super.find(sql, userId);
 	}
 }
