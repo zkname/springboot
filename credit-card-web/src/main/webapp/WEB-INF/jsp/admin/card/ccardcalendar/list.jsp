@@ -49,7 +49,7 @@ $(function () {
                           events.push({
                               title: c.title,
                               start: c.start , // will be parsed
-                              color: '#96FED1'
+                              color: '#82D900'
                           });
                       } else if (c.status == '2') {
                           events.push({
