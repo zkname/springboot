@@ -3,3 +3,5 @@
 /.settings/
 /target/
 profile-my.properties
+/profile-development.properties
+/profile-production.properties
