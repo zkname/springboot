@@ -41,22 +41,22 @@ $(function() {
     <form id="inputForm" action="${ctx}/register" method="post">
       <div class="form-group ">
         <input type="text" class="form-control required  min-length-3 max-length-16  validate-ajax-${ctx}/checkLoginName?oldLoginName=" placeholder="用户名" name="username">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="form-group ">
         <input type="password" class="form-control required min-length-6 max-length-32" placeholder="密码" name="password" />
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="form-group ">
         <input type="text" class="form-control required validate-email  validate-ajax-${ctx}/checkEmail?oldEmail=" placeholder="Email" name="email">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="form-group ">
         <input type="text" class="form-control required " placeholder="邀请码" name="invitationCode" />
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="row">

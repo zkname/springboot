@@ -37,12 +37,12 @@ $(function() {
     <form id="inputForm" action="${ctx}/login" method="post">
       <div class="form-group ">
         <input type="text" class="form-control required" placeholder="用户名" name="username">
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="form-group ">
         <input type="password" class="form-control required" placeholder="密码" name="password" />
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="row">
