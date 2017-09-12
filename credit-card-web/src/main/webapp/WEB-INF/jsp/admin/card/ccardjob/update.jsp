@@ -94,6 +94,24 @@ $(function() {
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-sm-2 control-label">MCC历史</label>
+                  <div class="col-sm-10">
+      				<div>&nbsp;
+      					<c:forEach var="mcc" items="${mccs}">
+      						<li>${mcc}</li>
+      					</c:forEach>
+      				</div>
+      				<br>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">MCC</label>
+                  <div class="col-sm-10">
+      				<input value="${entity.mcc}" id="mcc" name="mcc" class="required validate-number  form-control"  />
+      				<br>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-sm-2 control-label"><%=CcardJob.ALIAS_MONEY%></label>
                   <div class="col-sm-10">
       				<input value="${entity.money}" id="money" name="money" class="required validate-number max-value-2147483647 form-control"  />
