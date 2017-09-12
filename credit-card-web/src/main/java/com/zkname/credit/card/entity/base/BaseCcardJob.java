@@ -4,15 +4,14 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
-
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-
 import java.util.*;
 
 import java.util.*;
+
+
+
 
 @Data
 @ToString
@@ -31,6 +30,7 @@ public class BaseCcardJob extends IdEntity<java.lang.Long>
 	public static final String ALIAS_MONEY = "金额";
 	public static final String ALIAS_FEE = "手续费率";
 	public static final String ALIAS_FEE_VALUE = "手续费";
+	public static final String ALIAS_MCC = "刷的mcc 值";
 	public static final String ALIAS_STATUS = "刷卡状态：1、已刷卡";
 	public static final String ALIAS_CREATE_TIME = "创建时间";
 	public static final String ALIAS_UPDATE_TIME = "修改时间";
@@ -80,6 +80,11 @@ public class BaseCcardJob extends IdEntity<java.lang.Long>
 	 */
 	@Column(name = "feeValue")
 	private java.lang.Double feeValue;
+	/**
+	 * 刷的mcc 值
+	 */
+	@Column(name = "mcc")
+	private java.lang.Integer mcc;
 	/**
 	 * 刷卡状态：1、已刷卡
 	 */

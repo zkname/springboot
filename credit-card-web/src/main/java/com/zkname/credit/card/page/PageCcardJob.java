@@ -2,6 +2,8 @@ package com.zkname.credit.card.page;
 
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.zkname.credit.card.entity.*;
 import com.zkname.core.page.BasePage;
 import com.zkname.core.util.DateUtil;
@@ -149,6 +151,11 @@ public class PageCcardJob extends BasePage<CcardJob> {
 
 	public List<CcardJob> query() {
 		sb.append("select o.*,a.name as bankName,b.name as cardRangeName,c.name as cardInfoName from c_card_job o,c_bank as a,c_card_range as b,c_card_info c where o.bankId=a.id and b.id=o.cardRangeId and c.id=o.cardInfoId ").append(this.getSql());
+		if(this.status!=null && this.status.intValue()==1){
+			sb.append(" order by o.jobDate desc");
+		}else{
+			sb.append(" order by o.jobDate ");
+		}
 		return super.query();
 	}
 }

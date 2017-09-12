@@ -19,6 +19,12 @@ public class CcardJobDAO extends BaseDAO<CcardJob> {
 		String sql="SELECT a.id,CONCAT(c.name,'-',b.name,'[',a.money,'元]',',手续[',a.feeValue,'元]') as title,date_format(a.jobDate,'%Y-%m-%d') as start,a.status as status,a.money as money,a.feeValue as fee FROM c_card_job as a ,c_card_info as b,c_bank as c where a.creatorId=? and a.jobDate>=? and a.jobDate<? and c.id=a.bankId and b.id=a.cardInfoId order by a.jobDate asc,a.status desc";
 		return super.getJdbcTemplate().queryForList(sql, userId,b,e);
 	}
+	
+	
+	public List<String> findMccLimit(long cardInfoId,long id){
+		String sql="SELECT a.mcc FROM c_card_job as a where a.id!=? and a.status='1' and a.cardInfoId=? and a.mcc is not null order by a.jobDate asc limit 20";
+		return super.getJdbcTemplate().queryForList(sql, String.class,id,cardInfoId);
+	}
 }
 
 

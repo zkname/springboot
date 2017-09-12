@@ -6,6 +6,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.zkname.credit.card.page.*;
 import com.zkname.credit.card.entity.*;
 import com.zkname.credit.card.service.*;
 import com.zkname.credit.card.session.LoginUser;
+import com.google.common.collect.Lists;
 import com.zkname.core.controller.BaseController;
 import com.zkname.core.util.CompuUtils;
 import com.zkname.core.util.exception.ActionException;
@@ -73,6 +75,7 @@ public class CcardJobController extends BaseController{
         mv.addObject("cbank", cbankService.findById(entity.getBankId()));
         mv.addObject("ccardRange", ccardRangeService.findById(entity.getCardRangeId()));
         mv.addObject("ccardInfo", ccardInfoService.findById(entity.getCardInfoId()));
+        mv.addObject("mccs", service.getDAO().findMccLimit(entity.getCardInfoId(),entity.getId()));
 		return mv;
 	}
 	
@@ -92,6 +95,7 @@ public class CcardJobController extends BaseController{
 		entityUpdate.setFee(entity.getFee());
 		entityUpdate.setFeeValue(CompuUtils.multiply(entityUpdate.getMoney(), CompuUtils.divide(entityUpdate.getFee(), 100),2));
 		entityUpdate.setStatus(entity.getStatus());
+		entityUpdate.setMcc(entity.getMcc());
 		entityUpdate.setUpdateTime(new Date());
 		service.update(entityUpdate);
 		if(StringUtils.equals(request.getParameter("calendarType"),"1")){
