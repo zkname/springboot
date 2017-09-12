@@ -69,19 +69,6 @@ $(function() {
             </div>
             
             <div class="col-xs-6">
-                  <select name="deleStatus" id="deleStatus" class="form-control">
-	                <option value="">状态</option>
-	                <option value="1" <c:if test="${page.deleStatus!=null && page.deleStatus=='1'}">selected="selected"</c:if>>正常</option>
-	                <option value="0" <c:if test="${page.deleStatus!=null && page.deleStatus=='0'}">selected="selected"</c:if>>废止
-	                </option>
-	              </select>
-            	<br>
-            </div>
-            
-            <div class="col-xs-6">
-            	<br>
-            </div>
-            <div class="col-xs-6">
             	<input type="submit" value="搜索" class="btn btn-primary btn-block btn-flat"/>
             </div>
 	         </div>
@@ -96,10 +83,6 @@ $(function() {
 				      <th><input type="checkbox" id="checkbox" value="checkbox"></th>
 				      <th>ID</th>
 				      <th><%=Cbank.ALIAS_NAME%></th>
-				      <th><%=Cbank.ALIAS_CREATE_TIME%></th>
-				      <th><%=Cbank.ALIAS_UPDATE_TIME%></th>
-				      <th>状态</th>
-				      <th><%=Cbank.ALIAS_CREATOR_ID%></th>
 				      <th>操作</th>
 				    </tr>
 					<c:forEach var="item" items="${page.result}">
@@ -107,15 +90,6 @@ $(function() {
 				      <td><input type="checkbox" name="ids" id="ids" value="${item.id}"></td>
 				      <td>${item.id}</td>
 				      <td><c:out value='${item.name}'/></td>
-				      <td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-				      <td><fmt:formatDate value="${item.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-				      <td>
-		            <c:choose>
-		            	<c:when test="${item.deleStatus=='1'}">正常</c:when>
-		            	<c:otherwise><font color="red">废止</font></c:otherwise>
-		            </c:choose>
-						</td>
-				      <td><c:out value='${item.creatorId}'/></td>
 				      <td><a href="${ctx}/admin/card/cbank/update/${item.id}">修改</a> </td>
 				    </tr>
 					</c:forEach>
