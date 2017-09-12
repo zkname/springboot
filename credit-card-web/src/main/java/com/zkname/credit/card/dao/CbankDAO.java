@@ -14,7 +14,7 @@ public class CbankDAO extends BaseDAO<Cbank> {
 	 * @return
 	 */
 	public List<Cbank> findAll(long userId){
-		String sql="SELECT a.* FROM c_bank as a where a.creatorId=? and a.deleStatus='1' order by a.name";
+		String sql="SELECT a.* FROM c_bank as a where (a.creatorId=? or a.creatorId=0) and a.deleStatus='1' order by a.name";
 		return super.find(sql, userId);
 	}
 }

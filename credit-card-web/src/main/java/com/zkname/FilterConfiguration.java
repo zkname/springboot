@@ -82,7 +82,7 @@ public class FilterConfiguration {
     public FilterRegistrationBean testFilterRegistration() throws UnsupportedEncodingException, DecoderException, EncoderException {
 		PatchcaFilter pf=new PatchcaFilter();
 		//开启Debug 不管输入什么都验证通过
-		PatchcaFilter.DEBUG=true;
+//		PatchcaFilter.DEBUG=true;
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(pf);
         registration.addUrlPatterns("/images/code.png");
