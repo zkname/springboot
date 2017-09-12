@@ -16,6 +16,7 @@
 		            </span>
 		          </a>
 		    		<ul class="treeview-menu">
+		    			<li><a href="${ctx}/admin/card/cinvitationcodebatch/list"><i class="fa fa-circle-o"></i>邀请</a></li>
 						<li><a href="${ctx}/admin/management/sysuser/list"><i class="fa fa-circle-o"></i>用户列表</a></li>
 					</ul>
 				</li>
@@ -66,7 +67,6 @@
 		            </span>
 		          </a>
 		    		<ul class="treeview-menu">
-		    			<li><a href="${ctx}/admin/card/cinvitationcodebatch/list"><i class="fa fa-circle-o"></i>邀请码</a></li>
 						<li><a href="${ctx}/admin/system/sysparam/list"><i class="fa fa-circle-o"></i>系统参数</a></li>
 					</ul>
 				</li>
