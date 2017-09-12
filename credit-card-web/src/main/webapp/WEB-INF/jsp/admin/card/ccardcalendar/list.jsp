@@ -38,7 +38,6 @@ $(function () {
         week : '周',
         day  : '日'
       },
-	  editable: true,
 	  eventLimit: true, // allow "more" link when too many events
 	  navLinks: true,
       events: function(start,end,timezone,callback){
@@ -50,7 +49,13 @@ $(function () {
                           events.push({
                               title: c.title,
                               start: c.start , // will be parsed
-                              color: '#BEEABE'
+                              color: '#00A600'
+                          });
+                      } else if (c.status == '2') {
+                          events.push({
+                              title: "已刷："+c.money+"元，手续费："+c.fee+"元，未完："+c.nomoney+"元",
+                              start: c.start , // will be parsed
+                              color: '#FFC78E'
                           });
                       } else {
                           events.push({
