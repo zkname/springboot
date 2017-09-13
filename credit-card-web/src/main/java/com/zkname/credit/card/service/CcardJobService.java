@@ -19,6 +19,7 @@ import com.zkname.core.util.exception.ActionException;
 import com.zkname.credit.card.dao.CcardJobDAO;
 import com.zkname.credit.card.entity.CcardInfo;
 import com.zkname.credit.card.entity.CcardJob;
+import com.zkname.credit.card.entity.CcardJobGenerate;
 import com.zkname.credit.card.entity.CcardRange;
 import com.zkname.credit.card.session.LoginUser;
 
@@ -31,6 +32,9 @@ public class CcardJobService extends BaseService<CcardJob> {
 	
 	@Autowired
 	private CcardInfoService ccardInfoService;
+	
+	@Autowired
+	private CcardJobGenerateService ccardJobGenerateService;
 
 	@Transactional(readOnly=true)//非事务处理
 	public CcardJobDAO getDAO() {
@@ -54,7 +58,9 @@ public class CcardJobService extends BaseService<CcardJob> {
      * @param cinfo
      * @param ccardRange
      */
-    public void createJob(CcardInfo cinfo,CcardRange ccardRange,List<Double> moneyList){
+    public void createJob(CcardJobGenerate cjg,CcardInfo cinfo,CcardRange ccardRange,List<Double> moneyList){
+    	clear(cinfo.getId());
+    	ccardJobGenerateService.deleteId(cjg.getId());
     	String d=DateUtil.Date2Str(new Date(),"yyyy-MM");
     	d=d+"-"+String.format("%02d",cinfo.getBillDate());
     	cinfo.setJobDate(DateUtil.Str2Date(d));
@@ -96,8 +102,6 @@ public class CcardJobService extends BaseService<CcardJob> {
 				this.save(cj);
 			}
 		}
-		
-		ccardInfoService.updateJobDate(cinfo.getId(),cinfo.getJobDate());
     }
     
     /**
@@ -105,8 +109,8 @@ public class CcardJobService extends BaseService<CcardJob> {
      * @param cardInfoId
      * @param cardRangeId
      */
-    public void clear(long cardInfoId,long cardRangeId){
-    	this.getDAO().clear(cardInfoId,cardRangeId);
+    public void clear(long cardInfoId){
+    	this.getDAO().clear(cardInfoId);
     }
     
     

@@ -33,9 +33,9 @@ public class CcardJobDAO extends BaseDAO<CcardJob> {
      * @param cardInfoId
      * @param cardRangeId
      */
-    public int clear(long cardInfoId,long cardRangeId){
-    	String sql = "DELETE FROM c_card_job WHERE cardInfoId=? AND cardRangeId=? AND status=0 AND jobDate>=?";
-    	return super.update(sql, cardInfoId,cardRangeId,DateUtil.getNowDate());
+    public int clear(long cardInfoId){
+    	String sql = "DELETE FROM c_card_job WHERE cardInfoId=? AND status=0 AND jobDate>=?";
+    	return super.update(sql, cardInfoId,DateUtil.getNowDate());
     }
 }
 

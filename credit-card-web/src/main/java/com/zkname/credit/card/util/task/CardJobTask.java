@@ -16,8 +16,11 @@ import com.zkname.core.util.CompuUtils;
 import com.zkname.core.util.DateUtil;
 import com.zkname.core.util.ParamType;
 import com.zkname.credit.card.entity.CcardInfo;
+import com.zkname.credit.card.entity.CcardJob;
+import com.zkname.credit.card.entity.CcardJobGenerate;
 import com.zkname.credit.card.entity.CcardRange;
 import com.zkname.credit.card.service.CcardInfoService;
+import com.zkname.credit.card.service.CcardJobGenerateService;
 import com.zkname.credit.card.service.CcardJobService;
 import com.zkname.credit.card.service.CcardRangeService;
 
@@ -38,6 +41,10 @@ public class CardJobTask {
 	@Autowired
 	private CcardRangeService ccardRangeService;
 	
+	@Autowired
+	private CcardJobGenerateService ccardJobGenerateService; 
+	
+	
 	@Scheduled(cron="0 0/1 * * * ?")
 	public void run() {
 		logger.info(this.getClass().getSimpleName()+" 调用！~");
@@ -45,7 +52,15 @@ public class CardJobTask {
 		int day=ParamType.getint(DateUtil.Date2Str(d, "dd"));
 		List<CcardInfo> list = ccardInfoService.getDAO().findBillDate(day, d);
 		for(CcardInfo cinfo:list){
+			cinfo.setJobDate(d);
+			ccardInfoService.updateGenerate(cinfo);
+		}
+		
+		List<CcardJobGenerate> list1=ccardJobGenerateService.getDAO().findAll();
+		
+		for(CcardJobGenerate cjg:list1){
 			try {
+				CcardInfo cinfo=ccardInfoService.findById(cjg.getCardInfoId());
 				CcardRange ccardRange=ccardRangeService.findById(cinfo.getCardRangeId());
 		    	//刷卡次数
 		    	int num=RandomUtils.nextInt(ccardRange.getFrequencyPropStartValue(),ccardRange.getFrequencyPropEndtValue()+1);
@@ -54,7 +69,7 @@ public class CardJobTask {
 		    	//刷卡金额
 		    	double money=CompuUtils.multiply(CompuUtils.divide(moneyProp, 100.0D,2),cinfo.getMoney(),2);
 		    	
-				ccardJobService.createJob(cinfo,ccardRange,getMoney(money, num));
+				ccardJobService.createJob(cjg,cinfo,ccardRange,getMoney(money, num));
 			} catch (Exception e) {
 				logger.error("生成数据错误：",e);
 			}

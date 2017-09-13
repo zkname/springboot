@@ -15,7 +15,7 @@ public class CcardInfoDAO extends BaseDAO<CcardInfo> {
 	 * @return
 	 */
     public List<CcardInfo> findBillDate(int billDate,Date d) {
-        String sql = "SELECT * FROM c_card_info where deleStatus='1' and  ((billDate=? and jobDate!=?) or jobDate is null)";
+        String sql = "SELECT * FROM c_card_info where deleStatus='1' and  billDate=? and jobDate!=?";
         return super.find(sql, billDate,d);
     }
     

@@ -113,6 +113,7 @@ public class CcardInfoController extends BaseController{
 		//获取参数实体，操作更新实体，不拷贝字段
 		BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","createTime","updateTime","deleStatus","creatorId","jobDate"});
 		entityUpdate.setNextUp(entity.getNextUp());
+		entityUpdate.setUpdateTime(new Date());
 		service.update(cardRangeId,entityUpdate);
 		RedirectView mv = new RedirectView("list");
 		return mv;
