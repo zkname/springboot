@@ -112,9 +112,9 @@ $(function() {
 				    <tr>
 				      <th><input type="checkbox" id="checkbox" value="checkbox"></th>
 				      <th>ID</th>
-				      <th>银行名称</th>
-				      <th>规则名称</th>
-				      <th><%=CcardInfo.ALIAS_NAME%></th>
+				      <th>名称</th>
+				      <th>规则</th>
+				      <th>任务时间</th>
 				      <th><%=CcardInfo.ALIAS_MONEY%></th>
 				      <th>未刷金额</th>
 				      <th>年费类型</th>
@@ -122,7 +122,6 @@ $(function() {
 				      <th><%=CcardInfo.ALIAS_CARD_NUM%></th>
 				      <th><%=CcardInfo.ALIAS_BILL_DATE%></th>
 				      <th><%=CcardInfo.ALIAS_NEXT_UP%></th>
-				      <th><%=CcardInfo.ALIAS_CREATE_TIME%></th>
 				      <th><%=CcardInfo.ALIAS_UPDATE_TIME%></th>
 				      <th>操作</th>
 				    </tr>
@@ -130,9 +129,14 @@ $(function() {
 				    <tr>
 				      <td><input type="checkbox" name="ids" id="ids" value="${item.id}"></td>
 				      <td>${item.id}</td>
-				      <td><c:out value='${item.bankName}'/></td>
+				      <td><c:out value='${item.bankName}'/>-<c:out value='${item.name}'/></td>
 				      <td><c:out value='${item.cardRangeName}'/></td>
-				      <td><c:out value='${item.name}'/></td>
+				      <td>
+				      <c:choose>
+				      	<c:when test="${item.jobDate==null}">创建中</c:when>
+				      	<c:otherwise><fmt:formatDate value="${item.jobDate}" pattern="yyyy-MM-dd"/></c:otherwise>
+				      </c:choose>
+				      </td>
 				      <td><c:out value='${item.money}'/>元</td>
 				      <td><c:out value='${item.totalAmount}'/>元</td>
 				      
@@ -148,7 +152,6 @@ $(function() {
 				      <td><c:out value='${item.cardNum}'/></td>
 				      <td><c:out value='${item.billDate}'/></td>
 				      <td><fmt:formatDate value="${item.nextUp}" pattern="yyyy-MM-dd"/></td>
-				      <td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 				      <td><fmt:formatDate value="${item.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 				      <td><a href="${ctx}/admin/card/ccardinfo/update/${item.id}">修改</a> </td>
 				    </tr>
