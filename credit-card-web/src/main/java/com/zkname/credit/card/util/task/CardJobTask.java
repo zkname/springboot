@@ -3,6 +3,7 @@ package com.zkname.credit.card.util.task;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
@@ -12,11 +13,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.zkname.core.util.CompuUtils;
 import com.zkname.core.util.DateUtil;
 import com.zkname.core.util.ParamType;
 import com.zkname.credit.card.entity.CcardInfo;
-import com.zkname.credit.card.entity.CcardJob;
 import com.zkname.credit.card.entity.CcardJobGenerate;
 import com.zkname.credit.card.entity.CcardRange;
 import com.zkname.credit.card.service.CcardInfoService;
@@ -57,9 +58,14 @@ public class CardJobTask {
 		}
 		
 		List<CcardJobGenerate> list1=ccardJobGenerateService.getDAO().findAll();
-		
+		Set<Long> set=Sets.newHashSet();
 		for(CcardJobGenerate cjg:list1){
 			try {
+				if(set.contains(cjg.getCardInfoId())){
+					ccardJobGenerateService.deleteId(cjg.getId());
+					continue;
+				}
+				set.add(cjg.getCardInfoId());
 				CcardInfo cinfo=ccardInfoService.findById(cjg.getCardInfoId());
 				CcardRange ccardRange=ccardRangeService.findById(cinfo.getCardRangeId());
 		    	//刷卡次数
