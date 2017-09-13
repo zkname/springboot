@@ -59,8 +59,6 @@ public class CcardInfoService extends BaseService<CcardInfo> {
      */
     public void update(Long cardRangeId,CcardInfo entity){
     	if(entity.getJobDate()!=null && entity.getCardRangeId().longValue()!=cardRangeId.longValue()){
-    		entity.setJobDate(null);
-    		
         	CcardJobGenerate ccardJobGenerate=new CcardJobGenerate();
         	ccardJobGenerate.setBankId(entity.getBankId());
         	ccardJobGenerate.setCardInfoId(entity.getId());

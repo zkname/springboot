@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.zkname.core.controller.BaseController;
+import com.zkname.core.util.DateUtil;
 import com.zkname.core.util.exception.ActionException;
 import com.zkname.core.util.spring.annotation.AvoidDuplicateSubmission;
 import com.zkname.credit.card.entity.CcardInfo;
@@ -78,6 +79,9 @@ public class CcardInfoController extends BaseController{
 		entity.setCreatorId(LoginUser.getUser().getId());
 		entity.setDeleStatus("1");
 		entity.setUpdateTime(new Date());
+		String d=DateUtil.Date2Str(new Date(),"yyyy-MM");
+    	d=d+"-"+String.format("%02d",entity.getBillDate());
+    	entity.setJobDate(DateUtil.Str2Date(d));
 		service.save(entity);
 		RedirectView mv = new RedirectView("list");
 		return mv;
