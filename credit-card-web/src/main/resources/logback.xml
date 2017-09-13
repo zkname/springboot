@@ -20,9 +20,9 @@
 	</appender>
 	
 	<appender name="StderroutFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/app/log/${APP_NAME}/stderrout.log</file>
+		<file>logs/${APP_NAME}/stderrout.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>/app/log/${APP_NAME}/stderrout.log.%d{yyyyMMdd}</FileNamePattern>
+			<FileNamePattern>logs/${APP_NAME}/stderrout.log.%d{yyyyMMdd}</FileNamePattern>
 			<MaxHistory>30</MaxHistory>
 		</rollingPolicy>
 		<encoder>
@@ -30,9 +30,9 @@
 		</encoder>
 	</appender>
 	<appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/app/log/${APP_NAME}/base.log</file>
+		<file>logs/${APP_NAME}/base.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>/app/log/${APP_NAME}/base.log.%d{yyyyMMdd}</FileNamePattern>
+			<FileNamePattern>logs/${APP_NAME}/base.log.%d{yyyyMMdd}</FileNamePattern>
 			<MaxHistory>30</MaxHistory>
 		</rollingPolicy>
 		<encoder>
@@ -43,7 +43,7 @@
 		</filter>
 	</appender>
 	
-	<logger name="com.zkname.core.util.spring.ControllerInterceptor" level="DEBUG"  additivity="false">
+	<logger name="com.zkname.core.util.spring.ControllerInterceptor" level="WARN"  additivity="false">
 		<appender-ref ref="Console" />
 		<appender-ref ref="StderroutFile" />
 	</logger>
