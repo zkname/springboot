@@ -54,7 +54,7 @@ $(function() {
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-8"><br>
+        <div class="col-xs-8">
         </div>
         <!-- /.col -->
         <div class="col-xs-4"><br>
@@ -62,8 +62,10 @@ $(function() {
         </div>
         <!-- /.col -->
       </div>
+      
+        还没有帐号？<a href="${ctx}/register" class="text-center">立即注册></a>
+        
     </form>
-    <a href="${ctx}/register" class="text-center">注册</a>
   </div>
   <!-- /.login-box-body -->
 </div>
