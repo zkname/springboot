@@ -18,6 +18,9 @@ public class CcardInfoService extends BaseService<CcardInfo> {
 	
 	@Autowired
 	private CcardInfoDAO dao;
+	
+	@Autowired
+	private CcardJobService ccardJobService;
 
 	@Transactional(readOnly=true)//非事务处理
 	public CcardInfoDAO getDAO() {
@@ -43,5 +46,18 @@ public class CcardInfoService extends BaseService<CcardInfo> {
      */
     public void updateJobDate(long cinfoId,Date jobDate){
     	this.getDAO().updateJobDate(cinfoId,jobDate);
+    }
+    
+    /**
+     * 
+     * @param cardRangeId
+     * @param entity
+     */
+    public void  update(Long cardRangeId,CcardInfo entity){
+    	if(entity.getJobDate()!=null && entity.getCardRangeId().longValue()!=cardRangeId.longValue()){
+    		entity.setJobDate(null);
+    		ccardJobService.clear(entity.getId(),cardRangeId);
+    	}
+    	this.getDAO().update(entity);
     }
 }

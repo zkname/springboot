@@ -4,6 +4,8 @@ import java.util.*;
 import com.zkname.credit.card.entity.*;
 import com.zkname.credit.card.session.LoginUser;
 import com.zkname.core.dao.BaseDAO;
+import com.zkname.core.util.DateUtil;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,6 +27,16 @@ public class CcardJobDAO extends BaseDAO<CcardJob> {
 		String sql="SELECT a.mcc FROM c_card_job as a where a.id!=? and a.status='1' and a.cardInfoId=? and a.mcc is not null order by a.jobDate asc limit 20";
 		return super.getJdbcTemplate().queryForList(sql, String.class,id,cardInfoId);
 	}
+	
+    /**
+     * 更换规则清理数据
+     * @param cardInfoId
+     * @param cardRangeId
+     */
+    public int clear(long cardInfoId,long cardRangeId){
+    	String sql = "DELETE FROM c_card_job WHERE cardInfoId=? AND cardRangeId=? AND status=0 AND jobDate>=?";
+    	return super.update(sql, cardInfoId,cardRangeId,DateUtil.getNowDate());
+    }
 }
 
 

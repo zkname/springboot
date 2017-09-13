@@ -93,17 +93,17 @@ $(function() {
       				<br>
                   </div>
                 </div>
+                <c:if test="${fn:length(mccs)>0}">
                 <div class="form-group">
                   <label class="col-sm-2 control-label">MCC历史</label>
                   <div class="col-sm-10">
-      				<div>&nbsp;
       					<c:forEach var="mcc" items="${mccs}">
       						<li>${mcc}</li>
       					</c:forEach>
-      				</div>
       				<br>
                   </div>
                 </div>
+                </c:if>
                 <div class="form-group">
                   <label class="col-sm-2 control-label">MCC</label>
                   <div class="col-sm-10">

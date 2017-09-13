@@ -100,7 +100,14 @@ public class CcardJobService extends BaseService<CcardJob> {
 		ccardInfoService.updateJobDate(cinfo.getId(),cinfo.getJobDate());
     }
     
-
+    /**
+     * 更换规则清理数据
+     * @param cardInfoId
+     * @param cardRangeId
+     */
+    public void clear(long cardInfoId,long cardRangeId){
+    	this.getDAO().clear(cardInfoId,cardRangeId);
+    }
     
     
     public static void main(String[] args) {

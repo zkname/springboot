@@ -20,6 +20,7 @@ import com.zkname.credit.card.page.*;
 import com.zkname.credit.card.entity.*;
 import com.zkname.credit.card.service.*;
 import com.zkname.credit.card.session.LoginUser;
+import com.zkname.credit.card.util.conf.MccProperties;
 import com.google.common.collect.Lists;
 import com.zkname.core.controller.BaseController;
 import com.zkname.core.util.CompuUtils;
@@ -75,7 +76,13 @@ public class CcardJobController extends BaseController{
         mv.addObject("cbank", cbankService.findById(entity.getBankId()));
         mv.addObject("ccardRange", ccardRangeService.findById(entity.getCardRangeId()));
         mv.addObject("ccardInfo", ccardInfoService.findById(entity.getCardInfoId()));
-        mv.addObject("mccs", service.getDAO().findMccLimit(entity.getCardInfoId(),entity.getId()));
+        List<String> list1=Lists.newArrayList();
+        List<String> list=service.getDAO().findMccLimit(entity.getCardInfoId(),entity.getId());
+        for(String v:list){
+        	v="["+v+"]"+MccProperties.getInstance().getProperty(v,"");
+        	list1.add(v);
+        }
+        mv.addObject("mccs", list1);
 		return mv;
 	}
 	
