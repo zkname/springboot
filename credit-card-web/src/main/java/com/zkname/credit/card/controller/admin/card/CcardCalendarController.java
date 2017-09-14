@@ -48,7 +48,7 @@ public class CcardCalendarController extends BaseController{
 	@RequestMapping(value = "/data", produces = "application/text; charset=utf-8" ,method = RequestMethod.GET)
 	public String data(String start,String end,HttpServletRequest request,HttpServletResponse response) {
 		List<Map<String,Object>> list=service.getDAO().findUserJob(LoginUser.getUser().getId(),DateUtil.Str2Date(start),DateUtil.Str2Date(end));
-		Map<String,Map<String,Object>> map=Maps.newHashMap();
+		Map<String,Map<String,Object>> map=Maps.newLinkedHashMap();
 		for(Map<String,Object> obj:list){
 			int status=(Integer) obj.get("status");
 			String d=(String) obj.get("start");
@@ -58,7 +58,7 @@ public class CcardCalendarController extends BaseController{
 			obj.remove("fee");
 			Map<String,Object> map2=null;
 			if(!map.containsKey(d)){
-				map2=Maps.newHashMap();
+				map2=Maps.newLinkedHashMap();
 				map2.put("start", d);
 				map2.put("status", 2);
 				map2.put("money", 0D);
@@ -75,7 +75,7 @@ public class CcardCalendarController extends BaseController{
 				map2.put("nomoney", CompuUtils.add(money,(Double) map2.get("nomoney"),2));
 			}
 		}
-		list.addAll(map.values());
+		list.addAll(0,map.values());
 		return JsonUtil.toJSONString(list);
 	}
 	

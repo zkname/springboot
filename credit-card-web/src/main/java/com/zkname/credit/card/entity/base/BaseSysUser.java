@@ -33,6 +33,8 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	public static final String ALIAS_LOGIN_TIME = "登陆时间";
 	public static final String ALIAS_DELE_STATUS = "可见状态(0:不可见;1:可见)";
 	public static final String ALIAS_CREATOR_ID = "创建者id";
+	public static final String ALIAS_RESET_CODE = "重置密码code";
+	public static final String ALIAS_RESET_OUT_DATE = "重置超时时间";
 	
 	//columns START
 	/**
@@ -92,6 +94,16 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	 */
 	@Column(name = "creatorId")
 	private java.lang.Long creatorId;
+	/**
+	 * 重置密码code
+	 */
+	@Column(name = "resetCode")
+	private java.lang.String resetCode;
+	/**
+	 * 重置超时时间
+	 */
+	@Column(name = "resetOutDate")
+	private java.util.Date resetOutDate;
 	//columns END
 
 	public BaseSysUser(){
@@ -129,6 +141,13 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	}
 	public void setLoginTimeString(String value) {
 		setLoginTime(DateUtil.Str2Date(value));
+	}
+	@Transient
+	public String getResetOutDateString() {
+		return DateUtil.Date2Str(getResetOutDate());
+	}
+	public void setResetOutDateString(String value) {
+		setResetOutDate(DateUtil.Str2Date(value));
 	}
 	
 	public int hashCode() {

@@ -2,11 +2,13 @@ package com.zkname.credit.card.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +26,10 @@ import com.zkname.core.util.spring.SpringHttpServletRequest;
 import com.zkname.credit.card.entity.CinvitationCode;
 import com.zkname.credit.card.entity.SysUser;
 import com.zkname.credit.card.service.CinvitationCodeService;
+import com.zkname.credit.card.service.SysParamService;
 import com.zkname.credit.card.service.SysUserService;
 import com.zkname.credit.card.util.EncodeUtils;
+import com.zkname.credit.card.util.email.MailUtil;
 import com.zkname.patchca.PatchcaFilter;
 
 
@@ -41,6 +45,11 @@ public class IndexController extends BaseController {
 	
 	@Autowired
 	private CinvitationCodeService cinvitationCodeService;
+	
+	@Autowired
+	private SysParamService sysParamService;
+	
+	
 	
 	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
 	public String index(HttpServletRequest request,HttpServletResponse response){
@@ -194,5 +203,86 @@ public class IndexController extends BaseController {
 			return "Email已存在";
 		}
 		return null;
+	}
+	
+	
+	
+	
+	/**
+	 * 忘记密码
+	 * @param username
+	 * @param password
+	 * @param code
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/forgotten", method = RequestMethod.GET)
+	public String forgottenGet()  {
+        return "forgotten";
+	}
+	
+
+	/**
+	 * 找回密码
+	 * @param email
+	 * @param code
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/forgotten", method = RequestMethod.POST)
+	public String forgottenPost(String email,String code,ModelMap model)  {
+		if(StringUtils.isAnyBlank(email,code)){
+        	model.put("login_error", "参数错误！");
+        	return "register";
+        }
+		if(!PatchcaFilter.isValidationCode(SpringHttpServletRequest.getRequest(), code)){
+			model.put("login_error", "验证码错误！");
+        	return "register";
+		}
+		SysUser sysUser=sysUserService.findUserByEmail(email);
+		if(sysUser==null){
+			model.put("login_error", "email不存在！");
+        	return "register";
+		}
+		try {
+			sysUser.setResetCode(UUID.randomUUID().toString().replace("-", ""));
+			sysUser.setResetOutDate(new Date(System.currentTimeMillis()+1800000));
+			sysUserService.update(sysUser, "resetCode","resetOutDate");
+			String sid=DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDate().getTime());
+			long num=sysUser.getId();
+			MailUtil.sendResetPassword(email, sysParamService.findByKey("reset_password_url").getV()+"?sid="+sid+"&num="+num);
+			model.put("login_error", "邮件已发送《"+sysUser.getEmail()+"》邮箱!");
+        	return "register";			
+		} catch (ActionException e) {
+			model.put("login_error", e.getMessage());
+        	return "register";
+		}
+	}
+	
+	/**
+	 * 修改密码
+	 * @param num
+	 * @param sid
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/reset_password", produces = "application/text; charset=utf-8")
+	public String resetPassword(long num,String sid){
+		if(num==0L || StringUtils.isAnyBlank(sid)){
+        	return "参数错误！";
+        }
+		SysUser sysUser=sysUserService.findById(num);
+		if(sysUser==null || sysUser.getResetCode()==null || sysUser.getResetOutDate()==null){
+			return "参数错误！";
+		}
+		if(!StringUtils.equals(DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDate().getTime()), sid)){
+			return "参数错误！";
+		}
+		String password=RandomUtils.nextLong(100000L, 1000000L)+"";
+		sysUser.setPassword(DigestUtils.md5Hex(password));
+		sysUser.setResetCode(null);
+		sysUser.setResetOutDate(null);
+		sysUserService.update(sysUser,  "resetCode","resetOutDate","password");
+		return "新密码为："+password;
 	}
 }	

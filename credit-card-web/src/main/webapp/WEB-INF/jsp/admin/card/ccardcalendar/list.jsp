@@ -47,19 +47,19 @@ $(function () {
                   $.each(json,function(i,c) {
                       if (c.status == '1') {
                           events.push({
-                              title: c.title,
+                        	  title: c.title,
                               start: c.start , // will be parsed
                               color: '#82D900'
                           });
                       } else if (c.status == '2') {
                           events.push({
-                              title: "已刷："+c.money+"元，手续费："+c.fee+"元，未完："+c.nomoney+"元",
-                              start: c.start , // will be parsed
+                        	  title: "已刷："+c.money+"元，金额："+(c.money-c.fee)+"元，手续费："+c.fee+"元，未完："+c.nomoney+"元",
+                              start: c.start+" 00:01" , // will be parsed
                               color: '#FFC78E'
                           });
                       } else {
                           events.push({
-                              title: c.title,
+                        	  title: c.title,
                               start: c.start , // will be parsed
                               color: 'RED' ,
                               url:'${ctx}/admin/card/ccardjob/update/'+c.id+"?calendarType=1",

@@ -22,6 +22,10 @@ $(function() {
 		 $(this).attr("src",src+"?d="+Math.random());
 	 });
 	
+	
+	$("#backId").click(function(){
+		window.location.href="${ctx}/";
+	 });
 });
 </script>
 </head>
@@ -34,38 +38,33 @@ $(function() {
   <div class="login-box-body">
     <p class="login-box-msg"><c:if test="${login_error!=null}"><font color="red">${login_error}</font></c:if></p>
 
-    <form id="inputForm" action="${ctx}/login" method="post">
+    <form id="inputForm" action="${ctx}/forgotten" method="post">
       <div class="form-group ">
-        <input type="text" class="form-control required" placeholder="用户名" name="username">
-        <span class="glyphicon form-control-feedback"></span>
-        <br>
-      </div>
-      <div class="form-group ">
-        <input type="password" class="form-control required" placeholder="密码" name="password" />
+        <input type="text" class="form-control required validate-email" placeholder="Email" name="email">
         <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
       <div class="row">
       	<div class="col-xs-6">
         <input type="text" class="form-control required" placeholder="验证码" name="code" />
+        <br>
         </div>
         <div class="col-xs-6">
         <img id="codeImg" alt="验证码" src="${ctx}/images/code.png" />
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-8">
+        <div class="col-xs-4">
         </div>
         <!-- /.col -->
-        <div class="col-xs-4"><br>
-          <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+        <div class="col-xs-4">
+        	<button type="submit" class="btn btn-primary btn-block btn-flat">确定</button>
+        </div>
+        <div class="col-xs-4">
+           <button type="button" class="btn btn-primary btn-block btn-flat" id="backId">返回</button>
         </div>
         <!-- /.col -->
       </div>
-      
-        还没有帐号？<a href="${ctx}/register" class="text-center">立即注册></a>
-       忘记密码？<a href="${ctx}/forgotten" class="text-center">找回密码></a>
-        
     </form>
   </div>
   <!-- /.login-box-body -->
