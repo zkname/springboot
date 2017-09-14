@@ -233,16 +233,16 @@ public class IndexController extends BaseController {
 	public String forgottenPost(String email,String code,ModelMap model)  {
 		if(StringUtils.isAnyBlank(email,code)){
         	model.put("login_error", "参数错误！");
-        	return "register";
+        	return "forgotten";
         }
 		if(!PatchcaFilter.isValidationCode(SpringHttpServletRequest.getRequest(), code)){
 			model.put("login_error", "验证码错误！");
-        	return "register";
+        	return "forgotten";
 		}
 		SysUser sysUser=sysUserService.findUserByEmail(email);
 		if(sysUser==null){
 			model.put("login_error", "email不存在！");
-        	return "register";
+        	return "forgotten";
 		}
 		try {
 			sysUser.setResetCode(UUID.randomUUID().toString().replace("-", ""));
@@ -251,11 +251,11 @@ public class IndexController extends BaseController {
 			String sid=DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDate().getTime());
 			long num=sysUser.getId();
 			MailUtil.sendResetPassword(email, sysParamService.findByKey("reset_password_url").getV()+"?sid="+sid+"&num="+num);
-			model.put("login_error", "邮件已发送《"+sysUser.getEmail()+"》邮箱!");
-        	return "register";			
+			model.put("login_error", "邮件已发送“"+sysUser.getEmail()+"”邮箱!");
+        	return "forgotten";			
 		} catch (ActionException e) {
 			model.put("login_error", e.getMessage());
-        	return "register";
+        	return "forgotten";
 		}
 	}
 	
