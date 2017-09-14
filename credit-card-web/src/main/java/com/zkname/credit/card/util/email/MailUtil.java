@@ -17,10 +17,8 @@ public class MailUtil {
 			mailMessage.subject("找回您的账户密码.").from("system", "system@zkname.com").addTo("zhangkai@foxmail.com");
 			
 			
-			String emailContent = "请勿回复本邮件.点击下面的链接,重设密码<br/><a href="
-                    + url + " target='_BLANK'>" + url
-                    + "</a>  或者    <a href=" + url
-                    + " target='_BLANK'>点击我重新设置密码</a>"
+			String emailContent = "请勿回复本邮件.点击下面的链接<br/><a href=" + url
+                    + " target='_BLANK'>点击我重置密码</a>"
                     + "<br/>tips:本邮件超过30分钟,链接将会失效，需要重新申请";
 			mailMessage.content(emailContent);
 			mailSender.load().send(mailMessage);
