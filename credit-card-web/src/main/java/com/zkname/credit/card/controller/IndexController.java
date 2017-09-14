@@ -248,9 +248,13 @@ public class IndexController extends BaseController {
 			sysUser.setResetCode(UUID.randomUUID().toString().replace("-", ""));
 			sysUser.setResetOutDate(new Date(System.currentTimeMillis()+1800000));
 			sysUserService.update(sysUser, "resetCode","resetOutDate");
-			String sid=DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDate().getTime());
+			String sid=DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDateString());
 			long num=sysUser.getId();
-			MailUtil.sendResetPassword(email, sysParamService.findByKey("reset_password_url").getV()+"?sid="+sid+"&num="+num);
+			Thread t = new Thread(new Runnable(){  
+	            public void run(){  
+	            	MailUtil.sendResetPassword(email, sysParamService.findByKey("reset_password_url").getV()+"?sid="+sid+"&num="+num);
+	        }});  
+	        t.start();
 			model.put("login_error", "邮件已发送“"+sysUser.getEmail()+"”邮箱!");
         	return "forgotten";			
 		} catch (ActionException e) {
@@ -266,17 +270,20 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/reset_password", produces = "application/text; charset=utf-8")
+	@RequestMapping(value = "/reset_password", produces = "text/html; charset=utf-8")
 	public String resetPassword(long num,String sid){
 		if(num==0L || StringUtils.isAnyBlank(sid)){
         	return "参数错误！";
         }
 		SysUser sysUser=sysUserService.findById(num);
-		if(sysUser==null || sysUser.getResetCode()==null || sysUser.getResetOutDate()==null){
+		if(sysUser==null){
 			return "参数错误！";
 		}
-		if(!StringUtils.equals(DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDate().getTime()), sid)){
-			return "参数错误！";
+		if(sysUser.getResetCode()==null || sysUser.getResetOutDate()==null){
+			return "链接已失效！";
+		}
+		if(!StringUtils.equals(DigestUtils.md5Hex(sysUser.getId()+"|"+sysUser.getResetCode()+"|"+sysUser.getResetOutDateString()), sid)){
+			return "链接已失效！";
 		}
 		String password=RandomUtils.nextLong(100000L, 1000000L)+"";
 		sysUser.setPassword(DigestUtils.md5Hex(password));
