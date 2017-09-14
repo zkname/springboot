@@ -256,7 +256,7 @@ public class IndexController extends BaseController {
 	        }});  
 	        t.start();
 			model.put("login_error", "邮件已发送“"+sysUser.getEmail()+"”邮箱!");
-        	return "forgotten";			
+        	return "index";			
 		} catch (ActionException e) {
 			model.put("login_error", e.getMessage());
         	return "forgotten";
