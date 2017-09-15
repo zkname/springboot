@@ -54,11 +54,13 @@ $(function() {
         <span class="glyphicon form-control-feedback"></span>
         <br>
       </div>
-      <div class="form-group ">
-        <input type="text" class="form-control required " placeholder="邀请码" name="invitationCode" />
-        <span class="glyphicon form-control-feedback"></span>
-        <br>
-      </div>
+      <c:if test="${open_register=='0'}">
+	      <div class="form-group ">
+	        <input type="text" class="form-control required " placeholder="邀请码" name="invitationCode" />
+	        <span class="glyphicon form-control-feedback"></span>
+	        <br>
+	      </div>
+      </c:if>
       <div class="row">
       	<div class="col-xs-6">
         <input type="text" class="form-control required" placeholder="验证码" name="code" />

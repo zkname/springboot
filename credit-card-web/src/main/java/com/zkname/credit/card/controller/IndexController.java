@@ -46,9 +46,9 @@ public class IndexController extends BaseController {
 	@Autowired
 	private CinvitationCodeService cinvitationCodeService;
 	
-	@Autowired
-	private SysParamService sysParamService;
+	public static int OPEN_REGISTER=0;
 	
+	public static String RESET_PASSWORD_URL;
 	
 	
 	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
@@ -65,7 +65,7 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
-	public String login(String username,String password,String code,ModelMap model)  {
+	public String login(String code,String username,String password,ModelMap model)  {
 		if(StringUtils.isAnyBlank(username,password,code)){
         	model.put("login_error", "参数错误！");
         	return "index";
@@ -101,7 +101,8 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String registerGet()  {
+	public String registerGet(ModelMap model)  {
+		model.put("open_register", OPEN_REGISTER);
         return "register";
 	}
 	
@@ -115,8 +116,15 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerPost(String username,String password,String email,String invitationCode,String code,ModelMap model)  {
-		if(StringUtils.isAnyBlank(username,password,email,invitationCode,code)){
+	public String registerPost(HttpServletRequest request,String username,String password,String email,String code,ModelMap model)  {
+		String invitationCode=request.getParameter("invitationCode");
+		if(OPEN_REGISTER==0){
+			if(StringUtils.isAnyBlank(invitationCode)){
+	        	model.put("login_error", "参数错误！");
+	        	return "register";
+	        }
+		}
+		if(StringUtils.isAnyBlank(username,password,email,code)){
         	model.put("login_error", "参数错误！");
         	return "register";
         }
@@ -125,7 +133,7 @@ public class IndexController extends BaseController {
         	return "register";
 		}
 		CinvitationCode cinvitationCode=cinvitationCodeService.getDAO().findByInvitationCode(invitationCode);
-		if(cinvitationCode==null){
+		if(OPEN_REGISTER==0 && cinvitationCode==null){
 			model.put("login_error", "邀请码错误！");
         	return "register";
 		}
@@ -144,7 +152,7 @@ public class IndexController extends BaseController {
 			sysUser.setUsername(username);
 			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), 365));
 			sysUser.setRealName(username);
-			sysUserService.register(sysUser,cinvitationCode);
+			sysUserService.register(sysUser,cinvitationCode,OPEN_REGISTER);
 		} catch (ActionException e) {
 			model.put("login_error", e.getMessage());
         	return "register";
@@ -252,7 +260,7 @@ public class IndexController extends BaseController {
 			long num=sysUser.getId();
 			Thread t = new Thread(new Runnable(){  
 	            public void run(){  
-	            	MailUtil.sendResetPassword(email, sysParamService.findByKey("reset_password_url").getV()+"?sid="+sid+"&num="+num);
+	            	MailUtil.sendResetPassword(email, IndexController.RESET_PASSWORD_URL+"?sid="+sid+"&num="+num);
 	        }});  
 	        t.start();
 			model.put("login_error", "邮件已发送“"+sysUser.getEmail()+"”邮箱!");

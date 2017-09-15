@@ -155,15 +155,15 @@ public class SysUserService extends BaseService<SysUser> {
 	 * @param sysUser
 	 * @param cinvitationCode
 	 */
-	public void register(SysUser sysUser,CinvitationCode cinvitationCode){
+	public void register(SysUser sysUser,CinvitationCode cinvitationCode,int OPEN_REGISTER){
 		this.save(sysUser);
-		
-		cinvitationCode.setUserId(sysUser.getId());
-		cinvitationCode.setUpdateTime(new Date());
-		
-		if(cinvitationCodeService.register(cinvitationCode)<1){
-			throw new ActionException("请勿重复注册！");
-		};
-		
+		if(OPEN_REGISTER==0){
+			cinvitationCode.setUserId(sysUser.getId());
+			cinvitationCode.setUpdateTime(new Date());
+			
+			if(cinvitationCodeService.register(cinvitationCode)<1){
+				throw new ActionException("请勿重复注册！");
+			};
+		}
 	}
 }
