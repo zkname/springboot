@@ -148,6 +148,7 @@ public class IndexController extends BaseController {
 			sysUser.setDeleStatus("1");
 			sysUser.setEmail(email);
 			sysUser.setLoginTime(new Date());
+			sysUser.setRole(0);
 			sysUser.setPassword(DigestUtils.md5Hex(password));
 			sysUser.setUsername(username);
 			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), 90));
