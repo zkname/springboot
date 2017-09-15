@@ -83,7 +83,8 @@ $(function() {
 				      <th><%=CcardRange.ALIAS_NAME%></th>
 				      <th>刷卡比例（<font color="red">区间随机</font>）</th>
 				      <th>刷卡次数（<font color="red">区间随机</font>）</th>
-				      <th><%=CcardRange.ALIAS_DAY%>（<font color="red">账单日后XX天内</font>）</th>
+				      <th>账单日后几天</th>
+				      <th><%=CcardRange.ALIAS_DAY%></th>
 				      <th><%=CcardRange.ALIAS_CREATE_TIME%></th>
 				      <th><%=CcardRange.ALIAS_UPDATE_TIME%></th>
 				      <th>操作</th>
@@ -94,6 +95,7 @@ $(function() {
 				      <td><c:out value='${item.name}'/><c:if test="${item.creatorId==0}">(系统默认)</c:if></td>
 				      <td><c:out value='${item.moneyPropStartValue}'/>%~<c:out value='${item.moneyPropEndValue}'/>%</td>
 				      <td><c:out value='${item.frequencyPropStartValue}'/>~<c:out value='${item.frequencyPropEndtValue}'/>次</td>
+				      <td><c:out value='${item.billGapDay}'/>天</td>
 				      <td><c:out value='${item.day}'/>天</td>
 				      <td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 				      <td><fmt:formatDate value="${item.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>

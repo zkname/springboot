@@ -65,10 +65,13 @@ public class CcardJobService extends BaseService<CcardJob> {
     	d=d+"-"+String.format("%02d",cinfo.getBillDate());
     	cinfo.setJobDate(DateUtil.Str2Date(d));
     	Date e=DateUtil.addMonth(DateUtil.Str2Date(d), 1);
-    	int v=DateUtil.daysBetween(cinfo.getJobDate(), e)-1;
+    	int v=DateUtil.daysBetween(cinfo.getJobDate(), e)-ccardRange.getBillGapDay();
     	//设置最小天数
     	if(ccardRange.getDay()<v){
     		v=ccardRange.getDay();
+    	}
+    	if(1>v){
+    		v=1;
     	}
     	List<List<Double>> list=Lists.newArrayList();
     	for(int i=0;i<v;i++){
@@ -95,7 +98,7 @@ public class CcardJobService extends BaseService<CcardJob> {
 				cj.setCreatorId(cinfo.getCreatorId());
 				cj.setDeleStatus("1");
 				cj.setFee(0.6);
-				cj.setJobDate(DateUtil.addDate(cinfo.getJobDate(), i+1));
+				cj.setJobDate(DateUtil.addDate(cinfo.getJobDate(), ccardRange.getBillGapDay()+i));
 				cj.setMoney(list.get(i).get(o));
 				cj.setStatus(0);
 				cj.setFeeValue(CompuUtils.multiply(cj.getMoney(), CompuUtils.divide(cj.getFee(), 100),2));

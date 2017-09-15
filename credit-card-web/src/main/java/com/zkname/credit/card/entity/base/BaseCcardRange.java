@@ -4,15 +4,14 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.*;
 import com.zkname.core.entity.IdEntity;
 import com.zkname.core.util.DateUtil;
-
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
-
 import java.util.*;
 
 import java.util.*;
+
+
+
 
 @Data
 @ToString
@@ -29,6 +28,7 @@ public class BaseCcardRange extends IdEntity<java.lang.Long>
 	public static final String ALIAS_MONEY_PROP_END_VALUE = "刷卡比例结束";
 	public static final String ALIAS_FREQUENCY_PROP_START_VALUE = "刷卡次数开始";
 	public static final String ALIAS_FREQUENCY_PROP_ENDT_VALUE = "刷卡次数结束";
+	public static final String ALIAS_BILL_GAP_DAY = "出账单后几天执行任务";
 	public static final String ALIAS_DAY = "刷卡天数";
 	public static final String ALIAS_REMARKS = "备注";
 	public static final String ALIAS_CREATE_TIME = "创建时间";
@@ -69,6 +69,11 @@ public class BaseCcardRange extends IdEntity<java.lang.Long>
 	 */
 	@Column(name = "frequencyPropEndtValue")
 	private java.lang.Integer frequencyPropEndtValue;
+	/**
+	 * 出账单后几天执行任务
+	 */
+	@Column(name = "billGapDay")
+	private java.lang.Integer billGapDay;
 	/**
 	 * 刷卡天数
 	 */

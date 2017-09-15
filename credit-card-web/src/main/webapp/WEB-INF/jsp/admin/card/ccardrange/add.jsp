@@ -98,6 +98,13 @@ $(function() {
                   </div>
                 </div>
                 <div class="form-group">
+                  <label class="col-sm-2 control-label"><font color="red">*</font>账单日后几天</label>
+                  <div class="col-sm-10">
+      				<input value="1" id="billGapDay" name="billGapDay" class="required validate-integer min-value-0 max-value-31 form-control"  />
+      				<br>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label class="col-sm-2 control-label"><font color="red">*</font><%=CcardRange.ALIAS_DAY%></label>
                   <div class="col-sm-10">
       				<input value="25" id="day" name="day" class="required validate-integer min-value-5 max-value-31 form-control"  />
