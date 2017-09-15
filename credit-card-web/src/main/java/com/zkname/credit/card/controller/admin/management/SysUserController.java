@@ -42,7 +42,7 @@ public class SysUserController extends BaseController{
 		}
 		//登录
 		loginUser.getLoginUser().login();
-		RedirectView mv = new RedirectView("/index");
+		RedirectView mv = new RedirectView("/admin/index");
 		return mv;
 	}
 	
