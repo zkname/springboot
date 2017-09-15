@@ -87,10 +87,19 @@ $(function() {
 				    </tr>
 					<c:forEach var="item" items="${page.result}">
 				    <tr>
-				      <td><input type="checkbox" name="ids" id="ids" value="${item.id}"></td>
+				      <td>
+				      <c:if test="${item.creatorId!=0}">
+				      <input type="checkbox" name="ids" id="ids" value="${item.id}">
+				      </c:if>
+				      </td>
 				      <td>${item.id}</td>
-				      <td><c:out value='${item.name}'/></td>
-				      <td><a href="${ctx}/admin/card/cbank/update/${item.id}">修改</a> </td>
+				      <td><c:out value='${item.name}'/><c:if test="${item.creatorId==0}">(系统默认)</c:if></td>
+				      <td>
+				      
+				      <c:if test="${item.creatorId!=0}">
+				      <a href="${ctx}/admin/card/cbank/update/${item.id}">修改</a> 
+				      </c:if>
+				      </td>
 				    </tr>
 					</c:forEach>
 			        </table>

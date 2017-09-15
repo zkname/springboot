@@ -81,27 +81,23 @@ $(function() {
 				    <tr>
 				      <th><input type="checkbox" id="checkbox" value="checkbox"></th>
 				      <th><%=CcardRange.ALIAS_NAME%></th>
-				      <th><%=CcardRange.ALIAS_MONEY_PROP_START_VALUE%></th>
-				      <th><%=CcardRange.ALIAS_MONEY_PROP_END_VALUE%></th>
-				      <th><%=CcardRange.ALIAS_FREQUENCY_PROP_START_VALUE%></th>
-				      <th><%=CcardRange.ALIAS_FREQUENCY_PROP_ENDT_VALUE%></th>
-				      <th><%=CcardRange.ALIAS_DAY%></th>
+				      <th>刷卡比例（<font color="red">区间随机</font>）</th>
+				      <th>刷卡次数（<font color="red">区间随机</font>）</th>
+				      <th><%=CcardRange.ALIAS_DAY%>（<font color="red">账单日后XX天内</font>）</th>
 				      <th><%=CcardRange.ALIAS_CREATE_TIME%></th>
 				      <th><%=CcardRange.ALIAS_UPDATE_TIME%></th>
 				      <th>操作</th>
 				    </tr>
 					<c:forEach var="item" items="${page.result}">
 				    <tr>
-				      <td><input type="checkbox" name="ids" id="ids" value="${item.id}"></td>
-				      <td><c:out value='${item.name}'/></td>
-				      <td><c:out value='${item.moneyPropStartValue}'/>%</td>
-				      <td><c:out value='${item.moneyPropEndValue}'/>%</td>
-				      <td><c:out value='${item.frequencyPropStartValue}'/></td>
-				      <td><c:out value='${item.frequencyPropEndtValue}'/></td>
+				      <td><c:if test="${item.creatorId!=0}"><input type="checkbox" name="ids" id="ids" value="${item.id}"></c:if></td>
+				      <td><c:out value='${item.name}'/><c:if test="${item.creatorId==0}">(系统默认)</c:if></td>
+				      <td><c:out value='${item.moneyPropStartValue}'/>%~<c:out value='${item.moneyPropEndValue}'/>%</td>
+				      <td><c:out value='${item.frequencyPropStartValue}'/>~<c:out value='${item.frequencyPropEndtValue}'/>次</td>
 				      <td><c:out value='${item.day}'/>天</td>
 				      <td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 				      <td><fmt:formatDate value="${item.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-				      <td><a href="${ctx}/admin/card/ccardrange/update/${item.id}">修改</a> </td>
+				      <td><c:if test="${item.creatorId!=0}"><a href="${ctx}/admin/card/ccardrange/update/${item.id}">修改</a></c:if></td>
 				    </tr>
 					</c:forEach>
 			        </table>

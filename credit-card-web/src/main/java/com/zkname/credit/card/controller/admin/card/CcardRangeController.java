@@ -78,6 +78,9 @@ public class CcardRangeController extends BaseController{
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
 	public ModelAndView update(@PathVariable java.lang.Long id,HttpServletRequest request,HttpServletResponse response) {
 		CcardRange entity = service.findById(id);
+		if(LoginUser.getUser().getId().longValue()!=entity.getCreatorId().longValue()){
+			throw new ActionException("参数错误！");
+		}
         ModelAndView mv = new ModelAndView("admin/card/ccardrange/update");
         mv.addObject("entity", entity);
 		return mv;

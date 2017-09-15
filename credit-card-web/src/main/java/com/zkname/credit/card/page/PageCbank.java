@@ -93,7 +93,7 @@ public class PageCbank extends BasePage<Cbank> {
         	list.add(this.deleStatus);
         }
         if(isNotEmpty(this.creatorId)) {
-        	sb.append(" and  o.creatorId = ? ");
+        	sb.append(" and  (o.creatorId = ? or o.creatorId = 0)");
         	list.add(this.creatorId);
         }
 		return sb;
@@ -101,6 +101,7 @@ public class PageCbank extends BasePage<Cbank> {
 
 	public List<Cbank> query() {
 		sb.append("select o.* from c_bank o where 1=1 ").append(this.getSql());
+		sb.append(" order by o.id desc");
 		return super.query();
 	}
 

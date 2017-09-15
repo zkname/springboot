@@ -118,7 +118,7 @@ public class PageCcardRange extends BasePage<CcardRange> {
         	list.add(this.deleStatus);
         }
         if(isNotEmpty(this.creatorId)) {
-        	sb.append(" and  o.creatorId = ? ");
+        	sb.append(" and  (o.creatorId = ? or o.creatorId = 0)");
         	list.add(this.creatorId);
         }
 		return sb;
@@ -126,6 +126,7 @@ public class PageCcardRange extends BasePage<CcardRange> {
 
 	public List<CcardRange> query() {
 		sb.append("select o.* from c_card_range o where 1=1 ").append(this.getSql());
+		sb.append(" order by o.id desc");
 		return super.query();
 	}
 
