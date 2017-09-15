@@ -28,4 +28,14 @@ public class CinvitationCodeDAO extends BaseDAO<CinvitationCode> {
 		String sql = "update c_invitation_code set userId=?,updateTime=now() where id=? and userId='0' and deleStatus=1";
 		return super.update(sql, userId, id);
     }
+    
+    /**
+     * 查询批次邀请码
+     * @param codeBatchId
+     * @return
+     */
+    public List<CinvitationCode> findBatchId(long codeBatchId){
+		String sql="SELECT a.invitationCode FROM c_invitation_code as a where a.invitationCodeBatch=? and a.userId='0'";
+		return super.find(sql, codeBatchId);
+    }
 }

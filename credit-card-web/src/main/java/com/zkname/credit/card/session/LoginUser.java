@@ -46,6 +46,11 @@ public class LoginUser implements IUser{
 	@Getter
 	@Setter
 	private String email;
+	
+
+	@Getter
+	@Setter
+	private int role;
 
 	
 	public static IUser getUser(){

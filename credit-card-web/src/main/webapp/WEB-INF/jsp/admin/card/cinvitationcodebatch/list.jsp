@@ -134,7 +134,10 @@ $(function() {
 		            	<c:when test="${item.deleStatus=='1'}">正常</c:when>
 		            	<c:otherwise><font color="red">废止</font></c:otherwise>
 		            </c:choose></td>
-				      <td><a href="${ctx}/admin/card/cinvitationcode/list?invitationCodeBatch=${item.id}">详细</a></td>
+				      <td><a href="${ctx}/admin/card/cinvitationcode/list?invitationCodeBatch=${item.id}">详细</a> | 
+				      <a href="${ctx}/admin/card/cinvitationcodebatch/listDow?id=${item.id}">下载</a>
+				      
+				      </td>
 				    </tr>
 					</c:forEach>
 			        </table>

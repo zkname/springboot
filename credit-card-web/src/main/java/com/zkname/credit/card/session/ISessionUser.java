@@ -22,4 +22,7 @@ public interface ISessionUser<T> extends Serializable {
 
 	// 密码
 	public String getPassword();
+	
+	//角色
+	public int getRole();
 }

@@ -25,6 +25,7 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	public static final String ALIAS_ID = "主键";
 	public static final String ALIAS_USERNAME = "用户名";
 	public static final String ALIAS_PASSWORD = "密码";
+	public static final String ALIAS_ROLE = "角色id";
 	public static final String ALIAS_REAL_NAME = "真实姓名";
 	public static final String ALIAS_EMAIL = "邮箱";
 	public static final String ALIAS_VALID_PERIOD_TIME = "有效期";
@@ -54,6 +55,11 @@ public class BaseSysUser extends IdEntity<java.lang.Long>
 	 */
 	@Column(name = "password")
 	private java.lang.String password;
+	/**
+	 * 角色id
+	 */
+	@Column(name = "role")
+	private java.lang.Integer role;
 	/**
 	 * 真实姓名
 	 */

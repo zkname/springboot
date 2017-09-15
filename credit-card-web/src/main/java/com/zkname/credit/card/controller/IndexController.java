@@ -150,7 +150,7 @@ public class IndexController extends BaseController {
 			sysUser.setLoginTime(new Date());
 			sysUser.setPassword(DigestUtils.md5Hex(password));
 			sysUser.setUsername(username);
-			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), 365));
+			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), 90));
 			sysUser.setRealName(username);
 			sysUserService.register(sysUser,cinvitationCode,OPEN_REGISTER);
 		} catch (ActionException e) {

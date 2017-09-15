@@ -20,6 +20,7 @@ public class SysUser extends BaseSysUser {
 		suv.setPassword(this.getPassword());
 		suv.setUsername(this.getUsername());
 		suv.setEmail(this.getEmail());
+		suv.setRole(this.getRole());
 		return suv;
 	}
 }

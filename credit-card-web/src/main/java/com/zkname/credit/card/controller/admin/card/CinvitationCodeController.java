@@ -17,6 +17,7 @@ import com.zkname.credit.card.page.*;
 import com.zkname.credit.card.entity.*;
 import com.zkname.credit.card.service.*;
 import com.zkname.credit.card.session.LoginUser;
+import com.zkname.credit.card.util.purview.Purview;
 import com.zkname.core.controller.BaseController;
 import com.zkname.core.util.exception.ActionException;
 import com.zkname.core.util.spring.annotation.AvoidDuplicateSubmission;
@@ -32,12 +33,10 @@ public class CinvitationCodeController extends BaseController{
 	/**
 	 * list(列表)
 	 */
+	@Purview(roles={Purview.管理员})
 	@AvoidDuplicateSubmission(needSaveToken=true)
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(PageCinvitationCode page,HttpServletRequest request,HttpServletResponse response) {
-		if(LoginUser.getUser().getId()!=1L){
-			throw new ActionException("系统错误！");
-		}
 		page.setHttpServletRequestValue(request);
 		page.query();
         ModelAndView mv = new ModelAndView("admin/card/cinvitationcode/list");
@@ -48,12 +47,10 @@ public class CinvitationCodeController extends BaseController{
 	/**
 	 * delete(删除功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@AvoidDuplicateSubmission(needRemoveToken=true)
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public RedirectView delete(Long [] ids,HttpServletRequest request,HttpServletResponse response) {
-		if(LoginUser.getUser().getId()!=1L){
-			throw new ActionException("系统错误！");
-		}
 		RedirectView mv = new RedirectView("list");
 		service.delete(ids);
 		return mv;

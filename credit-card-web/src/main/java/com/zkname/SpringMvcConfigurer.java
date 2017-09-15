@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.zkname.core.util.spring.AvoidDuplicateSubmissionInterceptor;
 import com.zkname.core.util.spring.ControllerInterceptor;
+import com.zkname.credit.card.util.purview.PurviewInterceptor;
 
 @Configuration
 public class SpringMvcConfigurer extends WebMvcConfigurerAdapter {
@@ -26,6 +27,7 @@ public class SpringMvcConfigurer extends WebMvcConfigurerAdapter {
 		// 多个拦截器组成一个拦截器链
 		registry.addInterceptor(new ControllerInterceptor()).addPathPatterns("/**");
 		registry.addInterceptor(new AvoidDuplicateSubmissionInterceptor()).addPathPatterns("/**");
+		registry.addInterceptor(new PurviewInterceptor()).addPathPatterns("/**");
 		super.addInterceptors(registry);
 	}
 	

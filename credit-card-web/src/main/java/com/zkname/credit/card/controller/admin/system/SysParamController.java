@@ -15,10 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.zkname.core.controller.BaseController;
+import com.zkname.core.util.exception.ActionException;
 import com.zkname.credit.card.entity.SysParam;
 import com.zkname.credit.card.page.PageSysParam;
 import com.zkname.credit.card.service.SysParamService;
 import com.zkname.credit.card.session.LoginUser;
+import com.zkname.credit.card.util.purview.Purview;
 
 @Controller
 @RequestMapping(value = "/admin/system/sysparam")
@@ -31,9 +33,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * list(列表)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(PageSysParam page,HttpServletRequest request,HttpServletResponse response) {
-		
 		page.setHttpServletRequestValue(request);
 		page.query();
         ModelAndView mv = new ModelAndView("admin/system/sysparam/list");
@@ -44,9 +46,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * add(添加页面)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request,HttpServletResponse response) {
-		
         ModelAndView mv = new ModelAndView("admin/system/sysparam/add");
 		return mv;
 	}
@@ -54,9 +56,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * addInput(添加提交功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/addInput", method = RequestMethod.POST)
 	public RedirectView add(SysParam entity,HttpServletRequest request,HttpServletResponse response) {
-		
 		entity.setType(0);
 		entity.setCreateTime(new Date());
 		entity.setCreatorId(LoginUser.getUser().getId().longValue());
@@ -70,9 +72,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * update(修改页面)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
 	public ModelAndView update(@PathVariable java.lang.Long id,HttpServletRequest request,HttpServletResponse response) {
-		
 		SysParam entity = service.findById(id);
 		service.findByKey(entity.getK());
         ModelAndView mv = new ModelAndView("admin/system/sysparam/update");
@@ -83,9 +85,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * updateInput(修改提交功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/updateInput", method = RequestMethod.POST)
 	public RedirectView updateInput(SysParam entity,java.lang.Long id,HttpServletRequest request,HttpServletResponse response) {
-		
 		SysParam entityUpdate = service.findById(id);
 		//获取参数实体，操作更新实体，不拷贝字段
 		BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","type","createTime","deleStatus"});
@@ -100,9 +102,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * delete(删除功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public RedirectView delete(java.lang.Long [] ids,HttpServletRequest request,HttpServletResponse response) {
-		
 		RedirectView mv = new RedirectView("list");
 		service.delete(ids);
 		return mv;
@@ -111,9 +113,9 @@ public class SysParamController extends BaseController{
 	/**
 	 * reuse(恢复功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/recovery", method = RequestMethod.GET)
 	public RedirectView recovery(java.lang.Long [] ids,HttpServletRequest request,HttpServletResponse response) {
-		
 		RedirectView mv = new RedirectView("list");
 		service.recovery(ids);
 		return mv;

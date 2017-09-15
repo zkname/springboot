@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import com.zkname.credit.card.page.PageSysUser;
 import com.zkname.credit.card.service.SysUserService;
 import com.zkname.credit.card.session.LoginUser;
 import com.zkname.credit.card.util.EncodeUtils;
+import com.zkname.credit.card.util.purview.Purview;
 import com.zkname.core.controller.BaseController;
 import com.zkname.core.util.exception.ActionException;
 
@@ -30,12 +33,26 @@ public class SysUserController extends BaseController{
 	@Autowired
 	private SysUserService service;
 	
+	@Purview(roles={Purview.管理员})
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public RedirectView login(Long id,HttpServletRequest request,HttpServletResponse response) {
+		SysUser loginUser=service.findById(id);
+		if(loginUser==null){
+			throw new ActionException("系统错误！");
+		}
+		//登录
+		loginUser.getLoginUser().login();
+		RedirectView mv = new RedirectView("/index");
+		return mv;
+	}
+	
+	
 	/**
 	 * list(列表)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(HttpServletRequest request,HttpServletResponse response) {
-		
 	    PageSysUser page=(PageSysUser) request.getSession().getAttribute("SysUserController");
 	    if(page==null || request.getParameterMap().containsKey("sessionRemove")){
 	        page=new PageSysUser();
@@ -52,9 +69,9 @@ public class SysUserController extends BaseController{
 	/**
 	 * add(添加页面)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add(HttpServletRequest request,HttpServletResponse response) {
-		
         ModelAndView mv = new ModelAndView("admin/management/sysuser/add");
         return mv;
 	}
@@ -62,9 +79,9 @@ public class SysUserController extends BaseController{
 	/**
 	 * addInput(添加提交功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/addInput", method = RequestMethod.POST)
 	public RedirectView add(SysUser entity,Long roleId,HttpServletRequest request,HttpServletResponse response) {
-		
 	    if (service.findUserByUserName(entity.getUsername()) != null) {
             throw new ActionException("用户名已存在!");
         }
@@ -83,9 +100,9 @@ public class SysUserController extends BaseController{
 	/**
 	 * update(修改页面)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
 	public ModelAndView update(@PathVariable int id,HttpServletRequest request,HttpServletResponse response) {
-		
 		SysUser entity = service.findById(id);
         ModelAndView mv = new ModelAndView("admin/management/sysuser/update");
         mv.addObject("entity", entity);
@@ -95,15 +112,15 @@ public class SysUserController extends BaseController{
 	/**
 	 * updateInput(修改提交功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/updateInput", method = RequestMethod.POST)
 	public RedirectView updateInput(SysUser entity,int id,Long roleId,String [] producersId,HttpServletRequest request,HttpServletResponse response) {
-		
 		SysUser entityUpdate = service.findById(id);
 		//获取参数实体，操作更新实体，不拷贝字段
 		if(entity.getPassword()==null || "".equals(entity.getPassword())){
-			BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","password","createTime","updateTime","deleStatus","loginTime","creatorId"});
+			BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","password","createTime","updateTime","deleStatus","loginTime","creatorId","role"});
 		}else{
-			BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","createTime","updateTime","deleStatus","loginTime","creatorId"});
+			BeanUtils.copyProperties(entity,entityUpdate,new String[]{"id","createTime","updateTime","deleStatus","loginTime","creatorId","role"});
 			entityUpdate.setPassword(EncodeUtils.md5(entity.getPassword()));
 		}
 		entityUpdate.setUpdateTime(new Date());
@@ -115,9 +132,9 @@ public class SysUserController extends BaseController{
 	/**
 	 * delete(废止功能)
 	 */
+	@Purview(roles={Purview.管理员})
 	@RequestMapping(value = "/delete")
 	public RedirectView delete(Long [] ids,String type,HttpServletRequest request,HttpServletResponse response) {
-		
 		RedirectView mv = new RedirectView("list");
 		if(service.updateStatus(type,ids)>0){
 			return mv;

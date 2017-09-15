@@ -122,7 +122,7 @@ function edit(id){
 		            <td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 		            <td>
 		            <c:if test="${item.id!=1}">
-		            	<a href="#" onclick=edit(${item.id})>编辑</a>
+		            	<a href="#" onclick=edit(${item.id})>编辑</a> | <a href="/admin/management/sysuser/login?id=${item.id}" >登录</a>
 		            </c:if>
 		            </td>
 		          </tr>
