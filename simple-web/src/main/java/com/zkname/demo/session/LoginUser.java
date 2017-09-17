@@ -1,10 +1,12 @@
 package com.zkname.demo.session;
 
-import com.zkname.core.util.exception.LoginTimeoutException;
-import com.zkname.core.util.spring.SpringHttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import com.zkname.core.util.exception.LoginTimeoutException;
+import com.zkname.core.util.spring.SpringHttpServletRequest;
 
 /**
  * 登陆session对象
@@ -37,12 +39,18 @@ public class LoginUser implements IUser{
 
 	
 	public static IUser getUser(){
-		IUser user = (IUser) SpringHttpServletRequest.getRequest().getSession().getAttribute(LoginUser.SESSION_KEY);
+		return getUser(SpringHttpServletRequest.getRequest().getSession());
+	}
+	
+	
+	public static IUser getUser(HttpSession session){
+		IUser user = (IUser) session.getAttribute(LoginUser.SESSION_KEY);
 		if(user==null){
 			throw new LoginTimeoutException("登录超时！");
 		}
 		return user;
 	}
+	
 	
 	/**
 	 * 登录
