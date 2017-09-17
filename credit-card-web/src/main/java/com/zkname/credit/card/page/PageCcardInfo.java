@@ -164,7 +164,7 @@ public class PageCcardInfo extends BasePage<CcardInfo> {
 	}
 
 	public List<CcardInfo> query() {
-		sb.append("select o.*,a.name as bankName,b.name as cardRangeName,(SELECT sum(k.money) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='0') as totalAmount  from c_card_info as o,c_bank as a,c_card_range as b where o.bankId=a.id and b.id=o.cardRangeId").append(this.getSql());
+		sb.append("select o.*,a.name as bankName,b.name as cardRangeName,(SELECT sum(k.money) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='0') as totalAmount,(SELECT count(k.id) FROM c_card_job as k WHERE k.cardInfoId=o.id and k.deleStatus='1' and k.status='1') as creditCardNumber  from c_card_info as o,c_bank as a,c_card_range as b where o.bankId=a.id and b.id=o.cardRangeId").append(this.getSql());
 		return super.query();
 	}
 

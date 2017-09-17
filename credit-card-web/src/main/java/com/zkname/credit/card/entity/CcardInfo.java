@@ -38,6 +38,13 @@ public class CcardInfo extends BaseCcardInfo {
 	private double amount;
 	
 	/**
+	 * 数卡次数
+	 */
+	@Getter
+	@Setter
+	private int creditCardNumber;
+	
+	/**
 	 * 手续费
 	 */
 	@Getter

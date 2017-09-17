@@ -122,7 +122,6 @@ $(function() {
 				      <th><%=CcardInfo.ALIAS_CARD_NUM%></th>
 				      <th><%=CcardInfo.ALIAS_BILL_DATE%></th>
 				      <th><%=CcardInfo.ALIAS_NEXT_UP%></th>
-				      <th><%=CcardInfo.ALIAS_UPDATE_TIME%></th>
 				      <th>操作</th>
 				    </tr>
 					<c:forEach var="item" items="${page.result}">
@@ -149,10 +148,9 @@ $(function() {
 				      </c:choose>
 				      </td>
 				      <td><c:out value='${item.annualFee}'/></td>
-				      <td><c:out value='${item.cardNum}'/></td>
+				      <td><c:out value='${item.creditCardNumber}'/>/<c:out value='${item.cardNum}'/>次</td>
 				      <td><c:out value='${item.billDate}'/></td>
 				      <td><fmt:formatDate value="${item.nextUp}" pattern="yyyy-MM-dd"/></td>
-				      <td><fmt:formatDate value="${item.updateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 				      <td><a href="${ctx}/admin/card/ccardinfo/update/${item.id}">修改</a> </td>
 				    </tr>
 					</c:forEach>
