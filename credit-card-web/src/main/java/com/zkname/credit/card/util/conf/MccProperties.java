@@ -1,5 +1,7 @@
 package com.zkname.credit.card.util.conf;
 
+import java.util.Enumeration;
+
 import com.zkname.core.util.conf.base.BaseProperties;
 
 
@@ -30,6 +32,14 @@ public final class MccProperties extends BaseProperties {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(MccProperties.getInstance().getProperty("5712"));
+//		System.out.println(MccProperties.getInstance().getProperty("5712"));
+//		MccProperties.getInstance().getProperties().entrySet();
+		
+		Enumeration enu2=MccProperties.getInstance().getProperties().propertyNames();
+		while(enu2.hasMoreElements()){
+		    String key = (String)enu2.nextElement();
+		    System.out.println("<option value=\""+key+"\"  <c:if test=\"${entity.mcc==key}\">selected=\"selected\"</c:if> >["+key+"]"+MccProperties.getInstance().getProperty(key)+"</option>");
+		}
+//		<option>Alabama</option>
 	}
 }
