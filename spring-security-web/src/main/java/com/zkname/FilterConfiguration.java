@@ -38,7 +38,7 @@ public class FilterConfiguration {
 		pf.setErrorUrl(failureUrl+"?login_error="+new URLCodec("UTF-8").encode("验证码错误！"));
 		pf.setLoginUrl(springSecurityLoginUrl);
 		//开启Debug 不管输入什么都验证通过
-		pf.setDebug(true);
+		PatchcaFilter.DEBUG=true;
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(pf);
         registration.addUrlPatterns("/images/code.png",springSecurityLoginUrl);
