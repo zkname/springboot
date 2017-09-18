@@ -46,9 +46,11 @@ public class IndexController extends BaseController {
 	@Autowired
 	private CinvitationCodeService cinvitationCodeService;
 	
-	public static int OPEN_REGISTER=0;
+	public static int 开发注册=0;
 	
-	public static String RESET_PASSWORD_URL;
+	public static int 体验时间=0;
+	
+	public static String 找回密码;
 	
 	
 	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
@@ -102,7 +104,7 @@ public class IndexController extends BaseController {
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerGet(ModelMap model)  {
-		model.put("open_register", OPEN_REGISTER);
+		model.put("open_register", 开发注册);
         return "register";
 	}
 	
@@ -118,7 +120,7 @@ public class IndexController extends BaseController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerPost(HttpServletRequest request,String username,String password,String email,String code,ModelMap model)  {
 		String invitationCode=request.getParameter("invitationCode");
-		if(OPEN_REGISTER==0){
+		if(开发注册==0){
 			if(StringUtils.isAnyBlank(invitationCode)){
 	        	model.put("login_error", "参数错误！");
 	        	return "register";
@@ -133,7 +135,7 @@ public class IndexController extends BaseController {
         	return "register";
 		}
 		CinvitationCode cinvitationCode=cinvitationCodeService.getDAO().findByInvitationCode(invitationCode);
-		if(OPEN_REGISTER==0 && cinvitationCode==null){
+		if(开发注册==0 && cinvitationCode==null){
 			model.put("login_error", "邀请码错误！");
         	return "register";
 		}
@@ -151,9 +153,9 @@ public class IndexController extends BaseController {
 			sysUser.setRole(0);
 			sysUser.setPassword(DigestUtils.md5Hex(password));
 			sysUser.setUsername(username);
-			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), 90));
+			sysUser.setValidPeriodTime(DateUtil.addDate(DateUtil.getNowDate(), IndexController.体验时间));
 			sysUser.setRealName(username);
-			sysUserService.register(sysUser,cinvitationCode,OPEN_REGISTER);
+			sysUserService.register(sysUser,cinvitationCode,开发注册);
 		} catch (ActionException e) {
 			model.put("login_error", e.getMessage());
         	return "register";
@@ -261,7 +263,7 @@ public class IndexController extends BaseController {
 			long num=sysUser.getId();
 			Thread t = new Thread(new Runnable(){  
 	            public void run(){  
-	            	MailUtil.sendResetPassword(email, IndexController.RESET_PASSWORD_URL+"?sid="+sid+"&num="+num);
+	            	MailUtil.sendResetPassword(email, IndexController.找回密码+"?sid="+sid+"&num="+num);
 	        }});  
 	        t.start();
 			model.put("login_error", "邮件已发送“"+sysUser.getEmail()+"”邮箱!");
