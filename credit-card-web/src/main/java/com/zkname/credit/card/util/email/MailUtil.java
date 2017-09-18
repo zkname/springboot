@@ -14,7 +14,7 @@ public class MailUtil {
 			MailSender mailSender = new MailSenderImpl();
 			MailMessage mailMessage = new MailMessage();
 			mailSender.getProps().setProperty("mail.smtp.ssl.enable", "true");
-			mailMessage.subject("找回您的账户密码.").from("system", "system@zkname.com").addTo("zhangkai@foxmail.com");
+			mailMessage.subject("找回您的账户密码.").from("system", "system@zkname.com").addTo(email);
 			
 			
 			String emailContent = "请勿回复本邮件.点击下面的链接<br/><a href=" + url
