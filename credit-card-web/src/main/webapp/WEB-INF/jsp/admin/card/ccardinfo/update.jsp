@@ -124,7 +124,7 @@ $(function() {
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><font color="red">*</font><%=CcardInfo.ALIAS_BILL_DATE%></label>
                   <div class="col-sm-10">
-      				<input value="${entity.billDate}" id="billDate" name="billDate" onclick="WdatePicker({dateFmt:'dd'})" class="required validate-digits min-length-2 max-length-2 form-control"  />
+      				<input value="<fmt:formatNumber value="${entity.billDate}" pattern="#00" />" id="billDate" name="billDate" onclick="WdatePicker({dateFmt:'dd'})" class="required validate-digits min-length-2 max-length-2 form-control"  />
       				<br>
                   </div>
                 </div>
