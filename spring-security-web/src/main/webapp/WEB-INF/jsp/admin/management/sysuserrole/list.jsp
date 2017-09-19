@@ -69,8 +69,8 @@ function dele(id){
                 <div class="col-xs-6">
                   	<select name="deleStatus" id="deleStatus" class="form-control">
 	                <option value="">状态</option>
-	                <option value="1" <c:if test="${page.deleStatus!=null && page.deleStatus=='1'}">selected="selected"</c:if>>正常</option>
-	                <option value="0" <c:if test="${page.deleStatus!=null && page.deleStatus=='0'}">selected="selected"</c:if>>废止
+	                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1' ? 'selected' :''}>正常</option>
+	                <option value="0" ${page.deleStatus!=null && page.deleStatus=='0' ? 'selected' :''}>废止
 	                </option>
 	              </select>
 	              <br>
