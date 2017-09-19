@@ -1,4 +1,4 @@
-<%@page import="com.yuewuxian.biz.entity.SysParam"%>
+<%@page import="com.zkname.demo.entity.SysParam"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/include/taglibs.jsp" %>
 <!DOCTYPE html>
