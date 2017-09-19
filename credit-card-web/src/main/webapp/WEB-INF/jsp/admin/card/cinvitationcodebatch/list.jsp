@@ -71,8 +71,8 @@ $(function() {
             <div class="col-xs-6">
             	<select name="updateLock" id="updateLock" class="form-control">
                 <option value="">锁定状态</option>
-                <option value="1" <c:if test="${page.updateLock!=null && page.updateLock=='1'}">selected="selected"</c:if>>锁定</option>
-                <option value="0" <c:if test="${page.updateLock!=null && page.updateLock=='0'}">selected="selected"</c:if>>正常</option>
+                <option value="1" ${page.updateLock!=null && page.updateLock=='1' ?'selected':''}>锁定</option>
+                <option value="0" ${page.updateLock!=null && page.updateLock=='0' ?'selected':''}>正常</option>
               </select>
             	<br>
             </div>
@@ -80,8 +80,8 @@ $(function() {
             <div class="col-xs-6">
             	<select name="deleStatus" id="deleStatus" class="form-control">
                 <option value="">状态</option>
-                <option value="1" <c:if test="${page.deleStatus!=null && page.deleStatus=='1'}">selected="selected"</c:if>>正常</option>
-                <option value="0" <c:if test="${page.deleStatus!=null && page.deleStatus=='0'}">selected="selected"</c:if>>废止</option>
+                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1'?'selected':''}>正常</option>
+                <option value="0" ${page.deleStatus!=null && page.deleStatus=='0'?'selected':''}>废止</option>
               </select>
             	<br>
             </div>

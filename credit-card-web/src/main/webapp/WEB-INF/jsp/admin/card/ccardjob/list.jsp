@@ -67,7 +67,7 @@ $(function() {
                 <select name="bankId" id="bankId" class="form-control">
 	                <option value="">银行信息</option>
 	                <c:forEach var="obj" items="${cbanks}">
-	                	<option value="${obj.id}" <c:if test="${page.bankId!=null && page.bankId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+	                	<option value="${obj.id}" ${page.bankId!=null && page.bankId==obj.id?'selected':''}>${obj.name}</option>
 	                </c:forEach>
                 </select>
             	<br>
@@ -77,7 +77,7 @@ $(function() {
                 <select name="cardInfoId" id="cardInfoId" class="form-control">
 	                <option value="">信用卡信息</option>
 	                <c:forEach var="obj" items="${ccardInfos}">
-	                	<option value="${obj.id}" <c:if test="${page.cardInfoId!=null && page.cardInfoId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+	                	<option value="${obj.id}" ${page.cardInfoId!=null && page.cardInfoId==obj.id?'selected':''}>${obj.name}</option>
 	                </c:forEach>
                 </select>
             	<br>
@@ -87,7 +87,7 @@ $(function() {
                 <select name="cardRangeId" id="cardRangeId" class="form-control">
 	                <option value="">规则信息</option>
 	                <c:forEach var="obj" items="${ccardRanges}">
-	                	<option value="${obj.id}" <c:if test="${page.cardRangeId!=null && page.cardRangeId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+	                	<option value="${obj.id}" ${page.cardRangeId!=null && page.cardRangeId==obj.id?'selected':''}>${obj.name}</option>
 	                </c:forEach>
                 </select>            	<br>
             </div>
@@ -95,8 +95,8 @@ $(function() {
             <div class="col-xs-6">
                  <select name="status" id="status" class="form-control">
 	                <option value="">刷卡状态</option>
-	                <option value="1" <c:if test="${page.status!=null && page.status=='1'}">selected="selected"</c:if>>已刷卡</option>
-	                <option value="0" <c:if test="${page.status!=null && page.status=='0'}">selected="selected"</c:if>>未刷卡</option>
+	                <option value="1" ${page.status!=null && page.status=='1'?'selected':''}>已刷卡</option>
+	                <option value="0" ${page.status!=null && page.status=='0'?'selected':''}>未刷卡</option>
 	              </select>
             	<br>
             </div>

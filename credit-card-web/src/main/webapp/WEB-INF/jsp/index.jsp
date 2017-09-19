@@ -62,8 +62,8 @@ $(function() {
         </div>
         <!-- /.col -->
       </div>
-        还没有帐号？<a href="${ctx}/register" class="text-center">立即注册></a></br>
-       忘记密码？<a href="${ctx}/forgotten" class="text-center">找回密码></a></br>
+        还没有帐号？<a href="${ctx}/register" class="text-center">立即注册></a><br>
+       忘记密码？<a href="${ctx}/forgotten" class="text-center">找回密码></a><br>
 		
 		
 		

@@ -38,8 +38,9 @@ public final class MccProperties extends BaseProperties {
 		Enumeration enu2=MccProperties.getInstance().getProperties().propertyNames();
 		while(enu2.hasMoreElements()){
 		    String key = (String)enu2.nextElement();
-		    System.out.println("<option value=\""+key+"\"  <c:if test=\"${entity.mcc=='"+key+"'}\">selected=\"selected\"</c:if> >["+key+"]"+MccProperties.getInstance().getProperty(key)+"</option>");
+		    System.out.println("<option value=\""+key+"\" ${entity.mcc=='"+key+"'?'selected':''} >["+key+"]"+MccProperties.getInstance().getProperty(key)+"</option>");
 		}
+		
 //		<option>Alabama</option>
 	}
 }

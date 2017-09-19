@@ -67,37 +67,46 @@ $(function() {
                 <select name="bankId" id="bankId" class="form-control">
 	                <option value="">银行信息</option>
 	                <c:forEach var="obj" items="${cbanks}">
-	                	<option value="${obj.id}" <c:if test="${page.bankId!=null && page.bankId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+	                	<option value="${obj.id}" ${page.bankId!=null && page.bankId==obj.id?'selected':''}>${obj.name}</option>
 	                </c:forEach>
                 </select>
+                
+                
+                
             	<br>
                 <select name="annualFeeType" id="annualFeeType" class="form-control">
                 <option value="">年费类型</option>
-                <option value="1" <c:if test="${page.annualFeeType!=null && page.annualFeeType=='1'}">selected="selected"</c:if>>强制收费</option>
-                <option value="2" <c:if test="${page.annualFeeType!=null && page.annualFeeType=='2'}">selected="selected"</c:if>>刷卡次数</option>
-                <option value="3" <c:if test="${page.annualFeeType!=null && page.annualFeeType=='3'}">selected="selected"</c:if>>免年费</option>
+                <option value="1" ${page.annualFeeType!=null && page.annualFeeType=='1'?'selected':''}>强制收费</option>
+                <option value="2" ${page.annualFeeType!=null && page.annualFeeType=='2'?'selected':''}>刷卡次数</option>
+                <option value="3" ${page.annualFeeType!=null && page.annualFeeType=='3'?'selected':''}>免年费</option>
               </select>
             <br>
             </div>
+            
+            
             
             <div class="col-xs-6">
             	<input value="${page.name}" id="name" name="name" maxlength="50"  class="form-control"  placeholder="<%=CcardInfo.ALIAS_NAME%>"/>
             	<br>
                  <select name="deleStatus" id="deleStatus" class="form-control">
                 <option value="">状态</option>
-                <option value="1" <c:if test="${page.deleStatus!=null && page.deleStatus=='1'}">selected="selected"</c:if>>正常</option>
-                <option value="0" <c:if test="${page.deleStatus!=null && page.deleStatus=='0'}">selected="selected"</c:if>>废止</option>
+                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1'?'selected':''}>正常</option>
+                <option value="0" ${page.deleStatus!=null && page.deleStatus=='0'?'selected':''}>废止</option>
               </select>
+              
+              
+              
             	<br>
             </div>
             <div class="col-xs-6">
                 <select name="cardRangeId" id="cardRangeId" class="form-control">
 	                <option value="">规则信息</option>
 	                <c:forEach var="obj" items="${ccardRanges}">
-	                	<option value="${obj.id}" <c:if test="${page.cardRangeId!=null && page.cardRangeId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+	                	<option value="${obj.id}" ${page.cardRangeId!=null && page.cardRangeId==obj.id?'selected':''}>${obj.name}</option>
 	                </c:forEach>
                 </select>
             </div>
+            
             <div class="col-xs-6">
             	<input type="submit" value="搜索" class="btn btn-primary btn-block btn-flat"/>
             </div>
