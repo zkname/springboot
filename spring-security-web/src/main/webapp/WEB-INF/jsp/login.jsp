@@ -44,10 +44,10 @@ $(function() {
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
-      	<div class="col-xs-8">
+      	<div class="col-xs-6">
         <input type="text" class="form-control required" placeholder="验证码" name="code" />
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-6">
         <img id="codeImg" alt="验证码" src="${ctx}/images/code.png" />
         </div>
       </div>
