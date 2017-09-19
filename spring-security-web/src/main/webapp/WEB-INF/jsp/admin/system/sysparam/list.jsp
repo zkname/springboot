@@ -1,4 +1,4 @@
-<%@page import="com.yuewuxian.biz.entity.SysParam"%>
+<%@page import="com.zkname.demo.entity.SysParam"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/include/taglibs.jsp" %>
 <!DOCTYPE html>
@@ -79,9 +79,8 @@ $(function() {
                 <div class="col-xs-6">
                   	<select name="deleStatus" id="deleStatus" class="form-control">
 	                <option value="">状态</option>
-	                <option value="1" <c:if test="${page.deleStatus!=null && page.deleStatus=='1'}">selected="selected"</c:if>>正常</option>
-	                <option value="0" <c:if test="${page.deleStatus!=null && page.deleStatus=='0'}">selected="selected"</c:if>>废止
-	                </option>
+	                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1' ? 'selected' :''}>正常</option>
+                    <option value="0" ${page.deleStatus!=null && page.deleStatus=='0' ? 'selected' :''}>废止</option>
 	              </select>
 	              <br>
 	              <input type="submit" value="搜索" class="btn btn-primary btn-block btn-flat"/>
@@ -93,7 +92,7 @@ $(function() {
             </div>
             <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
-              <table class="table table-hover">
+              <table class="table table-hover"> 
 				    <tr >
 				      <th ><input type="checkbox" id="checkbox" value="checkbox"></th>
 				      <th ><%=SysParam.ALIAS_NAME%></th>

@@ -64,7 +64,7 @@ function edit(id){
                  <select name="roleCode" class="form-control">
 	                <option value="">角色</option>
 	                <c:forEach var="role" items="${roleList}">
-						<option value="${role.roleCode}" <c:if test="${page.roleCode!=null && page.roleCode==role.roleCode}">selected="selected"</c:if> >${role.name}</option>
+						<option value="${role.roleCode}" ${page.roleCode!=null && page.roleCode==role.roleCode ? 'selected' :''}>${role.name}</option>
 	                </c:forEach>
 	              </select>
                 </div>
@@ -73,8 +73,8 @@ function edit(id){
                   <br>
                   	<select name="deleStatus" id="deleStatus" class="form-control">
 	                <option value="">状态</option>
-	                <option value="1" <c:if test="${page.deleStatus!=null && page.deleStatus=='1'}">selected="selected"</c:if>>正常</option>
-	                <option value="0" <c:if test="${page.deleStatus!=null && page.deleStatus=='0'}">selected="selected"</c:if>>废止
+	                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1' ? 'selected' :''}>正常</option>
+	                <option value="0" ${page.deleStatus!=null && page.deleStatus=='0' ? 'selected' :''}>废止
 	                </option>
 	              </select>
 	              <br>

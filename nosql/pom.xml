@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>zkname</groupId>
+  <artifactId>nosql</artifactId>
+  <version>0.0.1</version>
+  
+  	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<spring.version>4.3.8.RELEASE</spring.version>
+	</properties>
+  
+	<build>
+	    <plugins>
+			<!-- 编译插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*.properties</exclude>
+						<exclude>**/*.xml</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+	    </plugins>
+	</build>
+
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>zkname</groupId>
+			<artifactId>core</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		
+		<!-- memcached -->
+		<dependency>
+		    <groupId>com.googlecode.xmemcached</groupId>
+		    <artifactId>xmemcached</artifactId>
+		    <version>2.3.2</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- memcached end -->
+		
+	    <dependency>
+	        <groupId>org.springframework.data</groupId>
+	        <artifactId>spring-data-mongodb</artifactId>
+	        <version>1.10.3.RELEASE</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>org.springframework.data</groupId>
+	        <artifactId>spring-data-redis</artifactId>
+	        <version>1.8.3.RELEASE</version>
+	        <scope>provided</scope>
+	    </dependency>
+		
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.9.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- servlet 依赖. -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.0-b05</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.12.6</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.7</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.12</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-test</artifactId>
+	        <version>${spring.version}</version>
+	        <scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+  
+</project>

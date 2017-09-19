@@ -62,7 +62,7 @@ $(function() {
 	                <select name="bankId" id="bankId" class="validate-selection form-control">
 		                <option value=" ">请选择</option>
 		                <c:forEach var="obj" items="${cbanks}">
-		                	<option value="${obj.id}" <c:if test="${entity.bankId!=null && entity.bankId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+		                	<option value="${obj.id}" ${entity.bankId!=null && entity.bankId==obj.id ? 'selected':''}>${obj.name}</option>
 		                </c:forEach>
 	                </select>
       				<br>
@@ -75,7 +75,7 @@ $(function() {
 		                <select name="cardRangeId" id="cardRangeId" class="validate-selection form-control">
 			                <option value=" ">规则信息</option>
 			                <c:forEach var="obj" items="${ccardRanges}">
-			                	<option value="${obj.id}" <c:if test="${entity.cardRangeId!=null && entity.cardRangeId==obj.id}">selected="selected"</c:if>>${obj.name}</option>
+			                	<option value="${obj.id}" ${entity.cardRangeId!=null && entity.cardRangeId==obj.id ? 'selected':'' }>${obj.name}</option>
 			                </c:forEach>
 		                </select>
       				<br>
@@ -100,9 +100,9 @@ $(function() {
                   <div class="col-sm-10">
 	                <select name="annualFeeType" id="annualFeeType" class="validate-selection form-control">
 		                <option value=" ">请选择</option>
-		                <option value="1" <c:if test="${entity.annualFeeType=='1'}">selected="selected"</c:if>>强制收费</option>
-		                <option value="2" <c:if test="${entity.annualFeeType=='2'}">selected="selected"</c:if>>刷卡次数</option>
-		                <option value="3" <c:if test="${entity.annualFeeType=='3'}">selected="selected"</c:if>>免年费</option>
+		                <option value="1" ${entity.annualFeeType=='1' ? 'selected' : ''}>强制收费</option>
+		                <option value="2" ${entity.annualFeeType=='2' ? 'selected' : ''}>刷卡次数</option>
+		                <option value="3" ${entity.annualFeeType=='3' ? 'selected' : ''}>免年费</option>
 		              </select>
       				<br>
                   </div>

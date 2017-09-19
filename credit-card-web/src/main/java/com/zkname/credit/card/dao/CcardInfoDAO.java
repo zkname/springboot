@@ -3,6 +3,8 @@ package com.zkname.credit.card.dao;
 import java.util.*;
 import com.zkname.credit.card.entity.*;
 import com.zkname.core.dao.BaseDAO;
+import com.zkname.core.util.DateUtil;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,8 +17,8 @@ public class CcardInfoDAO extends BaseDAO<CcardInfo> {
 	 * @return
 	 */
     public List<CcardInfo> findBillDate(int billDate,Date d) {
-        String sql = "SELECT * FROM c_card_info where deleStatus='1' and  billDate=? and jobDate!=?";
-        return super.find(sql, billDate,d);
+        String sql = "SELECT a.* FROM c_card_info as a,sys_user as b where a.deleStatus='1' and  a.billDate=? and a.jobDate!=? and a.creatorId=b.id and b.loginTime>? and b.deleStatus='1'";
+        return super.find(sql, billDate,d,DateUtil.addDate(DateUtil.getNowDate(), -25));
     }
     
     

@@ -31,6 +31,7 @@ public class MinuteJobTask {
 		try {
 			UPDATE(sysParamService.findByKey("open_register"));
 			UPDATE(sysParamService.findByKey("reset_password_url"));
+			UPDATE(sysParamService.findByKey("experience_time"));
 		} catch (Exception e) {
 			logger.error("错误：",e);
 		}
@@ -42,9 +43,13 @@ public class MinuteJobTask {
 			return;
 		}
 		if(StringUtils.equals(sy.getK(), "open_register")){
-			IndexController.OPEN_REGISTER=sy.getIntV();
+			IndexController.开发注册=sy.getIntV();
 		}else if(StringUtils.equals(sy.getK(), "reset_password_url")){
-			IndexController.RESET_PASSWORD_URL=sy.getV();
+			IndexController.找回密码=sy.getV();
+		}else if(StringUtils.equals(sy.getK(), "experience_time")){
+			IndexController.体验时间=sy.getIntV();
+			
+			
 		}
 	}
 }

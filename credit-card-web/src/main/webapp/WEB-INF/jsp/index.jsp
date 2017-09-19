@@ -62,11 +62,13 @@ $(function() {
         </div>
         <!-- /.col -->
       </div>
-      
-        还没有帐号？<a href="${ctx}/register" class="text-center">立即注册></a></br>
-       忘记密码？<a href="${ctx}/forgotten" class="text-center">找回密码></a>
-        
+        还没有帐号？<a href="${ctx}/register" class="text-center">立即注册></a><br>
+       忘记密码？<a href="${ctx}/forgotten" class="text-center">找回密码></a><br>
+		
+		
+		
     </form>
+    <i class="fa fa-fw fa-qq"></i> QQ交流群：613671246
   </div>
   <!-- /.login-box-body -->
 </div>
