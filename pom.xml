@@ -18,6 +18,7 @@
 		<module>simple-web</module>
 		<module>spring-security-web</module>
 		<module>credit-card-web</module>
+		<module>nosql</module>
 		
 	</modules>
 </project>
