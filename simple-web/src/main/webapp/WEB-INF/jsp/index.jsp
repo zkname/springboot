@@ -45,9 +45,13 @@ $(function() {
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         <br>
       </div>
-      <div class="input-group ">
+      <div class="row">
+      	<div class="col-xs-6">
         <input type="text" class="form-control required" placeholder="验证码" name="code" />
-        <span class="input-group-addon"><img id="codeImg" alt="验证码" src="${ctx}/images/code.png" /></span>
+        </div>
+        <div class="col-xs-6">
+        <img id="codeImg" alt="验证码" src="${ctx}/images/code.png" />
+        </div>
       </div>
       <div class="row">
         <div class="col-xs-8">
