@@ -67,11 +67,10 @@ function dele(id){
                   <input type="text" class="form-control" name="name" value="${page.name}"  placeholder="角色名">
                 </div>
                 <div class="col-xs-6">
-                  	<select name="deleStatus" id="deleStatus" class="form-control">
-	                <option value="">状态</option>
-	                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1' ? 'selected' :''}>正常</option>
-	                <option value="0" ${page.deleStatus!=null && page.deleStatus=='0' ? 'selected' :''}>废止
-	                </option>
+                   <select name="deleStatus" id="deleStatus" class="form-control">
+		                <option value="">状态</option>
+		                <option value="1" ${page.deleStatus!=null && page.deleStatus=='1' ? 'selected' :''}>正常</option>
+		                <option value="0" ${page.deleStatus!=null && page.deleStatus=='0' ? 'selected' :''}>废止 </option>
 	              </select>
 	              <br>
 	              <input type="submit" value="搜索" class="btn btn-primary btn-block btn-flat"/>

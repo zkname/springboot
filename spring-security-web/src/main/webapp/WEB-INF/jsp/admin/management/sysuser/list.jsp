@@ -64,7 +64,7 @@ function edit(id){
                  <select name="roleCode" class="form-control">
 	                <option value="">角色</option>
 	                <c:forEach var="role" items="${roleList}">
-						<option value="${role.roleCode}" ${page.roleCode!=null && page.roleCode==role.roleCode ? 'selected' :''}>${role.name}</option>
+						<option value="${role.roleCode}"  ${page.roleCode!=null && page.roleCode==role.roleCode?'selected' :''} >${role.name}</option>
 	                </c:forEach>
 	              </select>
                 </div>
